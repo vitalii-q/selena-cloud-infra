@@ -1,0 +1,14 @@
+.vscode/
+.DS_Store
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.crash
+.terraform/
+.terraform.lock.hcl
+*.backup
+*.log
+
+# AWS credentials
+~/.aws/ 
