@@ -15,6 +15,9 @@ resource "aws_db_instance" "users_postgres" {
 
   enabled_cloudwatch_logs_exports = ["postgresql", "upgrade", "iam-db-auth-error"]
 
+  # Link custom parameter group
+  parameter_group_name = aws_db_parameter_group.users_postgres_logging.name
+
   tags = {
     Name = var.db_identifier
     Env  = var.env
@@ -52,3 +55,25 @@ resource "aws_cloudwatch_log_group" "users_db_logs" {
   retention_in_days = 14
 }
 
+# Create a custom parameter group for PostgreSQL RDS
+resource "aws_db_parameter_group" "users_postgres_logging" {
+  name        = "${var.db_identifier}-param-group"
+  family      = "postgres15"                  # Family must match the DB version
+  description = "Custom parameter group for PostgreSQL logs
+
+  # Enable logging parameters
+  parameter {
+    name  = "log_connections"
+    value = "1"
+  }
+
+  parameter {
+    name  = "log_disconnections"
+    value = "1"
+  }
+
+  parameter {
+    name  = "log_statement"
+    value = "all"
+  }
+}
