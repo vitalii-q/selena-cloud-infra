@@ -59,7 +59,7 @@ resource "aws_cloudwatch_log_group" "users_db_logs" {
 resource "aws_db_parameter_group" "users_postgres_logging" {
   name        = "${var.db_identifier}-param-group"
   family      = "postgres15"                  # Family must match the DB version
-  description = "Custom parameter group for PostgreSQL logs
+  description = "Custom parameter group for PostgreSQL logs"
 
   # Enable logging parameters
   parameter {

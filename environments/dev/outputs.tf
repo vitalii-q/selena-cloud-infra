@@ -31,3 +31,9 @@ output "users_sg_id" {
   description = "ID security group for users-service"
   value       = module.ec2.users_sg_id
 }
+
+# Output for RDS endpoint
+output "users_postgres_endpoint" {
+  description = "Endpoint of the RDS instance for users service"
+  value       = module.users_rds.endpoint
+}
