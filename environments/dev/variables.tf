@@ -78,3 +78,38 @@ variable "alert_email" {
   description = "Email для уведомлений CloudWatch"
   type        = string
 }
+
+# Minimum number of instances in the Auto Scaling Group
+variable "users_min_size" {
+  description = "Minimum number of instances for users-service"
+  type        = number
+  default     = 1
+}
+
+# Maximum number of instances in the Auto Scaling Group
+variable "users_max_size" {
+  description = "Maximum number of instances for users-service"
+  type        = number
+  default     = 3
+}
+
+# Desired number of instances in the Auto Scaling Group
+variable "users_desired_capacity" {
+  description = "Desired number of instances for users-service"
+  type        = number
+  default     = 1
+}
+
+# Port on which the users-service container is running
+variable "users_service_port" {
+  description = "Port for users-service container"
+  type        = number
+  default     = 9065
+}
+
+# Health check path for the Load Balancer
+variable "users_health_check_path" {
+  description = "Health check path for users-service"
+  type        = string
+  default     = "/test"
+}
