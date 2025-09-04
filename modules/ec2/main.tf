@@ -137,6 +137,8 @@ resource "aws_security_group" "users_sg" {
   description = "Allow SSH and HTTP"
   vpc_id      = var.vpc_id
 
+  # depends_on = [aws_lb.users_service_alb]
+
   ingress {
     from_port   = 22
     to_port     = 22

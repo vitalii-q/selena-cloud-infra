@@ -3,12 +3,14 @@ module "vpc" {
 
   project             = "selena"
   vpc_cidr            = "10.0.0.0/16"
-  public_subnet_cidr  = "10.0.1.0/24"
-  public_subnet_cidr_2  = "10.0.2.0/24"
-  private_subnet_cidr = "10.0.2.0/24"
-  private_subnet_cidr_2 = var.private_subnet_cidr_2
-  availability_zone   = "eu-central-1a"
 
+  public_subnet_cidr  = "10.0.1.0/24"
+  public_subnet_cidr_2  = "10.0.3.0/24"
+
+  private_subnet_cidr = "10.0.2.0/24"
+  private_subnet_cidr_2 = "10.0.4.0/24"
+
+  availability_zone   = "eu-central-1a"
   availability_zone_2   = var.availability_zone_2
 }
 
