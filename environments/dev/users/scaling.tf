@@ -1,7 +1,7 @@
 # Launch Template
 resource "aws_launch_template" "users_service_lt" {
   name_prefix   = "users-service-"
-  image_id      = var.users_service_ami_id
+  image_id      = data.aws_ami.amazon_linux_2023.id
   instance_type = var.users_service_instance_type
   key_name      = "selena-aws-key"
 
@@ -57,5 +57,25 @@ resource "aws_autoscaling_policy" "users_cpu_tgt" {
       predefined_metric_type = "ASGAverageCPUUtilization"
     }
     target_value = 70.0
+  }
+}
+
+data "aws_ami" "amazon_linux_2023" {
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["al2023-ami-*-x86_64"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
   }
 }
