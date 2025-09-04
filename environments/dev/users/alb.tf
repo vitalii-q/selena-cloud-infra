@@ -26,7 +26,7 @@ resource "aws_lb" "users_service_alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.users_alb_sg.id]
-  subnets            = [module.vpc.public_subnet_id]
+  subnets            = [module.vpc.public_subnet_id, module.vpc.public_subnet_2_id]
 
   tags = {
     Name = "users-service-alb"

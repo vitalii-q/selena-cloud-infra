@@ -17,3 +17,11 @@ output "default_security_group_id" {
 output "db_subnet_group" {
   value = aws_db_subnet_group.main.name
 }
+
+output "public_subnet_2_id" {
+  value = aws_subnet.public_subnet_2.id
+}
+
+output "private_subnet_2_id" {
+  value = aws_subnet.private_subnet_2.id
+}
