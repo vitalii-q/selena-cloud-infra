@@ -6,7 +6,7 @@ resource "aws_launch_template" "users_service_lt" {
   key_name      = "selena-aws-key"
 
   network_interfaces {
-    security_groups = [aws_security_group.users_service_sg.id]
+    security_groups = [module.ec2.users_sg_id]
   }
 
   user_data = base64encode(<<-EOF
@@ -23,7 +23,7 @@ resource "aws_autoscaling_group" "users_service_asg" {
   min_size            = var.users_service_min_size
   desired_capacity    = var.users_service_desired_capacity
   max_size            = var.users_service_max_size
-  vpc_zone_identifier = module.vpc.public_subnets
+  vpc_zone_identifier = [module.vpc.public_subnet_id]
 
   target_group_arns = [aws_lb_target_group.users_service_tg.arn]
 

@@ -1,5 +1,5 @@
 module "vpc" {
-  source              = "../../modules/vpc"
+  source              = "../../../modules/vpc"
 
   project             = "selena"
   vpc_cidr            = "10.0.0.0/16"
@@ -12,7 +12,7 @@ module "vpc" {
 }
 
 module "ec2" {
-  source        = "../../modules/ec2"
+  source        = "../../../modules/ec2"
   ami_id        = "ami-0381f7486a6b24f34"
   instance_type = "t3.micro"
   subnet_id     = module.vpc.public_subnet_id
@@ -23,7 +23,7 @@ module "ec2" {
 }
 
 module "users_rds" {
-  source = "../../modules/rds"
+  source = "../../../modules/rds"
 
   db_identifier          = "users-db-${var.env}"
   instance_class         = "db.t3.micro"
@@ -44,7 +44,7 @@ module "users_rds" {
 }
 
 module "users_service_s3" {
-  source      = "../../modules/s3"
+  source      = "../../../modules/s3"
   bucket_name = "selena-users-service-env-${var.environment}"
   tags = {
     Name = "users-service-env"
@@ -53,12 +53,12 @@ module "users_service_s3" {
 }
 
 module "iam" {
-  source = "../../modules/iam"
+  source = "../../../modules/iam"
   user_name = "terraform-user"
 }
 
 module "cloudwatch" {
-  source = "../../modules/cloudwatch"
+  source = "../../../modules/cloudwatch"
 
   ec2_instance_id             = module.ec2.instance_id
   notification_email          = var.alert_email
@@ -68,12 +68,12 @@ module "cloudwatch" {
 }
 
 module "sns" {
-  source      = "../../modules/sns"
+  source      = "../../../modules/sns"
   alert_email = "vitaly2822@gmail.com"
 }
 
 module "asg" {
-  source = "../../modules/asg"
+  source = "../../../modules/asg"
 
   environment          = "dev"
   ami_id               = var.ami_id
