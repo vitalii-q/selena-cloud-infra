@@ -19,27 +19,11 @@ resource "aws_instance" "users_service" {
     volume_type = "gp3"
   }
 
-  user_data = base64encode(file("${path.module}/userdata.sh"))
+  user_data_base64 = file("${path.root}/../../scripts/userdata/userdata.sh")
 
   tags = {
     Name = "users-service-instance"
   }
-}
-
-resource "aws_autoscaling_group" "users_service_asg" {
-  desired_capacity     = 1
-  min_size             = 1
-  max_size             = 2
-  launch_template {
-    id      = aws_launch_template.users_service_lt.id
-    version = "$Latest"
-  }
-  vpc_zone_identifier = [var.subnet_id]
-  tags = [{
-    key                 = "Name"
-    value               = "users-service-instance"
-    propagate_at_launch = true
-  }]
 }
 
 resource "aws_security_group" "users_sg" {
