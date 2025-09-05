@@ -59,6 +59,7 @@ variable "users_desired_capacity" {
   default     = 1
 }
 
+variable "public_subnet_cidr_2" { type = string }
 variable "private_subnet_cidr_2" { type = string }
 variable "availability_zone_2"   { type = string }
 variable "ami_id"               { type = string }
@@ -66,5 +67,4 @@ variable "key_name"             { type = string }
 variable "instance_type"        { type = string }
 variable "env"                  { type = string }
 variable "alert_email"          { type = string }
-
 
