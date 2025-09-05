@@ -34,6 +34,8 @@ resource "aws_launch_template" "this" {
   instance_type = var.instance_type
   key_name      = var.key_name
 
+  user_data = base64encode(file("${path.module}/userdata.sh"))
+
   vpc_security_group_ids = [aws_security_group.asg_sg.id]
 
   iam_instance_profile {
