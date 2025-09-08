@@ -28,9 +28,29 @@ resource "aws_security_group" "asg_sg" {
   }
 }
 
+data "aws_ami" "amazon_linux_2023" {
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["al2023-ami-*-x86_64"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
 resource "aws_launch_template" "this" {
   name_prefix   = "selena-asg-"
-  image_id      = var.ami_id
+  image_id      = data.aws_ami.amazon_linux_2023.id
   instance_type = var.instance_type
   key_name      = var.key_name
 
@@ -73,7 +93,7 @@ resource "aws_autoscaling_group" "this" {
 
   tag {
     key                 = "Name"
-    value               = "selena-asg-instance"
+    value               = "users-service-asg"
     propagate_at_launch = true
   }
 }
