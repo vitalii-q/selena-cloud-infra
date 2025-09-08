@@ -54,9 +54,9 @@ resource "aws_launch_template" "this" {
 
 resource "aws_autoscaling_group" "this" {
   name                      = "selena-asg"
-  desired_capacity          = 0
-  min_size                  = 0
-  max_size                  = 1
+  desired_capacity          = 1
+  min_size                  = 1
+  max_size                  = 2
   vpc_zone_identifier       = var.subnet_ids
   health_check_type         = "EC2"
   health_check_grace_period = 120
