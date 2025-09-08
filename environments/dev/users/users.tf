@@ -75,18 +75,6 @@ module "sns" {
   alert_email = "vitaly2822@gmail.com"
 }
 
-module "asg" {
-  source = "../../../modules/asg"
-
-  environment          = "dev"
-  ami_id               = var.ami_id
-  instance_type        = var.instance_type
-  key_name             = var.key_name
-  vpc_id               = module.vpc.vpc_id
-  subnet_ids           = [module.vpc.public_subnet_id]               # сейчас в публичном сабнете для простоты
-  iam_instance_profile = module.iam.cloudwatch_agent_profile_name
-}
-
 data "aws_ssm_parameter" "db_password" {
   name = "/selena/dev/users-db-password"
 }
@@ -104,3 +92,27 @@ resource "aws_security_group_rule" "allow_users_service_to_rds" {
   description              = "Allow users-service to connect to RDS"
 }
 
+module "users_asg" {
+  source = "../../../modules/asg"
+
+  ami_id                = "ami-0381f7486a6b24f34"
+  vpc_id                = var.vpc_id
+  subnet_ids            = var.subnet_ids
+  instance_type         = var.instance_type
+  key_name              = var.key_name
+  iam_instance_profile  = var.iam_instance_profile
+  environment           = var.environment
+}
+
+# dublicate
+/*module "asg" {
+  source = "../../../modules/asg"
+
+  environment          = "dev"
+  ami_id               = var.ami_id
+  instance_type        = var.instance_type
+  key_name             = var.key_name
+  vpc_id               = module.vpc.vpc_id
+  subnet_ids           = [module.vpc.public_subnet_id]
+  iam_instance_profile = module.iam.cloudwatch_agent_profile_name
+}*/

@@ -18,5 +18,5 @@ module "users" {
   alert_email                 = var.alert_email
 
   users_service_ami_id        = var.ami_id
-  users_service_instance_type = var.instance_type
+  # users_service_instance_type = var.instance_type
 }

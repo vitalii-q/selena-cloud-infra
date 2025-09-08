@@ -1,10 +1,3 @@
-# Port on which the users-service container is running
-variable "users_service_port" {
-  description = "Port for users-service container"
-  type        = number
-  default     = 9065
-}
-
 # Health check path for the Load Balancer
 variable "users_service_health_path" {
   description = "Health check path for users-service"
@@ -58,25 +51,3 @@ variable "users_service_ami_id" {
   type        = string
 }
 
-variable "users_service_instance_type" {
-  description = "EC2 instance type for users-service instances"
-  type        = string
-}
-
-variable "users_service_min_size" {
-  description = "Minimum number of instances in the users-service ASG"
-  type        = number
-  default     = 1
-}
-
-variable "users_service_desired_capacity" {
-  description = "Desired number of instances in the users-service ASG"
-  type        = number
-  default     = 1
-}
-
-variable "users_service_max_size" {
-  description = "Maximum number of instances in the users-service ASG"
-  type        = number
-  default     = 3
-}
