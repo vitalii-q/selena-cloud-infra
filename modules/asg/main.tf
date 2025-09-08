@@ -34,7 +34,7 @@ resource "aws_launch_template" "this" {
   instance_type = var.instance_type
   key_name      = var.key_name
 
-  user_data_base64 = file("${path.root}/../../scripts/userdata/userdata.sh")
+  user_data = base64encode(file("${path.root}/../../scripts/userdata/userdata.sh"))
 
   vpc_security_group_ids = [aws_security_group.asg_sg.id]
 
@@ -54,9 +54,9 @@ resource "aws_launch_template" "this" {
 
 resource "aws_autoscaling_group" "this" {
   name                      = "selena-asg"
-  desired_capacity          = 1
-  min_size                  = 1
-  max_size                  = 2
+  desired_capacity          = 0
+  min_size                  = 0
+  max_size                  = 1
   vpc_zone_identifier       = var.subnet_ids
   health_check_type         = "EC2"
   health_check_grace_period = 120

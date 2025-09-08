@@ -19,7 +19,7 @@ resource "aws_instance" "users_service" {
     volume_type = "gp3"
   }
 
-  user_data_base64 = file("${path.root}/../../scripts/userdata/userdata.sh")
+  user_data = file("${path.root}/../../scripts/userdata/userdata.sh")
 
   tags = {
     Name = "users-service-instance"
@@ -76,7 +76,8 @@ data "aws_ami" "amazon_linux_2023" {
   }
 }
 
-resource "aws_eip" "this" {
+# Elastic IP
+/* resource "aws_eip" "this" {
   count    = 1
   instance = aws_instance.users_service[0].id
 
@@ -87,5 +88,5 @@ resource "aws_eip" "this" {
   lifecycle {
     prevent_destroy = true
   }
-}
+} */
 

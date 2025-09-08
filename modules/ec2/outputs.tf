@@ -1,6 +1,6 @@
-output "elastic_ip" {
+/*output "elastic_ip" {
   value = aws_eip.this[0].public_ip
-}
+}*/
 
 output "amazon_linux_ami_id" {
   value = data.aws_ami.amazon_linux_2023.id
@@ -8,7 +8,7 @@ output "amazon_linux_ami_id" {
 }
 
 output "instance_id" {
-  value = aws_instance.users_service[0].id
+  value = length(aws_instance.users_service) > 0 ? aws_instance.users_service[0].id : null
   description = "ID созданного EC2 экземпляра"
 }
 
