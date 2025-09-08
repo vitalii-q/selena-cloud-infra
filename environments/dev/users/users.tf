@@ -104,15 +104,3 @@ module "users_asg" {
   environment           = var.environment
 }
 
-# dublicate
-/*module "asg" {
-  source = "../../../modules/asg"
-
-  environment          = "dev"
-  ami_id               = var.ami_id
-  instance_type        = var.instance_type
-  key_name             = var.key_name
-  vpc_id               = module.vpc.vpc_id
-  subnet_ids           = [module.vpc.public_subnet_id]
-  iam_instance_profile = module.iam.cloudwatch_agent_profile_name
-}*/
