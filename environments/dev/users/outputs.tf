@@ -7,5 +7,5 @@ output "users_alb_sg_id" {
 }
 
 output "users_asg_name" {
-  value = aws_autoscaling_group.users_service_asg.name
+  value = module.users_asg.asg_name
 }

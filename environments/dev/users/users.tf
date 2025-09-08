@@ -96,11 +96,11 @@ module "users_asg" {
   source = "../../../modules/asg"
 
   ami_id                = "ami-0381f7486a6b24f34"
-  vpc_id                = var.vpc_id
-  subnet_ids            = var.subnet_ids
+  vpc_id                = module.vpc.vpc_id
+  subnet_ids            = [module.vpc.public_subnet_id]
   instance_type         = var.instance_type
   key_name              = var.key_name
-  iam_instance_profile  = var.iam_instance_profile
+  iam_instance_profile  = module.iam.cloudwatch_agent_profile_name
   environment           = var.environment
 }
 

@@ -1,3 +1,10 @@
+# Port on which the users-service container is running
+variable "users_service_port" {
+  description = "Port for users-service container"
+  type        = number
+  default     = 9065
+}
+
 # Health check path for the Load Balancer
 variable "users_service_health_path" {
   description = "Health check path for users-service"
