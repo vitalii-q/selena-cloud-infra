@@ -12,7 +12,7 @@ resource "aws_ecs_service" "users_service" {
   }
 
   load_balancer {
-    target_group_arn = module.alb.users_service_tg_arn
+    target_group_arn = module.alb_users.target_group_arn
     container_name   = "selena-users-service"
     container_port   = 8080
   }
