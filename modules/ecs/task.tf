@@ -4,13 +4,13 @@ resource "aws_ecs_task_definition" "users_service_task" {
   requires_compatibilities = ["EC2"]  # Для ASG. Если Fargate — ["FARGATE"]
   cpu                      = "256"
   memory                   = "512"
-  execution_role_arn       = module.iam.ecs_task_execution_role_arn
-  task_role_arn            = module.iam.ecs_task_role_arn
+  execution_role_arn       = var.ecs_task_execution_role_arn
+  task_role_arn            = var.ecs_task_role_arn
 
   container_definitions = jsonencode([
     {
       name      = "selena-users-service"
-      image     = "${module.ecr.users_service_ecr_uri}:latest"
+      image     = "${var.users_service_ecr_uri}:latest"
       cpu       = 256
       memory    = 512
       essential = true
@@ -23,13 +23,13 @@ resource "aws_ecs_task_definition" "users_service_task" {
       environment = [
         {
           name  = "DATABASE_URL"
-          value = "postgresql://${module.users_rds.username}:${data.aws_ssm_parameter.db_password.value}@${module.users_rds.endpoint}:5432/users_db"
+          value = "postgresql://${var.db_username}:${var.db_password}@${var.db_endpoint}:5432/users_db"
         }
       ]
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          "awslogs-group"         = module.cloudwatch.logs_group_name
+          "awslogs-group"         = var.logs_group_name
           "awslogs-region"        = "eu-central-1"
           "awslogs-stream-prefix" = "selena-users-service"
         }
