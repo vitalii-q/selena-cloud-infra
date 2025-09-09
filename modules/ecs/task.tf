@@ -1,5 +1,5 @@
 resource "aws_ecs_task_definition" "users_service_task" {
-  family                   = "users-service-task"
+  family                   = "selena-users-service-task"
   network_mode             = "awsvpc"
   requires_compatibilities = ["EC2"]  # Для ASG. Если Fargate — ["FARGATE"]
   cpu                      = "256"
@@ -9,7 +9,7 @@ resource "aws_ecs_task_definition" "users_service_task" {
 
   container_definitions = jsonencode([
     {
-      name      = "users-service"
+      name      = "selena-users-service"
       image     = "${module.ecr.users_service_ecr_uri}:latest"
       cpu       = 256
       memory    = 512
@@ -31,7 +31,7 @@ resource "aws_ecs_task_definition" "users_service_task" {
         options = {
           "awslogs-group"         = module.cloudwatch.logs_group_name
           "awslogs-region"        = "eu-central-1"
-          "awslogs-stream-prefix" = "users-service"
+          "awslogs-stream-prefix" = "selena-users-service"
         }
       }
     }

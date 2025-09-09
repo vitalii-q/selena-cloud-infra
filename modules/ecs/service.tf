@@ -1,5 +1,5 @@
 resource "aws_ecs_service" "users_service" {
-  name            = "users-service"
+  name            = "selena-users-service"
   cluster         = module.ecs_cluster.cluster_id
   task_definition = aws_ecs_task_definition.users_service_task.arn
   desired_count   = 1
@@ -13,7 +13,7 @@ resource "aws_ecs_service" "users_service" {
 
   load_balancer {
     target_group_arn = module.alb.users_service_tg_arn
-    container_name   = "users-service"
+    container_name   = "selena-users-service"
     container_port   = 8080
   }
 
