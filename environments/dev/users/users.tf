@@ -110,7 +110,7 @@ module "ecr" {
 }
 
 module "alb_users" {
-  source            = "../../modules/alb"
+  source            = "../../../modules/alb"
   service_name      = "selena-users-service"
   vpc_id            = module.vpc.vpc_id
   subnets           = module.vpc.public_subnet_ids
