@@ -124,8 +124,14 @@ module "ecs_cluster" {
   ecs_task_execution_role_arn = module.iam.ecs_task_execution_role_arn
   ecs_task_role_arn           = module.iam.ecs_task_role_arn
   users_service_ecr_uri       = module.ecr.users_service_ecr_uri
-  db_username                 = module.users_rds.username
+  db_username                 = module.users_rds.db_username
   db_password                 = data.aws_ssm_parameter.db_password.value
-  db_endpoint                 = module.users_rds.endpoint
+  db_endpoint                 = module.users_rds.db_endpoint
   logs_group_name             = module.cloudwatch.logs_group_name
+
+  # добавляем обязательные переменные для ECS Service
+  public_subnet_ids           = [module.vpc.public_subnet_id, module.vpc.public_subnet_2_id]
+  users_sg_id                 = module.ec2.users_sg_id
+  users_alb_tg_arn            = module.alb_users.target_group_arn
+  users_alb_tg_depends_on     = module.alb_users.target_group_arn
 }

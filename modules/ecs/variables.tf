@@ -25,3 +25,19 @@ variable "db_endpoint" {
 variable "logs_group_name" {
   type = string
 }
+
+variable "public_subnet_ids" {
+  type = list(string)
+}
+
+variable "users_sg_id" {
+  type = string
+}
+
+variable "users_alb_tg_arn" {
+  type = string
+}
+
+variable "users_alb_tg_depends_on" {
+  type = any
+}
