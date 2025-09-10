@@ -28,3 +28,15 @@ resource "aws_iam_role_policy_attachment" "attach_ec2_rds_read" {
   role       = aws_iam_role.selena_ec2_role.name
   policy_arn = aws_iam_policy.ec2_rds_read.arn
 }
+
+# Attach AmazonECSTaskExecutionRolePolicy (AWS managed policy)
+resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
+  role       = aws_iam_role.ecs_task_execution_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
+# IAM роль EC2 для ECS
+resource "aws_iam_role_policy_attachment" "ecs_instance_role_attach" {
+  role       = aws_iam_role.selena_ec2_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+}
