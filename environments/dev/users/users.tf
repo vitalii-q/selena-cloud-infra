@@ -102,6 +102,7 @@ module "users_asg" {
   key_name              = var.key_name
   iam_instance_profile  = module.iam.cloudwatch_agent_profile_name
   environment           = var.environment
+  ecs_cluster_name      = "selena-users-cluster"
 }
 
 module "ecr" {

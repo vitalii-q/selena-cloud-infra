@@ -9,3 +9,8 @@ variable "environment" {
   description = "Environment name, e.g., dev or prod"
   type        = string
 }
+
+variable "ecs_cluster_name" {
+  description = "ECS Cluster name to register instances"
+  type        = string
+}
