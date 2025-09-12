@@ -71,7 +71,13 @@ resource "aws_launch_template" "this" {
     name = var.iam_instance_profile
   }
 
-tag_specifications {
+  user_data = base64encode(<<EOF
+    #!/bin/bash
+    echo "ECS_CLUSTER=${var.ecs_cluster_name}" >> /etc/ecs/ecs.config
+    EOF
+  )
+
+  tag_specifications {
     resource_type = "instance"
     tags = {
       Name        = "users-service-instance-asg"
