@@ -48,13 +48,22 @@ data "aws_ami" "amazon_linux_2023" {
   }
 }
 
+# ECS-Optimized Amazon Linux 2 AMI
+data "aws_ami" "ecs_optimized" {
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-ecs-hvm-*-x86_64-ebs"]
+  }
+}
+
 resource "aws_launch_template" "this" {
   name_prefix   = "selena-asg-"
-  image_id      = data.aws_ami.amazon_linux_2023.id
+  image_id      = data.aws_ami.ecs_optimized.id
   instance_type = var.instance_type
   key_name      = var.key_name
-
-  user_data = base64encode(file("${path.root}/../../scripts/userdata/userdata_ecs.sh"))
 
   vpc_security_group_ids = [aws_security_group.asg_sg.id]
 
@@ -62,7 +71,7 @@ resource "aws_launch_template" "this" {
     name = var.iam_instance_profile
   }
 
-  tag_specifications {
+tag_specifications {
     resource_type = "instance"
     tags = {
       Name        = "users-service-instance-asg"
