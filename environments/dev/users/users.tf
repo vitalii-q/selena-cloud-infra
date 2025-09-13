@@ -135,4 +135,10 @@ module "ecs_cluster" {
   users_sg_id                 = module.ec2.users_sg_id
   users_alb_tg_arn            = module.alb_users.target_group_arn
   users_alb_tg_depends_on     = module.alb_users.target_group_arn
+
+  # Fargate
+  launch_type                 = "FARGATE"
+  assign_public_ip            = true
+  cpu                         = "512"    # 0.5 vCPU
+  memory                      = "1024"   # 1 GB
 }

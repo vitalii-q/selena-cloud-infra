@@ -1,9 +1,9 @@
 resource "aws_ecs_task_definition" "users_service_task" {
   family                   = "selena-users-service-task"
   network_mode             = "awsvpc"
-  requires_compatibilities = ["EC2"]  # Для ASG. Если Fargate — ["FARGATE"]
-  cpu                      = "256"
-  memory                   = "512"
+  requires_compatibilities = ["FARGATE"]
+  cpu                      = var.cpu
+  memory                   = var.memory
   execution_role_arn       = var.ecs_task_execution_role_arn
   task_role_arn            = var.ecs_task_role_arn
 
@@ -11,8 +11,8 @@ resource "aws_ecs_task_definition" "users_service_task" {
     {
       name      = "selena-users-service"
       image     = "${var.users_service_ecr_uri}:latest"
-      cpu       = 256
-      memory    = 512
+      cpu       = tonumber(var.cpu)
+      memory    = tonumber(var.memory)
       essential = true
       portMappings = [
         {

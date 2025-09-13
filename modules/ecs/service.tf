@@ -3,7 +3,7 @@ resource "aws_ecs_service" "users_service" {
   cluster         = aws_ecs_cluster.users_cluster.id
   task_definition = aws_ecs_task_definition.users_service_task.arn
   desired_count   = 1
-  launch_type     = "EC2"
+  launch_type     = var.launch_type
 
   network_configuration {
     subnets          = var.public_subnet_ids
@@ -16,5 +16,5 @@ resource "aws_ecs_service" "users_service" {
     container_port   = 8080
   }
 
-  depends_on = [var.users_alb_tg_depends_on]
+  depends_on = [aws_ecs_task_definition.users_service_task]
 }

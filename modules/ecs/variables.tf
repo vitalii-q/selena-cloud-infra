@@ -41,3 +41,27 @@ variable "users_alb_tg_arn" {
 variable "users_alb_tg_depends_on" {
   type = any
 }
+
+variable "launch_type" {
+  description = "ECS launch type (EC2 or FARGATE)"
+  type        = string
+  default     = "FARGATE"
+}
+
+variable "assign_public_ip" {
+  description = "Assign public IP for ECS task"
+  type        = bool
+  default     = true
+}
+
+variable "cpu" {
+  description = "Fargate CPU units"
+  type        = string
+  default     = "512"
+}
+
+variable "memory" {
+  description = "Fargate memory (MB)"
+  type        = string
+  default     = "1024"
+}
