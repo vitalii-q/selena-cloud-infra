@@ -27,7 +27,7 @@ resource "aws_subnet" "private_subnet" {
   }
 }
 
-# Internet Gateway для доступа EC2 в интернет
+# Internet Gateway for EC2 Internet Access
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
   tags = {
@@ -35,7 +35,7 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
-# Route table для публичной подсети
+# Route table for public subnet
 resource "aws_route_table" "public_rt" {
   vpc_id = aws_vpc.main.id
   tags = {
@@ -43,14 +43,14 @@ resource "aws_route_table" "public_rt" {
   }
 }
 
-# Маршрут по умолчанию: весь трафик в интернет через IGW
+# Default route: all Internet traffic via IGW
 resource "aws_route" "default_route" {
   route_table_id         = aws_route_table.public_rt.id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.igw.id
 }
 
-# Привязка route table к public subnet
+# Binding the route table to the public subnet
 resource "aws_route_table_association" "public_subnet_assoc" {
   subnet_id      = aws_subnet.public_subnet.id
   route_table_id = aws_route_table.public_rt.id

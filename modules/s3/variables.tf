@@ -1,10 +1,10 @@
 variable "bucket_name" {
-  description = "Имя S3 бакета"
+  description = "S3 bucket name"
   type        = string
 }
 
 variable "tags" {
-  description = "Теги ресурса"
+  description = "Resource tags"
   type        = map(string)
   default     = {}
 }

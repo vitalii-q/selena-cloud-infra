@@ -101,7 +101,7 @@ resource "aws_autoscaling_group" "this" {
     version = "$Latest"
   }
 
-  # чтобы Terraform ждал, пока инстансы поднимутся
+  # so that Terraform waits until the instances are up
   lifecycle {
     create_before_destroy = true
   }
@@ -113,7 +113,7 @@ resource "aws_autoscaling_group" "this" {
   }
 }
 
-# Target Tracking: держать среднюю CPU группы около 50%
+# Target Tracking: keep the average CPU usage of the group around 50%
 resource "aws_autoscaling_policy" "cpu_tgt_tracking" {
   name                   = "cpu-target-tracking"
   policy_type            = "TargetTrackingScaling"
