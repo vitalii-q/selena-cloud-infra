@@ -1,5 +1,5 @@
 variable "service_name" {
-  description = "Имя сервиса (например, selena-users-service)"
+  description = "Service name (e.g., selena-users-service)"
   type        = string
 }
 
@@ -9,16 +9,16 @@ variable "vpc_id" {
 }
 
 variable "subnets" {
-  description = "Список подсетей для ALB"
+  description = "List of subnets for ALB"
   type        = list(string)
 }
 
 variable "security_group_id" {
-  description = "Security Group для ALB"
+  description = "Security Group for ALB"
   type        = string
 }
 
 variable "target_port" {
-  description = "Порт, на который будет идти трафик (обычно 8080 для контейнера)"
+  description = "The port to which traffic will be directed (usually 8080 for a container)"
   type        = number
 }

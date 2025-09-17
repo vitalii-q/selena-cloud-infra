@@ -4,6 +4,6 @@ output "alb_dns_name" {
 }
 
 output "target_group_arn" {
-  description = "ARN Target Group для ECS"
+  description = "ARN Target Group for ECS"
   value       = aws_lb_target_group.this.arn
 }

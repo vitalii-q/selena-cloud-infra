@@ -33,7 +33,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_high" {
   alarm_actions = [aws_autoscaling_policy.scale_out.arn]
 }
 
-# Аларм для масштабирования ВНИЗ, если CPU < 30%
+# Alarm for scaling DOWN if CPU < 30%
 resource "aws_cloudwatch_metric_alarm" "cpu_low" {
   alarm_name          = "CPULowScaleIn"
   comparison_operator = "LessThanThreshold"
