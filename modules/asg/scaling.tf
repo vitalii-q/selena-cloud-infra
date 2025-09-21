@@ -16,7 +16,7 @@ resource "aws_autoscaling_policy" "scale_in" {
   autoscaling_group_name = aws_autoscaling_group.this.name
 }
 
-# Аларм для масштабирования ВВЕРХ, если CPU > 70%
+# Alarm for scaling UP if CPU > 70%
 resource "aws_cloudwatch_metric_alarm" "cpu_high" {
   alarm_name          = "CPUHighScaleOut"
   comparison_operator = "GreaterThanThreshold"

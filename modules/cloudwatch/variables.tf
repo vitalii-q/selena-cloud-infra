@@ -1,10 +1,10 @@
 variable "ec2_instance_id" {
-  description = "ID EC2 инстанции для CloudWatch Alarm"
+  description = "EC2 instance ID for CloudWatch Alarm"
   type        = string
 }
 
 variable "notification_email" {
-  description = "Email для уведомлений CloudWatch Alarm"
+  description = "Email for CloudWatch Alarm notifications"
   type        = string
 }
 
