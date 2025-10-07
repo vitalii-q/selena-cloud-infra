@@ -1,3 +1,8 @@
+module "eks" {
+  source = "./eks"
+  cluster_name = var.cluster_name
+}
+
 resource "aws_iam_policy" "ec2_stop_start_policy" {
   name        = "Ec2StopStartPolicy"
   description = "Policy to allow stopping and starting EC2 instances"

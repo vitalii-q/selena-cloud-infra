@@ -1,26 +1,26 @@
 module "vpc" {
-  source              = "../../../modules/vpc"
+  source                = "../../../modules/vpc"
 
-  project             = "selena"
-  vpc_cidr            = "10.0.0.0/16"
+  project               = "selena"
+  vpc_cidr              = "10.0.0.0/16"
 
-  public_subnet_cidr  = "10.0.1.0/24"
-  private_subnet_cidr = "10.0.2.0/24"
+  public_subnet_cidr    = "10.0.1.0/24"
+  private_subnet_cidr   = "10.0.2.0/24"
 
   public_subnet_cidr_2  = "10.0.3.0/24"
   private_subnet_cidr_2 = "10.0.4.0/24"
 
-  availability_zone   = "eu-central-1a"
+  availability_zone     = "eu-central-1a"
   availability_zone_2   = var.availability_zone_2
 }
 
 module "ec2" {
-  source        = "../../../modules/ec2"
-  ami_id        = "ami-0381f7486a6b24f34"
-  instance_type = "t3.micro"
-  subnet_id     = module.vpc.public_subnet_id
-  vpc_id        = module.vpc.vpc_id
-  key_name      = var.key_name
+  source                      = "../../../modules/ec2"
+  ami_id                      = "ami-0381f7486a6b24f34"
+  instance_type               = "t3.micro"
+  subnet_id                   = module.vpc.public_subnet_id
+  vpc_id                      = module.vpc.vpc_id
+  key_name                    = var.key_name
   iam_instance_profile        = module.iam.cloudwatch_agent_profile_name
   selena_ec2_instance_profile = module.iam.selena_ec2_profile_name
 }
@@ -58,6 +58,7 @@ module "users_service_s3" {
 module "iam" {
   source = "../../../modules/iam"
   user_name = "terraform-user"
+  cluster_name = "selena-eks"
 }
 
 module "cloudwatch" {
@@ -79,17 +80,17 @@ data "aws_ssm_parameter" "db_password" {
   name = "/selena/dev/users-db-password"
 }
 
-# Разрешаем доступ к RDS от security group контейнера users-service
+# allow access to RDS from the users-service container security group
 resource "aws_security_group_rule" "allow_users_service_to_rds" {
-  type                     = "ingress"
-  from_port                = 5432
-  to_port                  = 5432
-  protocol                 = "tcp"
+  type                       = "ingress"
+  from_port                  = 5432
+  to_port                    = 5432
+  protocol                   = "tcp"
   # security_group_id        = module.users_rds.security_group_id
-  security_group_id        = module.users_rds.rds_sg_id
-  cidr_blocks              = ["10.0.1.0/24"]
+  security_group_id          = module.users_rds.rds_sg_id
+  cidr_blocks                = ["10.0.1.0/24"]
   # source_security_group_id = module.ec2.users_sg_id
-  description              = "Allow users-service to connect to RDS"
+  description                = "Allow users-service to connect to RDS"
 }
 
 module "users_asg" {
@@ -110,3 +111,12 @@ module "ecr" {
   environment = var.environment
 }
 
+module "eks" {
+  source               = "../../../modules/eks"
+
+  eks_cluster_role_arn = module.iam.eks_cluster_role_arn
+
+  cluster_name         = "selena-eks"
+  subnet_ids           = [module.vpc.public_subnet_id, module.vpc.public_subnet_2_id]
+  k8s_version          = "1.30"
+}
