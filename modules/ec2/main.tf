@@ -13,7 +13,6 @@ resource "aws_instance" "users_service" {
   associate_public_ip_address = true
   iam_instance_profile        = var.selena_ec2_instance_profile
 
-
   root_block_device {
     volume_size = 10
     volume_type = "gp3"
@@ -33,11 +32,12 @@ resource "aws_security_group" "users_sg" {
 
   # depends_on = [aws_instance.users_service]
 
+  # who can connect to the resource (ingress)
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # SSH доступ — ограничим позже
+    cidr_blocks = ["0.0.0.0/0"]  # SSH access
   }
 
   ingress {
@@ -48,6 +48,7 @@ resource "aws_security_group" "users_sg" {
     description = "Allow users-service access on port 9065"
   }
 
+  # wrehe can the resource send data (egress)
   egress {
     from_port   = 0
     to_port     = 0

@@ -29,7 +29,7 @@ resource "aws_security_group" "rds_sg" {
   description = "Security group for Users Service RDS"
   vpc_id      = var.vpc_id
 
-  # Allow Postgres connections only from SG users-service
+  # Allow Postgres connections only from SG EC2 users-service
   ingress {
     from_port                = 5432
     to_port                  = 5432

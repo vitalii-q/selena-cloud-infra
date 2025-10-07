@@ -1,7 +1,3 @@
-variable "user_name" {
-  type = string
-}
-
 resource "aws_iam_policy" "ec2_stop_start_policy" {
   name        = "Ec2StopStartPolicy"
   description = "Policy to allow stopping and starting EC2 instances"
