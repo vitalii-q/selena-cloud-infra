@@ -81,7 +81,7 @@ resource "aws_iam_role" "selena_ec2_role" {
   })
 }
 
-# Создаём instance profile для EC2
+# Creating an instance profile for EC2
 resource "aws_iam_instance_profile" "selena_ec2_instance_profile" {
   name = "selena-ec2-instance-profile"
   role = aws_iam_role.selena_ec2_role.name
