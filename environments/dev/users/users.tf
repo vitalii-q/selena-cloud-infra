@@ -111,7 +111,7 @@ module "ecr" {
   environment = var.environment
 }
 
-module "eks" {
+/*module "eks" {
   source               = "../../../modules/eks"
 
   eks_cluster_role_arn = module.iam.eks_cluster_role_arn
@@ -119,4 +119,4 @@ module "eks" {
   cluster_name         = "selena-eks"
   subnet_ids           = [module.vpc.public_subnet_id, module.vpc.public_subnet_2_id]
   k8s_version          = "1.30"
-}
+}*/
