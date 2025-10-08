@@ -4,13 +4,17 @@ resource "aws_db_instance" "users_postgres" {
   engine_version          = "15.13"
   instance_class          = var.instance_class
   allocated_storage       = var.allocated_storage
+
   db_name                 = var.db_name
   username                = var.username
   password                = var.password
+
   port                    = var.port
   publicly_accessible     = var.publicly_accessible
+
   vpc_security_group_ids  = [aws_security_group.rds_sg.id]
   db_subnet_group_name    = var.db_subnet_group_name
+  
   skip_final_snapshot     = true
 
   enabled_cloudwatch_logs_exports = ["postgresql", "upgrade", "iam-db-auth-error"]

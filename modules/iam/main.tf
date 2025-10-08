@@ -3,6 +3,12 @@ module "eks" {
   cluster_name = var.cluster_name
 }
 
+# Creating an instance profile for EC2
+resource "aws_iam_instance_profile" "selena_ec2_instance_profile" {
+  name = "selena-ec2-instance-profile"
+  role = aws_iam_role.selena_ec2_role.name
+}
+
 resource "aws_iam_policy" "ec2_stop_start_policy" {
   name        = "Ec2StopStartPolicy"
   description = "Policy to allow stopping and starting EC2 instances"
@@ -17,23 +23,6 @@ resource "aws_iam_policy" "ec2_stop_start_policy" {
           "ec2:DescribeInstances"
         ]
         Resource = "*"
-      }
-    ]
-  })
-}
-
-resource "aws_iam_role" "ec2_s3_access_role" {
-  name = "ec2-s3-access-role"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        Principal = {
-          Service = "ec2.amazonaws.com"
-        },
-        Action = "sts:AssumeRole"
       }
     ]
   })
@@ -63,11 +52,6 @@ resource "aws_iam_policy" "ec2_s3_access_policy" {
   })
 }
 
-resource "aws_iam_instance_profile" "ec2_s3_access_profile" {
-  name = "ec2-s3-access-profile"
-  role = aws_iam_role.ec2_s3_access_role.name
-}
-
 resource "aws_iam_role" "selena_ec2_role" {
   name = "selena-ec2-role"
 
@@ -83,12 +67,6 @@ resource "aws_iam_role" "selena_ec2_role" {
       }
     ]
   })
-}
-
-# Creating an instance profile for EC2
-resource "aws_iam_instance_profile" "selena_ec2_instance_profile" {
-  name = "selena-ec2-instance-profile"
-  role = aws_iam_role.selena_ec2_role.name
 }
 
 resource "aws_iam_policy" "ec2_rds_read" {

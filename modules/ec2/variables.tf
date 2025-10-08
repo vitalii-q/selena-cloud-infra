@@ -41,7 +41,7 @@ variable "region" {
   default     = "eu-central-1"
 }
 
-variable "selena_ec2_instance_profile" {
+variable "instance_profile" {
   description = "Instance profile for Selena EC2 instances"
   type        = string
 }

@@ -15,13 +15,13 @@ module "vpc" {
 }
 
 module "ec2" {
-  source                      = "../../../modules/ec2"
-  ami_id                      = "ami-0381f7486a6b24f34"
-  instance_type               = "t3.micro"
-  subnet_id                   = module.vpc.public_subnet_id
-  vpc_id                      = module.vpc.vpc_id
-  key_name                    = var.key_name
-  selena_ec2_instance_profile = module.iam.selena_ec2_profile_name
+  source           = "../../../modules/ec2"
+  ami_id           = "ami-0381f7486a6b24f34"
+  instance_type    = "t3.micro"
+  subnet_id        = module.vpc.public_subnet_id
+  vpc_id           = module.vpc.vpc_id
+  key_name         = var.key_name
+  instance_profile = module.iam.selena_ec2_profile_name
 }
 
 module "users_rds" {
@@ -55,8 +55,8 @@ module "users_service_s3" {
 }
 
 module "iam" {
-  source = "../../../modules/iam"
-  user_name = "terraform-user"
+  source       = "../../../modules/iam"
+  user_name    = "terraform-user"
   cluster_name = "selena-eks"
 }
 
