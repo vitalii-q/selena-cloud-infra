@@ -21,7 +21,6 @@ module "ec2" {
   subnet_id                   = module.vpc.public_subnet_id
   vpc_id                      = module.vpc.vpc_id
   key_name                    = var.key_name
-  iam_instance_profile        = module.iam.cloudwatch_agent_profile_name
   selena_ec2_instance_profile = module.iam.selena_ec2_profile_name
 }
 
@@ -66,7 +65,7 @@ module "cloudwatch" {
 
   ec2_instance_id             = module.ec2.instance_id
   notification_email          = var.alert_email
-  selena_ec2_instance_profile = module.iam.cloudwatch_agent_profile_name
+  selena_ec2_instance_profile = module.iam.selena_ec2_profile_name
 
   alerts_topic_arn = module.sns.alerts_topic_arn
 }
@@ -101,7 +100,7 @@ module "users_asg" {
   subnet_ids            = [module.vpc.public_subnet_id]
   instance_type         = var.instance_type
   key_name              = var.key_name
-  iam_instance_profile  = module.iam.cloudwatch_agent_profile_name
+  iam_instance_profile  = module.iam.selena_ec2_profile_name
   environment           = var.environment
   ecs_cluster_name      = "selena-users-cluster"
 }

@@ -8,13 +8,13 @@ resource "aws_cloudwatch_log_group" "users_service_logs" {
   }
 }
 
-# Привязываем политику к роли
+# attach policy to role
 resource "aws_iam_role_policy_attachment" "cloudwatch_agent_attach" {
   role       = aws_iam_role.cloudwatch_agent_server_role.name
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
-# Instance Profile для EC2
+# Instance Profile for EC2
 resource "aws_iam_instance_profile" "cloudwatch_agent_instance_profile" {
   name = "CloudWatchAgentInstanceProfile"
   role = aws_iam_role.cloudwatch_agent_server_role.name
@@ -42,12 +42,12 @@ resource "aws_iam_role" "cloudwatch_agent_server_role" {
   }
 }
 
-# Создаём terraform-user
+# creating terraform-user
 resource "aws_iam_user" "terraform_user" {
   name = "terraform-user"
 }
 
-# Добавляем inline-политику, разрешающую создавать IAM ресурсы
+# add inline-policy, accessing creation IAM resources
 resource "aws_iam_user_policy" "terraform_user_policy" {
   name = "terraform-user-policy"
   user = aws_iam_user.terraform_user.name

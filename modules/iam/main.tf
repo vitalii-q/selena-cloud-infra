@@ -68,7 +68,6 @@ resource "aws_iam_instance_profile" "ec2_s3_access_profile" {
   role = aws_iam_role.ec2_s3_access_role.name
 }
 
-
 resource "aws_iam_role" "selena_ec2_role" {
   name = "selena-ec2-role"
 

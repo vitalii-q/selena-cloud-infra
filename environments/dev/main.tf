@@ -1,5 +1,3 @@
-# infra/terraform/environments/dev/main.tf
-
 provider "aws" {
   region = "eu-central-1"
   profile = "terraform"
@@ -18,5 +16,4 @@ module "users" {
   alert_email                 = var.alert_email
 
   users_service_ami_id        = var.ami_id
-  # users_service_instance_type = var.instance_type
 }
