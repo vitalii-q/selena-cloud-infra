@@ -119,3 +119,16 @@ module "ecr" {
   subnet_ids           = [module.vpc.public_subnet_id, module.vpc.public_subnet_2_id]
   k8s_version          = "1.30"
 }*/
+
+module "users_alb" {
+  source             = "../../../modules/alb"
+  name               = "users-service-alb"
+  vpc_id             = module.vpc.vpc_id
+  subnets            = [
+    module.vpc.public_subnet_id,      # subnet in AZ 1
+    module.vpc.public_subnet_2_id     # subnet in AZ 2
+  ]
+  security_group_id  = module.ec2.users_sg_id
+  target_port        = 80
+#  health_path       = "/test"
+}
