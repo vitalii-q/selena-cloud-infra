@@ -35,3 +35,8 @@ variable "environment" {
   type        = string
   default     = "dev"
 }
+
+variable "ec2_instance_id" {
+  description = "EC2 instance ID to attach to Target Group"
+  type        = string
+}

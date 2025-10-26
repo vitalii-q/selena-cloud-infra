@@ -130,5 +130,6 @@ module "users_alb" {
   ]
   security_group_id  = module.ec2.users_sg_id
   target_port        = 80
+  ec2_instance_id = module.ec2.instance_id
 #  health_path       = "/test"
 }

@@ -48,3 +48,9 @@ resource "aws_lb_listener" "users_http_listener" {
 
   depends_on = [aws_lb.users_alb, aws_lb_target_group.users_tg] # guarantee that Listener is created after ALB and Target Group
 }
+
+resource "aws_lb_target_group_attachment" "users_ec2_attachment" {
+  target_group_arn = aws_lb_target_group.users_tg.arn
+  target_id        = var.ec2_instance_id
+  port             = var.target_port
+}
