@@ -38,15 +38,15 @@ unzip awscliv2.zip
 sudo ./aws/install
 
 # Проверяем наличие .env в репозитории и скачиваем из S3 при отсутствии
-if [ ! -f selena-users-service/.env ]; then
-    echo ".env не найден, скачиваем из S3..."
-    aws s3 cp s3://selena-users-service-env-dev/.env selena-users-service/.env
-    chown ec2-user:ec2-user selena-users-service/.env
+if [ ! -f selena-users-service/users.env.cloud ]; then
+    echo "users.env.cloud не найден, скачиваем из S3..."
+    aws s3 cp s3://selena-users-service-env-dev/users.env.cloud selena-users-service/users.env.cloud
+    chown ec2-user:ec2-user selena-users-service/users.env.cloud
 else
-    echo ".env уже существует"
+    echo "users.env.cloud уже существует"
 fi
 
-chmod 600 selena-users-service/.env
+chmod 600 selena-users-service/users.env.cloud
 
 cd selena-users-service
 
@@ -62,7 +62,7 @@ fi
 # Запускаем контейнер с использованием .env файла
 sudo -u ec2-user docker run -d \
     --name selena-users-service \
-    --env-file .env \
+    --env-file users.env.cloud \
     -p 9065:9065 \
     --restart always \
     selena-users-service:latest

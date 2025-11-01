@@ -18,7 +18,7 @@ resource "aws_instance" "users_service" {
     volume_type = "gp3"
   }
 
-  user_data = file("${path.root}/../../scripts/userdata/userdata.sh")
+  user_data = file("${path.root}/../../scripts/userdata/userdata.sh") # v2
 
   tags = {
     Name = "users-service-instance"
