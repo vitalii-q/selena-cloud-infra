@@ -16,7 +16,7 @@ resource "aws_s3_bucket_versioning" "this" {
 
 # autoloud .env files
 resource "aws_s3_object" "env_files" {
-  for_each = fileset("${path.module}/../../environments/dev/s3_files", "*.env")
+  for_each = fileset("${path.module}/../../environments/dev/s3_files", "*.env*")
 
   bucket = aws_s3_bucket.this.id
   key    = each.value
