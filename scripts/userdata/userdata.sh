@@ -39,14 +39,14 @@ sudo ./aws/install
 
 # Проверяем наличие .env в репозитории и скачиваем из S3 при отсутствии
 if [ ! -f selena-users-service/users.env.cloud ]; then
-    echo "users.env.cloud не найден, скачиваем из S3..."
-    aws s3 cp s3://selena-users-service-env-dev/users.env.cloud selena-users-service/users.env.cloud
-    chown ec2-user:ec2-user selena-users-service/users.env.cloud
+    echo ".env (users.env.cloud) не найден, скачиваем из S3..."
+    aws s3 cp s3://selena-users-service-env-dev/users.env.cloud selena-users-service/.env
+    chown ec2-user:ec2-user selena-users-service/.env
 else
-    echo "users.env.cloud уже существует"
+    echo ".env (users.env.cloud) уже существует"
 fi
 
-chmod 600 selena-users-service/users.env.cloud
+chmod 600 selena-users-service/.env
 
 cd selena-users-service
 
