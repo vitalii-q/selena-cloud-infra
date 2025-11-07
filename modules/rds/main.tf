@@ -38,7 +38,7 @@ resource "aws_security_group" "rds_sg" {
     from_port                = 5432
     to_port                  = 5432
     protocol                 = "tcp"
-    security_groups          = [var.users_sg_id]
+    cidr_blocks = ["10.0.0.0/16"]    # security_groups = [var.users_sg_id]
     description              = "Allow Postgres from Users Service EC2"
   }
 
