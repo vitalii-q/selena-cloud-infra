@@ -129,7 +129,7 @@ module "users_alb" {
     module.vpc.public_subnet_2_id     # subnet in AZ 2
   ]
   security_group_id  = module.ec2.users_sg_id
-  target_port        = 80
+  target_port        = 9065
   ec2_instance_id = module.ec2.instance_id
-#  health_path       = "/test"
+  health_check       = "/test"
 }

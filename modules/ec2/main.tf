@@ -41,11 +41,12 @@ resource "aws_security_group" "users_sg" {
   }
 
   ingress {
-    from_port   = 9065
-    to_port     = 9065
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    description = "Allow users-service access on port 9065"
+    from_port       = 9065
+    to_port         = 9065
+    protocol        = "tcp"
+    cidr_blocks   = ["0.0.0.0/0"]                      # direct EC2 access
+    # security_groups = [var.alb_sg_id]  # only ALB access
+    description     = "Allow users-service access on port 9065"
   }
 
   # wrehe can the resource send data (egress)

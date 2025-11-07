@@ -3,7 +3,7 @@ resource "aws_lb" "users_alb" {
   name            = var.name
   internal        = false
   load_balancer_type = "application"
-  security_groups = [var.security_group_id]
+  security_groups = [aws_security_group.alb_sg.id]
   subnets         = var.subnets
 
   enable_deletion_protection = false
@@ -53,4 +53,30 @@ resource "aws_lb_target_group_attachment" "users_ec2_attachment" {
   target_group_arn = aws_lb_target_group.users_tg.arn
   target_id        = var.ec2_instance_id
   port             = var.target_port
+}
+
+resource "aws_security_group" "alb_sg" {
+  name        = "users-alb-sg"
+  description = "Security group for users-service ALB"
+  vpc_id      = var.vpc_id
+
+  # Allow HTTP from anywhere
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name        = "users-alb-sg"
+    Environment = var.environment
+  }
 }
