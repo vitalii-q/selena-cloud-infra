@@ -16,4 +16,6 @@ module "users" {
   alert_email                 = var.alert_email
 
   users_service_ami_id        = var.ami_id
+
+  route53_zone_id = var.route53_zone_id
 }

@@ -1,3 +1,9 @@
+variable "environment" {
+  description = "Environment (dev, prod и etc.)"
+  type        = string
+  default     = "dev"
+}
+
 variable "region" {
   description = "AWS region"
   type        = string
@@ -68,3 +74,7 @@ variable "instance_type"        { type = string }
 variable "env"                  { type = string }
 variable "alert_email"          { type = string }
 
+variable "route53_zone_id" {
+  description = "Route53 Hosted Zone ID for DNS validation"
+  type        = string
+}

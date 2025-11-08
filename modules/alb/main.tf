@@ -80,3 +80,21 @@ resource "aws_security_group" "alb_sg" {
     Environment = var.environment
   }
 }
+
+resource "aws_lb_listener" "users_https_listener" {
+  load_balancer_arn = aws_lb.users_alb.arn
+  port              = 443
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2023-01"
+  certificate_arn   = var.certificate_arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.users_tg.arn
+  }
+
+  depends_on = [
+    aws_lb.users_alb,
+    aws_lb_target_group.users_tg
+  ]
+}

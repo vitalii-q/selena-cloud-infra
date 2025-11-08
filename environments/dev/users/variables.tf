@@ -1,3 +1,9 @@
+variable "environment" {
+  description = "Environment (dev, prod etc.)"
+  type        = string
+  default     = "dev"
+}
+
 # Port on which the users-service container is running
 variable "users_service_port" {
   description = "Port for users-service container"
@@ -42,12 +48,6 @@ variable "env" {
   type        = string
 }
 
-variable "environment" {
-  description = "Окружение (dev, prod и т.д.)"
-  type        = string
-  default     = "dev"
-}
-
 variable "alert_email" {
   description = "Email для уведомлений CloudWatch"
   type        = string
@@ -58,3 +58,8 @@ variable "users_service_ami_id" {
   type        = string
 }
 
+# Route53 zone ID for DNS validation
+variable "route53_zone_id" {
+  description = "Route53 Hosted Zone ID for DNS validation"
+  type        = string
+}
