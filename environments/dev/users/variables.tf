@@ -62,4 +62,10 @@ variable "users_service_ami_id" {
 variable "route53_zone_id" {
   description = "Route53 Hosted Zone ID for DNS validation"
   type        = string
+  default     = "Z09863231BVIDNICLY1A1"
+}
+
+variable "users_alb_dns_name" {
+  type = string
+  description = "ALB DNS name for users-service, to create Route53 record"
 }

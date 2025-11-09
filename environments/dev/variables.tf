@@ -77,4 +77,5 @@ variable "alert_email"          { type = string }
 variable "route53_zone_id" {
   description = "Route53 Hosted Zone ID for DNS validation"
   type        = string
+  default     = "Z09863231BVIDNICLY1A1"
 }

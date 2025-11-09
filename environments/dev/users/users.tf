@@ -136,4 +136,5 @@ module "users_alb" {
   health_check       = "/test"
 
   certificate_arn    = aws_acm_certificate_validation.users_service_cert_validation.certificate_arn
+  
 }

@@ -17,5 +17,22 @@ module "users" {
 
   users_service_ami_id        = var.ami_id
 
-  route53_zone_id = var.route53_zone_id
+  route53_zone_id             = module.users.users_service_route53_zone_id
+  environment                 = var.environment
+
+  users_alb_dns_name          = module.users.users_alb_dns_name
 }
+
+/*module "hotels" {
+  source = "./hotels"
+
+  route53_zone_id = var.route53_zone_id
+  environment     = var.environment
+}
+
+module "bookings" {
+  source = "./bookings"
+
+  route53_zone_id = var.route53_zone_id
+  environment     = var.environment
+}*/
