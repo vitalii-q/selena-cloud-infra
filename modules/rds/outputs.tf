@@ -13,7 +13,3 @@ output "rds_sg_id" {
 output "db_username" {
   value = aws_db_instance.users_postgres.username
 }
-
-output "db_endpoint" {
-  value = aws_db_instance.users_postgres.endpoint
-}
