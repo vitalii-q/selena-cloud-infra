@@ -14,3 +14,8 @@ variable "ecs_cluster_name" {
   description = "ECS Cluster name to register instances"
   type        = string
 }
+
+variable "users_alb_tg_arn" {
+  description = "ARN of the Target Group for users service ALB"
+  type        = string
+}

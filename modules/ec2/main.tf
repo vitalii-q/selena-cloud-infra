@@ -3,7 +3,7 @@
 # -----------------------
 
 resource "aws_instance" "users_service" {
-  count                       = 1
+  count                       = 0
   ami                         = var.ami_id
   # ami                       = data.aws_ami.amazon_linux_2023.id dynamic
   instance_type               = var.instance_type

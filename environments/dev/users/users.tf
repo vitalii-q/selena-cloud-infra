@@ -103,6 +103,8 @@ module "users_asg" {
   iam_instance_profile  = module.iam.selena_ec2_profile_name
   environment           = var.environment
   ecs_cluster_name      = "selena-users-cluster"
+
+  users_alb_tg_arn = module.users_alb.users_tg_arn
 }
 
 module "ecr" {
@@ -136,5 +138,6 @@ module "users_alb" {
   health_check       = "/test"
 
   certificate_arn    = aws_acm_certificate_validation.users_service_cert_validation.certificate_arn
-  
+
+  users_asg_name     = module.users_asg.asg_name
 }

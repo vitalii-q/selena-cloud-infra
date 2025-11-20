@@ -71,11 +71,12 @@ resource "aws_launch_template" "this" {
     name = var.iam_instance_profile
   }
 
-  user_data = base64encode(<<EOF
+  /*user_data = base64encode(<<EOF
     #!/bin/bash
     echo "ECS_CLUSTER=${var.ecs_cluster_name}" >> /etc/ecs/ecs.config
     EOF
-  )
+  )*/
+  user_data = base64encode(file("${path.root}/../../scripts/userdata/userdata.sh"))
 
   tag_specifications {
     resource_type = "instance"
@@ -89,8 +90,8 @@ resource "aws_launch_template" "this" {
 
 resource "aws_autoscaling_group" "this" {
   name                      = "selena-asg"
-  desired_capacity          = 0
-  min_size                  = 0
+  desired_capacity          = 1
+  min_size                  = 1
   max_size                  = 2
   vpc_zone_identifier       = var.subnet_ids
   health_check_type         = "EC2"
@@ -126,4 +127,3 @@ resource "aws_autoscaling_policy" "cpu_tgt_tracking" {
     target_value = 50
   }
 }
-

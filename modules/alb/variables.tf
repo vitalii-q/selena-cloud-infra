@@ -46,3 +46,7 @@ variable "certificate_arn" {
   type        = string
   default     = null
 }
+
+variable "users_asg_name" {
+  type = string
+}
