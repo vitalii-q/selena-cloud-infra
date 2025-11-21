@@ -19,6 +19,14 @@ resource "aws_security_group" "asg_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # Allow users-service port (9065)
+  ingress {
+    from_port   = 9065
+    to_port     = 9065
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   # Allow all outbound traffic
   egress {
     from_port   = 0
@@ -115,7 +123,7 @@ resource "aws_autoscaling_group" "this" {
 }
 
 # Target Tracking: keep the average CPU usage of the group around 50%
-resource "aws_autoscaling_policy" "cpu_tgt_tracking" {
+/*resource "aws_autoscaling_policy" "cpu_tgt_tracking" {
   name                   = "cpu-target-tracking"
   policy_type            = "TargetTrackingScaling"
   autoscaling_group_name = aws_autoscaling_group.this.name
@@ -126,4 +134,4 @@ resource "aws_autoscaling_policy" "cpu_tgt_tracking" {
     }
     target_value = 50
   }
-}
+}*/

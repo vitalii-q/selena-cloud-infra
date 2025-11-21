@@ -14,6 +14,6 @@ resource "aws_cloudwatch_metric_alarm" "cpu_high" {
   ok_actions          = [aws_sns_topic.cloudwatch_alerts.arn]
 
   dimensions = {
-    InstanceId = var.ec2_instance_id
+    InstanceId = var.ec2_instance_id # for EC2 instance with ID
   }
 }
