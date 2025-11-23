@@ -14,4 +14,5 @@ output "instance_id" {
 
 output "users_sg_id" {
   value = aws_security_group.users_sg.id
+  description = "ID of the EC2 users-service security group"
 }

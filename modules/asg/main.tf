@@ -36,6 +36,7 @@ resource "aws_security_group" "asg_sg" {
   }
 }
 
+# Amazon Linux 2023 AMI finder
 data "aws_ami" "amazon_linux_2023" {
   most_recent = true
   owners      = ["amazon"]
@@ -69,7 +70,7 @@ data "aws_ami" "ecs_optimized" {
 
 resource "aws_launch_template" "this" {
   name_prefix   = "selena-asg-"
-  image_id      = data.aws_ami.ecs_optimized.id
+  image_id      = data.aws_ami.amazon_linux_2023.id
   instance_type = var.instance_type
   key_name      = var.key_name
 
@@ -84,7 +85,7 @@ resource "aws_launch_template" "this" {
     echo "ECS_CLUSTER=${var.ecs_cluster_name}" >> /etc/ecs/ecs.config
     EOF
   )*/
-  user_data = base64encode(file("${path.root}/../../scripts/userdata/userdata.sh"))
+  user_data = base64encode(file("${path.root}/../../scripts/userdata/userdata_asg.sh"))
 
   tag_specifications {
     resource_type = "instance"

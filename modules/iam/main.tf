@@ -1,8 +1,3 @@
-module "eks" {
-  source = "./eks"
-  cluster_name = var.cluster_name
-}
-
 # Creating an instance profile for EC2
 resource "aws_iam_instance_profile" "selena_ec2_instance_profile" {
   name = "selena-ec2-instance-profile"

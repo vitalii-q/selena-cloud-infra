@@ -12,9 +12,13 @@ variable "vpc_security_group_ids" {
 variable "db_subnet_group_name" {}
 variable "env" {}
 
-variable "users_sg_id" {
+variable "users_ec2_sg_id" {
   description = "ID of the users-service security group"
   type        = string
+}
+
+variable "users_asg_sg_id" {
+  type = string
 }
 
 variable "vpc_id" {

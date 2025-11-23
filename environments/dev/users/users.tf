@@ -36,12 +36,16 @@ module "users_rds" {
   port                   = 5432
   publicly_accessible    = true
   
-  vpc_security_group_ids = [module.vpc.default_security_group_id, module.ec2.users_sg_id]
+  vpc_security_group_ids = [
+    module.vpc.default_security_group_id, 
+    module.ec2.users_sg_id
+  ]
 
   db_subnet_group_name   = module.vpc.db_subnet_group
   env                    = var.env
 
-  users_sg_id            = module.ec2.users_sg_id
+  users_ec2_sg_id        = module.ec2.users_sg_id    # security_groups EC2
+  users_asg_sg_id        = module.users_asg.asg_sg_id    # security_groups ASG
   vpc_id                 = module.vpc.vpc_id
 }
 
@@ -77,19 +81,6 @@ module "sns" {
 
 data "aws_ssm_parameter" "db_password" {
   name = "/selena/dev/users-db-password"
-}
-
-# allow access to RDS from the users-service container security group
-resource "aws_security_group_rule" "allow_users_service_to_rds" {
-  type                       = "ingress"
-  from_port                  = 5432
-  to_port                    = 5432
-  protocol                   = "tcp"
-  # security_group_id        = module.users_rds.security_group_id
-  security_group_id          = module.users_rds.rds_sg_id
-  cidr_blocks                = ["10.0.1.0/24"]
-  # source_security_group_id = module.ec2.users_sg_id
-  description                = "Allow users-service to connect to RDS"
 }
 
 module "users_asg" {

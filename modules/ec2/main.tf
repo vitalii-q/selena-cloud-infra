@@ -5,7 +5,7 @@
 resource "aws_instance" "users_service" {
   count                       = 0
   ami                         = var.ami_id
-  # ami                       = data.aws_ami.amazon_linux_2023.id dynamic
+  # ami                       = data.aws_ami.amazon_linux_2023.id # dynamic
   instance_type               = var.instance_type
   subnet_id                   = var.subnet_id
   vpc_security_group_ids      = [aws_security_group.users_sg.id]
@@ -18,7 +18,7 @@ resource "aws_instance" "users_service" {
     volume_type = "gp3"
   }
 
-  user_data = file("${path.root}/../../scripts/userdata/userdata.sh") # v2
+  user_data = file("${path.root}/../../scripts/userdata/userdata_ec2.sh") # v2
 
   tags = {
     Name = "users-service-instance"

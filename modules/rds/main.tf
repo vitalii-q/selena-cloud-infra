@@ -34,13 +34,22 @@ resource "aws_security_group" "rds_sg" {
   vpc_id      = var.vpc_id
 
   # Allow Postgres connections only from SG EC2 users-service
-  ingress {
+  /*ingress {
     from_port                = 5432
     to_port                  = 5432
     protocol                 = "tcp"
-    cidr_blocks = ["10.0.0.0/16"]    # security_groups = [var.users_sg_id]
+    security_groups = [var.users_ec2_sg_id]    # security_groups = [var.users_ec2_sg_id] / cidr_blocks = ["10.0.0.0/16"]
     description              = "Allow Postgres from Users Service EC2"
-  }
+  }*/
+
+  # Allow Postgres connections only from SG EC2 users-service
+  /*ingress {
+    from_port                = 5432
+    to_port                  = 5432
+    protocol                 = "tcp"
+    security_groups = [var.users_asg_sg_id]    # security_groups = [var.users_asg_sg_id] / cidr_blocks = ["10.0.0.0/16"]
+    description              = "Allow Postgres from Users Service ASG"
+  }*/
 
   egress {
     from_port   = 0
@@ -48,6 +57,28 @@ resource "aws_security_group" "rds_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+}
+
+# Allow Postgres from single EC2
+resource "aws_security_group_rule" "allow_from_ec2" {
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.rds_sg.id
+  source_security_group_id = var.users_ec2_sg_id
+  description              = "Allow Postgres from EC2 users-service"
+}
+
+# Allow Postgres from ASG
+resource "aws_security_group_rule" "allow_from_asg" {
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.rds_sg.id
+  source_security_group_id = var.users_asg_sg_id
+  description              = "Allow Postgres from ASG users-service"
 }
 
 data "aws_ssm_parameter" "db_password" {

@@ -19,6 +19,9 @@ systemctl enable docker
 # Добавить ec2-user в группу docker
 usermod -aG docker ec2-user
 
+# Установка stress-ng для тестирования нагрузки
+yum install -y stress-ng
+
 cd /home/ec2-user
 
 # Клонируем репозиторий, если не существует, иначе обновляем
