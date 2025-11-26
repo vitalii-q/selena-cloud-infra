@@ -14,3 +14,7 @@ output "users_alb_dns_name" {
 output "users_tg_arn" {
   value = aws_lb_target_group.users_tg.arn
 }
+
+output "alb_sg_id" {
+  value = aws_security_group.alb_sg.id
+}

@@ -4,6 +4,19 @@ variable "environment" {
   default     = "dev"
 }
 
+variable "vpc_id" { 
+  type = string 
+}
+
+variable "db_subnet_group" { 
+  type = string 
+}
+
+variable "default_security_group_id" {
+  description = "Default security group of the VPC"
+  type        = string
+}
+
 # Port on which the users-service container is running
 variable "users_service_port" {
   description = "Port for users-service container"
@@ -65,7 +78,12 @@ variable "route53_zone_id" {
   default     = "Z09863231BVIDNICLY1A1"
 }
 
-variable "users_alb_dns_name" {
-  type = string
-  description = "ALB DNS name for users-service, to create Route53 record"
+variable "public_subnet_1_id" {
+  description = "First public subnet ID"
+  type        = string
+}
+
+variable "public_subnet_2_id" {
+  description = "Second public subnet ID"
+  type        = string
 }

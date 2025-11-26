@@ -1,13 +1,3 @@
-resource "aws_cloudwatch_log_group" "users_service_logs" {
-  name              = "users-service-logs"
-  retention_in_days = 14
-
-  tags = {
-    Project = "Selena"
-    Service = "users-service"
-  }
-}
-
 # attach policy to role
 resource "aws_iam_role_policy_attachment" "cloudwatch_agent_attach" {
   role       = aws_iam_role.cloudwatch_agent_server_role.name

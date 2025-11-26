@@ -6,13 +6,12 @@ output "users_service_ecr_uri" {
   value = module.ecr.users_service_ecr_uri
 }
 
-output "users_alb_dns_name" {
-  value       = module.users_alb.users_alb_dns_name
-  description = "Public DNS name of the users-service ALB"
-}
-
 # Users RDS endpoint output
 output "users_rds_endpoint" {
   description = "RDS endpoint for Users Service database"
   value       = module.users_rds.endpoint
+}
+
+output "users_alb_dns_name" {
+  value = module.users_alb.users_alb_dns_name
 }

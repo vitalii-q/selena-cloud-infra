@@ -1,25 +1,9 @@
-module "vpc" {
-  source                = "../../../modules/vpc"
-
-  project               = "selena"
-  vpc_cidr              = "10.0.0.0/16"
-
-  public_subnet_cidr    = "10.0.1.0/24"
-  private_subnet_cidr   = "10.0.2.0/24"
-
-  public_subnet_cidr_2  = "10.0.3.0/24"
-  private_subnet_cidr_2 = "10.0.4.0/24"
-
-  availability_zone     = "eu-central-1a"
-  availability_zone_2   = var.availability_zone_2
-}
-
 module "ec2" {
   source           = "../../../modules/ec2"
   ami_id           = "ami-0381f7486a6b24f34"
   instance_type    = "t3.micro"
-  subnet_id        = module.vpc.public_subnet_id
-  vpc_id           = module.vpc.vpc_id
+  subnet_id        = var.public_subnet_1_id
+  vpc_id           = var.vpc_id
   key_name         = var.key_name
   instance_profile = module.iam.selena_ec2_profile_name
 }
@@ -37,16 +21,16 @@ module "users_rds" {
   publicly_accessible    = true
   
   vpc_security_group_ids = [
-    module.vpc.default_security_group_id, 
+    var.default_security_group_id, 
     module.ec2.users_sg_id
   ]
 
-  db_subnet_group_name   = module.vpc.db_subnet_group
+  db_subnet_group_name   = var.db_subnet_group
   env                    = var.env
 
   users_ec2_sg_id        = module.ec2.users_sg_id    # security_groups EC2
   users_asg_sg_id        = module.users_asg.asg_sg_id    # security_groups ASG
-  vpc_id                 = module.vpc.vpc_id
+  vpc_id                 = var.vpc_id
 }
 
 module "users_service_s3" {
@@ -67,11 +51,11 @@ module "iam" {
 module "cloudwatch" {
   source = "../../../modules/cloudwatch"
 
-  ec2_instance_id             = module.ec2.instance_id
-  notification_email          = var.alert_email
-  selena_ec2_instance_profile = module.iam.selena_ec2_profile_name
+  ec2_instance_id              = module.ec2.instance_id
+  notification_email           = var.alert_email
+  selena_ec2_instance_profile  = module.iam.selena_ec2_profile_name
 
-  alerts_topic_arn = module.sns.alerts_topic_arn
+  alerts_topic_arn             = module.sns.alerts_topic_arn
 }
 
 module "sns" {
@@ -87,8 +71,8 @@ module "users_asg" {
   source = "../../../modules/asg"
 
   ami_id                = "ami-0381f7486a6b24f34"
-  vpc_id                = module.vpc.vpc_id
-  subnet_ids            = [module.vpc.public_subnet_id]
+  vpc_id                = var.vpc_id
+  subnet_ids            = [var.public_subnet_1_id]
   instance_type         = var.instance_type
   key_name              = var.key_name
   iam_instance_profile  = module.iam.selena_ec2_profile_name
@@ -116,11 +100,11 @@ module "ecr" {
 module "users_alb" {
   source             = "../../../modules/alb"
   name               = "users-service-alb"
-  vpc_id             = module.vpc.vpc_id
+  vpc_id             = var.vpc_id
 
   subnets            = [
-    module.vpc.public_subnet_id,      # subnet in AZ 1
-    module.vpc.public_subnet_2_id     # subnet in AZ 2
+    var.public_subnet_1_id,      # subnet in AZ 1
+    var.public_subnet_2_id       # subnet in AZ 2
   ]
 
   security_group_id  = module.ec2.users_sg_id
@@ -131,4 +115,12 @@ module "users_alb" {
   certificate_arn    = aws_acm_certificate_validation.users_service_cert_validation.certificate_arn
 
   users_asg_name     = module.users_asg.asg_name
+}
+
+resource "aws_route53_record" "users_service_alb_record" {
+  zone_id = var.route53_zone_id
+  name    = "users-service.selena-aws.com"
+  type    = "CNAME"
+  ttl     = 300
+  records = [module.users_alb.users_alb_dns_name]
 }

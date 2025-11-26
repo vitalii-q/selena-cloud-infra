@@ -1,6 +1,6 @@
 resource "aws_cloudwatch_log_metric_filter" "users_service_errors" {
   name           = "UsersServiceErrorFilter"
-  log_group_name = "users-service-logs"
+  log_group_name = aws_cloudwatch_log_group.users_service_logs.name
   pattern        = "ERROR"
 
   metric_transformation {
@@ -8,6 +8,8 @@ resource "aws_cloudwatch_log_metric_filter" "users_service_errors" {
     namespace = "Selena"
     value     = "1"
   }
+
+  depends_on = [aws_cloudwatch_log_group.users_service_logs]
 }
 
 resource "aws_cloudwatch_metric_alarm" "users_service_errors_alarm" {

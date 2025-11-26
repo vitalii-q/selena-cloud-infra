@@ -3,6 +3,22 @@ provider "aws" {
   profile = "terraform"
 }
 
+module "vpc" {
+  source                = "../../modules/vpc"
+
+  project               = "selena"
+  vpc_cidr              = "10.0.0.0/16"
+
+  public_subnet_cidr    = "10.0.1.0/24"
+  private_subnet_cidr   = "10.0.2.0/24"
+
+  public_subnet_cidr_2  = "10.0.3.0/24"
+  private_subnet_cidr_2 = "10.0.4.0/24"
+
+  availability_zone     = "eu-central-1a"
+  availability_zone_2   = var.availability_zone_2
+}
+
 module "users" {
   source = "./users"
 
@@ -14,13 +30,18 @@ module "users" {
   instance_type               = var.instance_type
   env                         = var.env
   alert_email                 = var.alert_email
-
-  users_service_ami_id        = var.ami_id
-
-  route53_zone_id             = module.users.users_service_route53_zone_id
   environment                 = var.environment
+  users_service_ami_id        = var.ami_id
+  default_security_group_id   = module.vpc.default_security_group_id
 
-  users_alb_dns_name          = module.users.users_alb_dns_name
+  route53_zone_id             = data.aws_route53_zone.main_zone.zone_id 
+
+  # certificate_arn           = aws_acm_certificate_validation.users_service_cert_validation.certificate_arn
+
+  public_subnet_1_id          = module.vpc.public_subnet_id
+  public_subnet_2_id          = module.vpc.public_subnet_2_id
+  vpc_id                      = module.vpc.vpc_id
+  db_subnet_group             = module.vpc.db_subnet_group
 }
 
 /*module "hotels" {
