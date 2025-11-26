@@ -41,12 +41,12 @@ unzip awscliv2.zip
 sudo ./aws/install
 
 # Проверяем наличие .env в репозитории и скачиваем из S3 при отсутствии
-if [ ! -f selena-users-service/users.env.cloud ]; then
-    echo ".env (users.env.cloud) не найден, скачиваем из S3..."
+if [ ! -f selena-users-service/.env ]; then
+    echo ".env (s3 users.env.cloud) не найден, скачиваем из S3..."
     aws s3 cp s3://selena-users-service-env-dev/users.env.cloud selena-users-service/.env
     chown ec2-user:ec2-user selena-users-service/.env
 else
-    echo ".env (users.env.cloud) уже существует"
+    echo ".env (s3 users.env.cloud) уже существует"
 fi
 
 chmod 600 selena-users-service/.env
@@ -55,6 +55,9 @@ cd selena-users-service
 
 # Собираем docker-образ
 sudo -u ec2-user docker build -t selena-users-service .
+
+# Логин в ECR перед запуском контейнера
+aws ecr get-login-password --region eu-central-1 | sudo -u ec2-user docker login --username AWS --password-stdin 235484063004.dkr.ecr.eu-central-1.amazonaws.com
 
 # Останавливаем старый контейнер, если он есть
 if docker ps -a --format '{{.Names}}' | grep -q '^selena-users-service$'; then
@@ -65,10 +68,11 @@ fi
 # Запускаем контейнер с использованием .env файла
 sudo -u ec2-user docker run -d \
     --name selena-users-service \
-    --env-file users.env.cloud \
-    -p 9065:9065 \
+    --env-file .env \
+    --network host \
     --restart always \
-    selena-users-service:latest
+    235484063004.dkr.ecr.eu-central-1.amazonaws.com/selena-users-service:latest
+    # -p 9065:9065 \
 
 # Установка CloudWatch Agent
 cd /tmp

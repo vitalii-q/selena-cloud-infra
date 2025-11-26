@@ -6,9 +6,9 @@ variable "username" {}
 variable "password" {}
 variable "port" {}
 variable "publicly_accessible" {}
-variable "vpc_security_group_ids" {
+/*variable "vpc_security_group_ids" {
   type = list(string)
-}
+}*/
 variable "db_subnet_group_name" {}
 variable "env" {}
 

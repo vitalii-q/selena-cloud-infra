@@ -18,19 +18,20 @@ module "users_rds" {
   username               = "postgres"
   password               = data.aws_ssm_parameter.db_password.value
   port                   = 5432
-  publicly_accessible    = true
+  publicly_accessible    = false
+
+  vpc_id                 = var.vpc_id
   
-  vpc_security_group_ids = [
+  /*vpc_security_group_ids = [
     var.default_security_group_id, 
     module.ec2.users_sg_id
-  ]
+  ]*/
 
   db_subnet_group_name   = var.db_subnet_group
   env                    = var.env
 
-  users_ec2_sg_id        = module.ec2.users_sg_id    # security_groups EC2
+  users_ec2_sg_id        = module.ec2.users_sg_id        # security_groups EC2
   users_asg_sg_id        = module.users_asg.asg_sg_id    # security_groups ASG
-  vpc_id                 = var.vpc_id
 }
 
 module "users_service_s3" {
