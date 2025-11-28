@@ -36,17 +36,17 @@ variable "environment" {
   default     = "dev"
 }
 
-variable "ec2_instance_id" {
-  description = "EC2 instance ID to attach to Target Group"
-  type        = string
-}
-
 variable "certificate_arn" {
   description = "ACM Certificate ARN for HTTPS listener"
   type        = string
   default     = null
 }
 
+/*variable "ec2_instance_id" {
+  description = "EC2 instance ID to attach to Target Group"
+  type        = string
+}
+
 variable "users_asg_name" {
   type = string
-}
+}*/

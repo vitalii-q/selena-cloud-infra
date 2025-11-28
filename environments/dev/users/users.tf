@@ -108,14 +108,14 @@ module "users_alb" {
     var.public_subnet_2_id       # subnet in AZ 2
   ]
 
-  security_group_id  = module.ec2.users_sg_id
-  target_port        = 9065
-  ec2_instance_id    = module.ec2.instance_id
+  # ec2_instance_id    = module.ec2.instance_id
+  # users_asg_name     = module.users_asg.asg_name
+
+  security_group_id  = module.users_asg.asg_sg_id
+  target_port        = 80
   health_check       = "/test"
 
   certificate_arn    = aws_acm_certificate_validation.users_service_cert_validation.certificate_arn
-
-  users_asg_name     = module.users_asg.asg_name
 }
 
 resource "aws_route53_record" "users_service_alb_record" {

@@ -72,3 +72,6 @@ sudo -u ec2-user docker run -d \
     --network host \
     --restart always \
     235484063004.dkr.ecr.eu-central-1.amazonaws.com/selena-users-service:latest
+
+# Перенаправление трафика с порта 80 на порт 9065
+sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 9065

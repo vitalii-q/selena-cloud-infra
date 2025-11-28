@@ -57,11 +57,10 @@ resource "aws_lb_listener" "users_http_listener" {
 }*/
 
 # For ASG EC2 instances
-resource "aws_autoscaling_attachment" "asg_to_tg" {
+/*resource "aws_autoscaling_attachment" "asg_to_tg" {
   autoscaling_group_name = var.users_asg_name  # ASG name
   lb_target_group_arn    = aws_lb_target_group.users_tg.arn
-}
-
+}*/
 
 resource "aws_security_group" "alb_sg" {
   name        = "users-alb-sg"

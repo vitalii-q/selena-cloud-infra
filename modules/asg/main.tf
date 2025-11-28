@@ -111,6 +111,10 @@ resource "aws_autoscaling_group" "this" {
     version = "$Latest"
   }
 
+  target_group_arns = [
+    var.users_alb_tg_arn
+  ]
+
   # so that Terraform waits until the instances are up
   lifecycle {
     create_before_destroy = true
