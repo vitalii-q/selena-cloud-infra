@@ -98,7 +98,7 @@ resource "aws_launch_template" "this" {
 }
 
 resource "aws_autoscaling_group" "this" {
-  name                      = "selena-asg"
+  name                      = "selena-users-service-asg"
   desired_capacity          = 1
   min_size                  = 1
   max_size                  = 2
@@ -109,6 +109,16 @@ resource "aws_autoscaling_group" "this" {
   launch_template {
     id      = aws_launch_template.this.id
     version = "$Latest"
+  }
+
+  # analog: aws autoscaling start-instance-refresh --auto-scaling-group-name users-service-asg
+  instance_refresh {
+    strategy = "Rolling"
+    preferences {
+      min_healthy_percentage = 90
+      instance_warmup        = 120
+    }
+    triggers = ["launch_template"]
   }
 
   target_group_arns = [
