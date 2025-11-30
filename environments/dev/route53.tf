@@ -14,8 +14,3 @@ resource "aws_route53_record" "users_service_alb_record" {
   # ALB hostname from module.users
   records = [module.users.users_alb_dns_name]
 }
-
-# Export the Hosted Zone ID
-output "users_service_route53_zone_id" {
-  value = data.aws_route53_zone.main_zone.zone_id
-}
