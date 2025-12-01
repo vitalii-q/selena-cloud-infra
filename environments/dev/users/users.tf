@@ -102,7 +102,7 @@ module "ecr" {
 
 module "users_alb" {
   source             = "../../../modules/alb"
-  name               = "users-service-alb"
+  name               = "selena-users-service-alb"
   vpc_id             = var.vpc_id
 
   subnets            = [
@@ -114,7 +114,7 @@ module "users_alb" {
   # users_asg_name     = module.users_asg.asg_name
 
   security_group_id  = module.users_asg.asg_sg_id
-  target_port        = 80
+  target_port        = 9065
   health_check       = "/test"
 
   certificate_arn    = aws_acm_certificate_validation.users_service_cert_validation.certificate_arn

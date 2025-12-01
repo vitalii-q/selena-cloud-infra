@@ -16,7 +16,7 @@ resource "aws_lb" "users_alb" {
 }
 
 resource "aws_lb_target_group" "users_tg" {
-  name     = "${var.name}-tg"
+  name     = "${var.name}-tg-${var.target_port}"
   port     = var.target_port
   protocol = "HTTP"
   vpc_id   = var.vpc_id
