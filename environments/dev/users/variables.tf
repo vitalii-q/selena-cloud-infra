@@ -4,6 +4,14 @@ variable "environment" {
   default     = "dev"
 }
 
+variable "account_id" {
+  description = "Account ID"
+}
+
+variable "region" {
+  description = "AWS region"
+}
+
 variable "vpc_id" { 
   type = string 
 }

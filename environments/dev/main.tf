@@ -23,6 +23,9 @@ module "users" {
   source = "./users"
 
   # variables
+  account_id                  = data.aws_caller_identity.current.account_id
+  region                      = var.region
+
   private_subnet_cidr_2       = var.private_subnet_cidr_2
   availability_zone_2         = var.availability_zone_2
   ami_id                      = var.ami_id
@@ -42,6 +45,12 @@ module "users" {
   public_subnet_2_id          = module.vpc.public_subnet_2_id
   vpc_id                      = module.vpc.vpc_id
   db_subnet_group             = module.vpc.db_subnet_group
+
+  # Secret variables
+  users_db_host = var.users_db_host
+  users_db_user = var.users_db_user
+  users_db_pass = var.users_db_pass
+  users_db_name = var.users_db_name
 }
 
 /*module "hotels" {
@@ -57,3 +66,6 @@ module "bookings" {
   route53_zone_id = var.route53_zone_id
   environment     = var.environment
 }*/
+
+# Account id
+data "aws_caller_identity" "current" {}

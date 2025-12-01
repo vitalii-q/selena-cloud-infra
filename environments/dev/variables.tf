@@ -7,6 +7,7 @@ variable "environment" {
 variable "region" {
   description = "AWS region"
   type        = string
+  default = "eu-central-1"
 }
 
 variable "subnet_id" {
@@ -79,3 +80,9 @@ variable "route53_zone_id" {
   type        = string
   default     = "Z09863231BVIDNICLY1A1"
 }
+
+# Secret variables
+variable "users_db_host" {}
+variable "users_db_user" {}
+variable "users_db_pass" {sensitive = true}
+variable "users_db_name" {}

@@ -35,3 +35,8 @@ resource "aws_iam_role_policy_attachment" "ecs_instance_role_attach" {
   role       = aws_iam_role.selena_ec2_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
 }
+
+resource "aws_iam_role_policy_attachment" "ec2_secrets_access_attach" {
+  role       = aws_iam_role.selena_ec2_role.name
+  policy_arn = aws_iam_policy.ec2_secrets_access_policy.arn
+}

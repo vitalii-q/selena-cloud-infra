@@ -117,3 +117,19 @@ resource "aws_iam_role" "ecs_task_role" {
     ]
   })
 }
+
+resource "aws_iam_policy" "ec2_secrets_access_policy" {
+  name        = "EC2SecretsAccessPolicy"
+  description = "Allow EC2 to read users-service secrets from Secrets Manager"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect   = "Allow",
+        Action   = ["secretsmanager:GetSecretValue"],
+        Resource = "arn:aws:secretsmanager:${var.region}:${var.account_id}:secret:selena-users-db-dev*"
+      }
+    ]
+  })
+}
