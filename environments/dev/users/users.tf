@@ -1,7 +1,8 @@
 module "ec2" {
   source           = "../../../modules/ec2"
   ami_id           = "ami-0381f7486a6b24f34"
-  instance_type    = "t3.micro"
+  instance_count   = 0
+  instance_type    = "t3.nano"
   subnet_id        = var.public_subnet_1_id
   vpc_id           = var.vpc_id
   key_name         = var.key_name
@@ -73,14 +74,18 @@ data "aws_ssm_parameter" "db_password" {
 module "users_asg" {
   source = "../../../modules/asg"
 
+  desired_capacity      = 1
+  min_size              = 1
+  max_size              = 2
+
   ami_id                = "ami-0381f7486a6b24f34"
   vpc_id                = var.vpc_id
   subnet_ids            = [var.public_subnet_1_id]
-  instance_type         = var.instance_type
+  instance_type         = "t3.nano"
   key_name              = var.key_name
   iam_instance_profile  = module.iam.selena_ec2_profile_name
   environment           = var.environment
-  ecs_cluster_name      = "selena-users-cluster"
+  #ecs_cluster_name      = "selena-users-cluster"
 
   users_alb_tg_arn = module.users_alb.users_tg_arn
 }

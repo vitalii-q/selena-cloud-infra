@@ -3,6 +3,11 @@ variable "ami_id" {
   type        = string
 }
 
+variable "instance_count" {
+  description = "Count of activ EC2 instances"
+  type        = number
+}
+
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string

@@ -30,7 +30,7 @@ module "users" {
   availability_zone_2         = var.availability_zone_2
   ami_id                      = var.ami_id
   key_name                    = var.key_name
-  instance_type               = var.instance_type
+  #instance_type               = var.instance_type
   env                         = var.env
   alert_email                 = var.alert_email
   environment                 = var.environment

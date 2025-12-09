@@ -1,3 +1,7 @@
+variable "desired_capacity"     { type = number }
+variable "min_size"             { type = number }
+variable "max_size"             { type = number }
+
 variable "ami_id"               { type = string }
 variable "instance_type"        { type = string }
 variable "key_name"             { type = string }
@@ -10,10 +14,10 @@ variable "environment" {
   type        = string
 }
 
-variable "ecs_cluster_name" {
+/*variable "ecs_cluster_name" {
   description = "ECS Cluster name to register instances"
   type        = string
-}
+}*/
 
 variable "users_alb_tg_arn" {
   description = "ARN of the Target Group for users service ALB"
