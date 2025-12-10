@@ -22,3 +22,13 @@ output "github_actions_secret_access_key" {
   value     = module.users.github_actions_secret_access_key
   sensitive = true
 }
+
+# Export VPC public subnets
+output "public_subnet_ids" {
+  value = module.vpc.public_subnet_ids
+}
+
+# Export VPC private subnets
+output "private_subnet_ids" {
+  value = module.vpc.private_subnet_ids
+}

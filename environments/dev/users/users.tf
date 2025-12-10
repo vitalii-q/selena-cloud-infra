@@ -1,7 +1,7 @@
 module "ec2" {
   source           = "../../../modules/ec2"
   ami_id           = "ami-0381f7486a6b24f34"
-  instance_count   = 0
+  instance_count   = 1
   instance_type    = "t3.nano"
   subnet_id        = var.public_subnet_1_id
   vpc_id           = var.vpc_id
