@@ -32,3 +32,8 @@ output "public_subnet_ids" {
 output "private_subnet_ids" {
   value = module.vpc.private_subnet_ids
 }
+
+# Users AMI(Packer) id
+output "users_ami_id" {
+  value = module.users.ami_id
+}

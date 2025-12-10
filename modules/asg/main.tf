@@ -57,7 +57,8 @@ resource "aws_autoscaling_group" "this" {
       min_healthy_percentage = 90
       instance_warmup        = 120
     }
-    #triggers = ["launch_template"]
+
+    triggers = ["launch_template"]   # restart instances when updating aws_launch_template
   }
 
   target_group_arns = [
