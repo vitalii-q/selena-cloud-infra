@@ -17,6 +17,15 @@ resource "aws_launch_template" "this" {
   )*/
   user_data = base64encode(file("${path.root}/../../scripts/userdata/userdata_asg.sh"))
 
+  block_device_mappings {        # EBS
+    device_name = "/dev/xvda"
+    ebs {
+      volume_size           = 5
+      volume_type           = "gp3"
+      delete_on_termination = true
+    }
+  }
+
   tag_specifications {
     resource_type = "instance"
     tags = {
