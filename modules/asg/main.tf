@@ -1,6 +1,6 @@
 resource "aws_launch_template" "this" {
   name_prefix   = "selena-asg-"
-  image_id      = data.aws_ami.amazon_linux_2023.id
+  image_id      = var.ami_id
   instance_type = var.instance_type
   key_name      = var.key_name
 

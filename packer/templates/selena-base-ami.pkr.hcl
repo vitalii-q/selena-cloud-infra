@@ -15,16 +15,6 @@ packer {
   }
 }
 
-variable "region" {
-  type    = string
-  default = "eu-central-1"
-}
-
-variable "source_ami" {
-  type    = string
-  default = "ami-0cff079720c1be186"
-}
-
 variable "subnet_id" {
   type = string
 }
@@ -34,10 +24,22 @@ locals {
 }
 
 source "amazon-ebs" "selena_base" {
-  region                  = var.region
-  instance_type           = "t3.micro"
-  source_ami              = var.source_ami
+  region                  = "eu-central-1"
+  instance_type           = "t3.nano"         # <- temporary build instance
   ssh_username            = "ec2-user"
+
+  # Get the latest Amazon Linux 2023
+  source_ami_filter {
+    filters = {
+      name                = "al2023-ami-*"
+      architecture        = "x86_64"
+      root-device-type    = "ebs"
+      virtualization-type = "hvm"
+    }
+    owners      = ["137112412989"] # AWS official owner ID
+    most_recent = true
+  }
+
   ami_name                = "selena-base-ami-${local.timestamp}"
   ami_description         = "Base AMI for Selena project (Docker, Git, CloudWatch, system updates)"
   associate_public_ip_address = true
