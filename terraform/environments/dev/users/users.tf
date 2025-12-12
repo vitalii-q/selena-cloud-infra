@@ -65,10 +65,10 @@ module "users_service_s3" {
 
 module "iam" {
   source       = "../../../modules/iam"
+
   user_name     = "terraform-user"
   account_id    = var.account_id
   region        = var.region
-  #cluster_name = "selena-eks"
 }
 
 module "cloudwatch" {

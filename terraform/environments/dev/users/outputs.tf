@@ -3,7 +3,7 @@ output "users_asg_name" {
 }
 
 output "users_service_ecr_uri" {
-  value = module.ecr.users_service_ecr_uri
+  value = module.ecr.services_ecr_uri
 }
 
 # Users RDS endpoint output

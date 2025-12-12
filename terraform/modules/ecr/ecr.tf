@@ -1,15 +1,20 @@
-resource "aws_ecr_repository" "users_service" {
-  name                 = "selena-users-service"
+# ECR Repositories
+resource "aws_ecr_repository" "services" {
+  for_each = toset(var.services)
+
+  name                 = "selena-${each.key}"
   image_tag_mutability = "MUTABLE"
+
   tags = {
     Environment = var.environment
-    Service     = "users-service"
+    Service     = each.key
   }
 }
 
-# Lifecycle policy for ECR: keep only last 3 tagged images
-resource "aws_ecr_lifecycle_policy" "users_service_policy" {
-  repository = aws_ecr_repository.users_service.name
+# Lifecycle Policies
+resource "aws_ecr_lifecycle_policy" "services_policy" {
+  for_each   = aws_ecr_repository.services
+  repository = each.value.name
 
   policy = jsonencode({
     rules = [
@@ -18,7 +23,7 @@ resource "aws_ecr_lifecycle_policy" "users_service_policy" {
         description  = "Keep only last 3 tagged images with v*"
         selection = {
           tagStatus     = "tagged"
-          tagPrefixList = ["v"]        # leave all tags beginning with “v”
+          tagPrefixList = ["v"]
           countType     = "imageCountMoreThan"
           countNumber   = 3
         }
@@ -31,7 +36,7 @@ resource "aws_ecr_lifecycle_policy" "users_service_policy" {
         description  = "Keep last 1 latest tag"
         selection = {
           tagStatus     = "tagged"
-          tagPrefixList = ["latest"]   # process separately latest
+          tagPrefixList = ["latest"]    # process separately latest
           countType     = "imageCountMoreThan"
           countNumber   = 1
         }
@@ -42,5 +47,3 @@ resource "aws_ecr_lifecycle_policy" "users_service_policy" {
     ]
   })
 }
-
-
