@@ -6,7 +6,7 @@ module "ec2" {
   subnet_id        = var.public_subnet_1_id
   vpc_id           = var.vpc_id
   key_name         = var.key_name
-  instance_profile = module.iam.selena_ec2_profile_name
+  instance_profile = module.users_ec2_role.selena_users_ec2_profile_name
 }
 
 module "users_asg" {
@@ -21,7 +21,7 @@ module "users_asg" {
   subnet_ids            = [var.public_subnet_1_id]
   instance_type         = "t3.nano"
   key_name              = var.key_name
-  iam_instance_profile  = module.iam.selena_ec2_profile_name
+  iam_instance_profile  = module.users_ec2_role.selena_users_ec2_profile_name
   environment           = var.environment
   #ecs_cluster_name      = "selena-users-cluster"
 
@@ -63,20 +63,12 @@ module "users_service_s3" {
   }
 }
 
-module "iam" {
-  source       = "../../../modules/iam"
-
-  user_name     = "terraform-user"
-  account_id    = var.account_id
-  region        = var.region
-}
-
 module "cloudwatch" {
   source = "../../../modules/cloudwatch"
 
   ec2_instance_id              = module.ec2.instance_id
   notification_email           = var.alert_email
-  selena_ec2_instance_profile  = module.iam.selena_ec2_profile_name
+  selena_ec2_instance_profile  = module.users_ec2_role.selena_users_ec2_profile_name
 
   alerts_topic_arn             = module.sns.alerts_topic_arn
 }
@@ -131,4 +123,64 @@ resource "aws_route53_record" "users_service_alb_record" {
   type    = "CNAME"
   ttl     = 300
   records = [module.users_alb.users_alb_dns_name]
+}
+
+# =======================
+# IAM 
+# =======================
+/*module "iam" {
+  source        = "../../../modules/iam"
+
+  user_name     = "terraform-user"
+  account_id    = var.account_id
+  region        = var.region
+}*/
+
+module "users_ec2_role" {
+  source        = "../../../modules/iam-roles"
+  role_name     = "selena-users-ec2-role"
+  service       = "ec2.amazonaws.com"
+  account_id    = var.account_id
+  region        = var.region
+
+  policies      = local.ec2_role_policies
+
+  tags = {
+    Project = "Selena"
+    Service = "users-service"
+  }
+}
+
+module "users_cloudwatch_role" {
+  source        = "../../../modules/iam-roles"
+  role_name     = "selena-users-cloudwatch-role"
+  service       = "ec2.amazonaws.com"
+  account_id    = var.account_id
+  region        = var.region
+
+  policies  = [
+    "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+  ]
+
+  tags = {
+    Project = "Selena"
+    Service = "users-service"
+  }
+}
+
+module "users_iam_github" {
+  source = "../../../modules/iam-roles"
+  role_name     = "selena-users-github_actions-role"
+  service       = "ec2.amazonaws.com"
+  account_id    = var.account_id
+  region        = var.region
+
+  policies = [
+    "arn:aws:iam::${var.account_id}:policy/GitHubActionsECRPolicy"
+  ]
+
+  tags = {
+    Project = "Selena"
+    Service = "ci/cd"
+  }
 }

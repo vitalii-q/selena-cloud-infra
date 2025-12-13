@@ -85,3 +85,7 @@ variable "users_db_host" {}
 variable "users_db_user" {}
 variable "users_db_pass" {sensitive = true}
 variable "users_db_name" {}
+
+variable "instance_type" {
+  type = string
+}
