@@ -4,6 +4,11 @@ variable "environment" {
   default     = "dev"
 }
 
+variable "account_id" {
+  default = ""
+  type = string
+}
+
 variable "region" {
   description = "AWS region"
   type        = string
@@ -80,12 +85,11 @@ variable "route53_zone_id" {
   default     = "Z09863231BVIDNICLY1A1"
 }
 
-# Secret variables
-variable "users_db_host" {}
-variable "users_db_user" {}
-variable "users_db_pass" {sensitive = true}
-variable "users_db_name" {}
-
-variable "account_id" {
-  type = string
+# Secret variables (used in ./users/secrets.tf)
+variable "users_db_name" {default = ""}
+variable "users_db_host" {default = ""}
+variable "users_db_user" {default = ""}
+variable "users_db_pass" {
+  default = "" 
+  sensitive = true
 }

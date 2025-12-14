@@ -10,12 +10,12 @@ resource "aws_secretsmanager_secret" "users_db_secret" {
 resource "aws_secretsmanager_secret_version" "users_db_secret_version" {
   secret_id     = aws_secretsmanager_secret.users_db_secret.id
   secret_string = jsonencode({
-    USERS_POSTGRES_DB_HOST     = var.users_db_host
-    USERS_POSTGRES_DB_USER     = var.users_db_user
-    USERS_POSTGRES_DB_PASS     = var.users_db_pass
-    USERS_POSTGRES_DB_NAME     = var.users_db_name
+    USERS_POSTGRES_DB_HOST       = var.users_db_host
+    USERS_POSTGRES_DB_USER       = var.users_db_user
+    USERS_POSTGRES_DB_PASS       = var.users_db_pass
+    USERS_POSTGRES_DB_NAME       = var.users_db_name
     USERS_POSTGRES_DB_PORT_INNER = var.users_db_port_inner
-    USERS_POSTGRES_DB_SSLMODE  = var.users_db_sslmode
+    USERS_POSTGRES_DB_SSLMODE    = var.users_db_sslmode
   })
 }
 
