@@ -58,7 +58,7 @@ resource "aws_autoscaling_group" "this" {
       instance_warmup        = 120
     }
 
-    triggers = ["launch_template"]   # restart instances when updating aws_launch_template
+    #triggers = ["launch_template"]   # restart instances when updating aws_launch_template
   }
 
   target_group_arns = [

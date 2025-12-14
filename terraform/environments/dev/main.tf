@@ -30,7 +30,6 @@ module "users" {
   availability_zone_2         = var.availability_zone_2
   ami_id                      = var.ami_id
   key_name                    = var.key_name
-  #instance_type               = var.instance_type
   env                         = var.env
   alert_email                 = var.alert_email
   environment                 = var.environment
@@ -53,14 +52,18 @@ module "users" {
   users_db_name = var.users_db_name
 }
 
-/*module "hotels" {
+module "hotels" {
   source = "./hotels"
+
+  # variables
+  account_id                  = data.aws_caller_identity.current.account_id
+  region                      = var.region
 
   route53_zone_id = var.route53_zone_id
   environment     = var.environment
 }
 
-module "bookings" {
+/*module "bookings" {
   source = "./bookings"
 
   route53_zone_id = var.route53_zone_id

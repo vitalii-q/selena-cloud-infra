@@ -168,7 +168,7 @@ module "users_cloudwatch_role" {
   }
 }
 
-module "users_iam_github" {
+module "users_iam_github" { # TODO: it may need to be moved to a higher level or duplicated in hotels infrastructure
   source = "../../../modules/iam-roles"
   role_name     = "selena-users-github_actions-role"
   service       = "ec2.amazonaws.com"
