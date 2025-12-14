@@ -7,8 +7,7 @@ variable "service" {
 }
 
 variable "policies" {
-  type = list(string)
-  default = []
+  type = map(string)
 }
 
 variable "tags" {

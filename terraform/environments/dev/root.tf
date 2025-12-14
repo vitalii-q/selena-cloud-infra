@@ -76,14 +76,20 @@ data "aws_caller_identity" "current" {}
 # =====================================
 # --- Policies and Roles for Selena ---
 # =====================================
+module "shared_policies" {
+  source     = "../../modules/iam/iam-policies/shared"
+  account_id = var.account_id
+  region     = var.region
+}
+
 module "selena_cloudwatch_role" {
   source        = "../../modules/iam/iam-roles/cloudwatch-role"
   role_name     = "selena-cloudwatch-role"
   service       = "ec2.amazonaws.com"
 
-  policies = [
-    "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
-  ]
+  policies = {
+    CloudWatchMetricsPolicy = module.shared_policies.cloudwatch_metrics_policy_arn # customer managed policies
+  }
 
   tags = {
     Project = "Selena"
@@ -95,9 +101,9 @@ module "github_actions_role" {   # TODO: it may need to be moved to a higher lev
   role_name     = "selena-github-actions-role"
   service       = "ec2.amazonaws.com"
 
-  policies = [
-    "arn:aws:iam::${var.account_id}:policy/GitHubActionsECRPolicy"
-  ]
+  policies = {
+    GitHubActionsECRPolicy = module.shared_policies.github_actions_ecr_policy_arn
+  }
 
   tags = {
     Project = "Selena"
@@ -110,9 +116,9 @@ module "instance_management_role" {
   role_name     = "selena-instance-management-role"
   service       = "ec2.amazonaws.com"
 
-  policies = [
-    "arn:aws:iam::${var.account_id}:policy/Ec2StopStartPolicy"
-  ]
+  policies = {
+    Ec2StopStartPolicy = module.shared_policies.ec2_stop_start_policy_arn
+  }
 
   tags = {
     Project = "Selena"

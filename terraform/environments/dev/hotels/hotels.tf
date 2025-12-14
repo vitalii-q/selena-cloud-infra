@@ -3,7 +3,7 @@ module "hotels_role" {
   role_name     = "selena-hotels-role"
   service       = "ec2.amazonaws.com"
 
-  #policies      = local.ec2_role_policies
+  policies      = local.ec2_role_policies
 
   tags = {
     Project = "Selena"

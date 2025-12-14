@@ -1,5 +1,11 @@
 # ============================================
 # --- Policies and Roles for users-service ---
+module "users_policies" {
+  source     = "../../../modules/iam/iam-policies/users"
+  account_id = var.account_id
+  region     = var.region
+}
+
 # ============================================
 module "users_role" {
   source        = "../../../modules/iam/iam-roles/service-role"
@@ -15,9 +21,9 @@ module "users_role" {
 }
 
 locals {
-  ec2_role_policies = [
-    "arn:aws:iam::${var.account_id}:policy/EC2S3AccessPolicy",
-    "arn:aws:iam::${var.account_id}:policy/EC2SecretsAccessPolicy",
-    "arn:aws:iam::${var.account_id}:policy/EC2RDSReadPolicy",
-  ]
+  ec2_role_policies = {
+    EC2S3AccessPolicy      = module.users_policies.ec2_s3_access_policy_arn
+    EC2SecretsAccessPolicy = module.users_policies.ec2_secrets_access_policy_arn
+    EC2RDSReadPolicy       = module.users_policies.ec2_rds_read_policy_arn
+  }
 }

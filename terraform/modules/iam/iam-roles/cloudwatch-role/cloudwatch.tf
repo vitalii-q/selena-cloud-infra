@@ -26,3 +26,9 @@ resource "aws_iam_instance_profile" "cloudwatch_agent_instance_profile" {
   name = "CloudWatchAgentInstanceProfile"
   role = aws_iam_role.cloudwatch_agent_server_role.name
 }
+
+resource "aws_iam_role_policy_attachment" "attach" {
+  for_each   = var.policies
+  role       = aws_iam_role.cloudwatch_agent_server_role.name
+  policy_arn = each.value
+}
