@@ -1,6 +1,6 @@
 # --- CloudWatch Role ---
 resource "aws_iam_role" "cloudwatch_agent_server_role" {
-  name = "cloudwatch-agent-server-role"
+  name = var.role_name
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -8,7 +8,7 @@ resource "aws_iam_role" "cloudwatch_agent_server_role" {
       {
         Effect = "Allow",
         Principal = {
-          Service = "ec2.amazonaws.com"
+          Service = var.service
         },
         Action = "sts:AssumeRole"
       }
@@ -23,7 +23,7 @@ resource "aws_iam_role" "cloudwatch_agent_server_role" {
 
 # --- Instance Profile for cloudwatch_agent_server_role ---
 resource "aws_iam_instance_profile" "cloudwatch_agent_instance_profile" {
-  name = "CloudWatchAgentInstanceProfile"
+  name = "${var.role_name}-instance-profile"
   role = aws_iam_role.cloudwatch_agent_server_role.name
 }
 
