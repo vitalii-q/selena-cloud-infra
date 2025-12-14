@@ -46,18 +46,18 @@ module "users" {
   db_subnet_group             = module.vpc.db_subnet_group
 
   # Secret variables
-  users_db_host = var.users_db_host
-  users_db_user = var.users_db_user
-  users_db_pass = var.users_db_pass
-  users_db_name = var.users_db_name
+  users_db_host               = var.users_db_host
+  users_db_user               = var.users_db_user
+  users_db_pass               = var.users_db_pass
+  users_db_name               = var.users_db_name
 }
 
 module "hotels" {
-  source = "./hotels"
+  source          = "./hotels"
 
   # variables
-  account_id                  = data.aws_caller_identity.current.account_id
-  region                      = var.region
+  account_id      = data.aws_caller_identity.current.account_id
+  region          = var.region
 
   route53_zone_id = var.route53_zone_id
   environment     = var.environment
@@ -72,3 +72,49 @@ module "hotels" {
 
 # Account id
 data "aws_caller_identity" "current" {}
+
+# =====================================
+# --- Policies and Roles for Selena ---
+# =====================================
+module "selena_cloudwatch_role" {
+  source        = "../../modules/iam/iam-roles/cloudwatch-role"
+  role_name     = "selena-cloudwatch-role"
+  service       = "ec2.amazonaws.com"
+
+  policies = [
+    "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+  ]
+
+  tags = {
+    Project = "Selena"
+  }
+}
+
+module "github_actions_role" {   # TODO: it may need to be moved to a higher level or duplicated in hotels infrastructure
+  source        = "../../modules/iam/iam-roles/github-actions-role"
+  role_name     = "selena-github-actions-role"
+  service       = "ec2.amazonaws.com"
+
+  policies = [
+    "arn:aws:iam::${var.account_id}:policy/GitHubActionsECRPolicy"
+  ]
+
+  tags = {
+    Project = "Selena"
+    Service = "CI/CD"
+  }
+}
+
+module "instance_management_role" {
+  source        = "../../modules/iam/iam-roles/service-role"
+  role_name     = "selena-instance-management-role"
+  service       = "ec2.amazonaws.com"
+
+  policies = [
+    "arn:aws:iam::${var.account_id}:policy/Ec2StopStartPolicy"
+  ]
+
+  tags = {
+    Project = "Selena"
+  }
+}

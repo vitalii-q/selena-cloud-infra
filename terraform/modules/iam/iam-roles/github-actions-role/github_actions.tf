@@ -1,5 +1,5 @@
 # IAM user for GitHub Actions (CI/CD)
-resource "aws_iam_user" "github_actions" {
+resource "aws_iam_user" "github_actions" { # TODO: replace it with a role
   name = "github-actions-user"
 }
 

@@ -13,15 +13,15 @@ output "users_service_route53_zone_id" {
 }
 
 # AWS_ACCESS_KEY_ID
-output "github_actions_access_key_id" {
+/*output "github_actions_access_key_id" {
   value = module.users.github_actions_access_key_id
-}
+}*/
 
 # AWS_SECRET_ACCESS_KEY
-output "github_actions_secret_access_key" {
+/*output "github_actions_secret_access_key" {
   value     = module.users.github_actions_secret_access_key
   sensitive = true
-}
+}*/
 
 # Export VPC public subnets
 output "public_subnet_ids" {

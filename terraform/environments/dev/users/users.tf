@@ -6,7 +6,7 @@ module "ec2" {
   subnet_id        = var.public_subnet_1_id
   vpc_id           = var.vpc_id
   key_name         = var.key_name
-  instance_profile = module.users_ec2_role.selena_users_ec2_profile_name
+  instance_profile = module.users_role.instance_profile
 }
 
 module "users_asg" {
@@ -21,7 +21,7 @@ module "users_asg" {
   subnet_ids            = [var.public_subnet_1_id]
   instance_type         = "t3.nano"
   key_name              = var.key_name
-  iam_instance_profile  = module.users_ec2_role.selena_users_ec2_profile_name
+  iam_instance_profile  = module.users_role.instance_profile
   environment           = var.environment
   #ecs_cluster_name      = "selena-users-cluster"
 
@@ -68,7 +68,7 @@ module "cloudwatch" {
 
   ec2_instance_id              = module.ec2.instance_id
   notification_email           = var.alert_email
-  selena_ec2_instance_profile  = module.users_ec2_role.selena_users_ec2_profile_name
+  selena_ec2_instance_profile  = module.users_role.instance_profile
 
   alerts_topic_arn             = module.sns.alerts_topic_arn
 }
@@ -125,23 +125,13 @@ resource "aws_route53_record" "users_service_alb_record" {
   records = [module.users_alb.users_alb_dns_name]
 }
 
-# =======================
-# IAM 
-# =======================
-/*module "iam" {
-  source        = "../../../modules/iam"
-
-  user_name     = "terraform-user"
-  account_id    = var.account_id
-  region        = var.region
-}*/
-
-module "users_ec2_role" {
-  source        = "../../../modules/iam-roles"
-  role_name     = "selena-users-ec2-role"
+# ============================================
+# --- Policies and Roles for users-service ---
+# ============================================
+module "users_role" {
+  source        = "../../../modules/iam/iam-roles/service-role"
+  role_name     = "selena-users-role"
   service       = "ec2.amazonaws.com"
-  account_id    = var.account_id
-  region        = var.region
 
   policies      = local.ec2_role_policies
 
@@ -151,36 +141,10 @@ module "users_ec2_role" {
   }
 }
 
-module "users_cloudwatch_role" {
-  source        = "../../../modules/iam-roles"
-  role_name     = "selena-users-cloudwatch-role"
-  service       = "ec2.amazonaws.com"
-  account_id    = var.account_id
-  region        = var.region
-
-  policies  = [
-    "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+locals {
+  ec2_role_policies = [
+    "arn:aws:iam::${var.account_id}:policy/EC2S3AccessPolicy",
+    "arn:aws:iam::${var.account_id}:policy/EC2SecretsAccessPolicy",
+    "arn:aws:iam::${var.account_id}:policy/EC2RDSReadPolicy",
   ]
-
-  tags = {
-    Project = "Selena"
-    Service = "users-service"
-  }
-}
-
-module "users_iam_github" { # TODO: it may need to be moved to a higher level or duplicated in hotels infrastructure
-  source = "../../../modules/iam-roles"
-  role_name     = "selena-users-github_actions-role"
-  service       = "ec2.amazonaws.com"
-  account_id    = var.account_id
-  region        = var.region
-
-  policies = [
-    "arn:aws:iam::${var.account_id}:policy/GitHubActionsECRPolicy"
-  ]
-
-  tags = {
-    Project = "Selena"
-    Service = "ci/cd"
-  }
 }

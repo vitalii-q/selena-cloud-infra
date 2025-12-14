@@ -59,15 +59,3 @@ resource "aws_iam_policy" "ec2_rds_read" {
   })
 }
 
-# =========================================
-# --- Policies to users local directory ---
-# =========================================
-locals {
-  ec2_role_policies = [
-    "arn:aws:iam::${var.account_id}:policy/EC2SecretsAccessPolicy",
-    "arn:aws:iam::${var.account_id}:policy/EC2S3AccessPolicy",
-    "arn:aws:iam::${var.account_id}:policy/EC2RDSReadPolicy",
-    "arn:aws:iam::${var.account_id}:policy/SelenaEC2CloudWatchMetricsPolicy",
-    "arn:aws:iam::${var.account_id}:policy/Ec2StopStartPolicy"
-  ]
-}

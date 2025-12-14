@@ -17,15 +17,15 @@ output "users_alb_dns_name" {
 }
 
 # AWS_ACCESS_KEY_ID
-output "github_actions_access_key_id" {
+/*output "github_actions_access_key_id" {
   value = module.users_iam_github.github_actions_access_key_id
-}
+}*/
 
 # AWS_SECRET_ACCESS_KEY
-output "github_actions_secret_access_key" {
+/*output "github_actions_secret_access_key" {
   value     = module.users_iam_github.github_actions_secret_access_key
   sensitive = true
-}
+}*/
 
 # AMI(Packer) id
 output "ami_id" {
