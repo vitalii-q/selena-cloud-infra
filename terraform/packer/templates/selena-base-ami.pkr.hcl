@@ -1,8 +1,8 @@
-# Получаем первый public subnet через terraform output -json и jq
+# Getting the first public subnet via terraform output -json and jq
 # echo $SUBNET_ID
 # SUBNET_ID=$(terraform -chdir=environments/dev output -json public_subnet_ids | jq -r '.[0]')
 #
-# После этого можно запускать Packer:
+# After that, you can run Packer:
 # packer build -var "subnet_id=$SUBNET_ID" packer/templates/selena-base-ami.pkr.hcl
 
 packer {

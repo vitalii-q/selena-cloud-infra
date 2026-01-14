@@ -1,6 +1,6 @@
-# ==========================
-# AMI data for users-service
-# ==========================
+# =========================================================
+# AMI data for microservices: users-service, hotels-service
+# =========================================================
 
 # Dynamic AMI lookup for Selena Base AMI
 data "aws_ami" "selena_base" {
