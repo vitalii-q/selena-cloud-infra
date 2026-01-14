@@ -35,5 +35,5 @@ output "private_subnet_ids" {
 
 # Users AMI(Packer) id
 output "users_ami_id" {
-  value = module.users.ami_id
+  value = data.aws_ami.selena_base.id
 }

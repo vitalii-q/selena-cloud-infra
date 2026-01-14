@@ -26,8 +26,3 @@ output "users_alb_dns_name" {
   value     = module.users_iam_github.github_actions_secret_access_key
   sensitive = true
 }*/
-
-# AMI(Packer) id
-output "ami_id" {
-  value = data.aws_ami.selena_base.id
-}

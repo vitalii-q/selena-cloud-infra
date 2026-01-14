@@ -1,6 +1,7 @@
 module "ec2" {
   source           = "../../../modules/ec2"
-  ami_id           = data.aws_ami.selena_base.id
+  
+  ami_id           = var.ami_id
   instance_count   = 0
   instance_type    = "t3.nano"
   subnet_id        = var.public_subnet_1_id
@@ -12,11 +13,11 @@ module "ec2" {
 module "users_asg" {
   source = "../../../modules/asg"
 
-  desired_capacity      = 0
-  min_size              = 0
-  max_size              = 0
+  desired_capacity      = 1
+  min_size              = 1
+  max_size              = 1
 
-  ami_id                = data.aws_ami.selena_base.id
+  ami_id                = var.ami_id
   vpc_id                = var.vpc_id
   subnet_ids            = [var.public_subnet_1_id]
   instance_type         = "t3.nano"
