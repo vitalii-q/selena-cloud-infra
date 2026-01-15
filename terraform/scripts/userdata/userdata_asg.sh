@@ -30,12 +30,11 @@ export USERS_REDIS_PORT=9765
 export HOTELS_SERVICE_URL=http://hotels-service:9064
 
 # Pull latest image
-docker pull 235484063004.dkr.ecr.eu-central-1.amazonaws.com/selena-users-service:latest
+docker pull 235484063004.dkr.ecr.eu-central-1.amazonaws.com/selena-users-service:amd64
 
 # Run container
 docker run -d \
   --name users-service \
-  --restart always \
   --network host \
   -p $USERS_SERVICE_PORT:$USERS_SERVICE_PORT \
   -e USERS_POSTGRES_DB_HOST \
@@ -50,4 +49,5 @@ docker run -d \
   -e USERS_POSTGRES_DB_PORT \
   -e USERS_REDIS_PORT \
   -e HOTELS_SERVICE_URL \
-  235484063004.dkr.ecr.eu-central-1.amazonaws.com/selena-users-service:latest
+  235484063004.dkr.ecr.eu-central-1.amazonaws.com/selena-users-service:amd64
+  # --restart always \
