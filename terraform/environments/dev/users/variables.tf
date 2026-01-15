@@ -87,3 +87,8 @@ variable "public_subnet_2_id" {
   description = "Second public subnet ID"
   type        = string
 }
+
+variable "ec2_ecr_access_policy_arn" {
+  type        = string
+  description = "ECR access policy ARN from root shared_policies"
+}

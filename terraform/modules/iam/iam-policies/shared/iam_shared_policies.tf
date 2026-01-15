@@ -39,10 +39,10 @@ resource "aws_iam_policy" "cloudwatch_metrics_policy" {
   })
 }
 
-# --- GitHub Actions Policy ---
-resource "aws_iam_policy" "github_actions_ecr_policy" {
-  name        = "GitHubActionsECRPolicy"
-  description = "Allow GitHub Actions to push to ECR"
+# --- ECR Actions Policy ---
+resource "aws_iam_policy" "ec2_ecr_access_policy" {
+  name        = "EC2ECRAccessPolicy"
+  description = "Allow EC2 instances to make actions with ECR"
 
   policy = jsonencode({
     Version = "2012-10-17"

@@ -48,6 +48,9 @@ module "users" {
   vpc_id                      = module.vpc.vpc_id
   db_subnet_group             = module.vpc.db_subnet_group
 
+  # Policies
+  ec2_ecr_access_policy_arn = module.shared_policies.ec2_ecr_access_policy_arn
+
   # Secret variables
   users_db_host               = var.users_db_host
   users_db_user               = var.users_db_user

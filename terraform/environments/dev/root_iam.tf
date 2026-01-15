@@ -1,8 +1,13 @@
+# =============================================
+# ----- Shared policies for users-service -----
 module "shared_policies" {
   source     = "../../modules/iam/iam-policies/shared"
   account_id = var.account_id
   region     = var.region
 }
+
+# =============================================
+# ---------- Roles for users-service ----------
 
 module "selena_cloudwatch_role" {
   source        = "../../modules/iam/iam-roles/cloudwatch-role"
@@ -24,7 +29,7 @@ module "github_actions_role" {   # TODO: it may need to be moved to a higher lev
   service       = "ec2.amazonaws.com"
 
   policies = {
-    GitHubActionsECRPolicy = module.shared_policies.github_actions_ecr_policy_arn
+    ECRAccessPolicy = module.shared_policies.ec2_ecr_access_policy_arn
   }
 
   tags = {
