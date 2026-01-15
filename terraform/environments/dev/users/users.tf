@@ -1,6 +1,6 @@
 module "ec2" {
   source           = "../../../modules/ec2"
-  
+
   ami_id           = var.ami_id
   instance_count   = 0
   instance_type    = "t3.nano"

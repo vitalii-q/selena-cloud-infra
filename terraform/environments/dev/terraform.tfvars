@@ -3,7 +3,7 @@ project     = "selena"
 account_id  = "235484063004"
 env         = "dev"
 
-ami_id         = "ami-00c8ac9147e19828e"  # AMI ID для EC2 instance
+#ami_id         = "ami-00c8ac9147e19828e"  # AMI ID for EC2 instance
 instance_type  = "t3.micro"
 subnet_id      = "subnet-0b8db83bda509afbb"
 vpc_id         = "vpc-030a96bd31fb160d2"

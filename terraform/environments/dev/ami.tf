@@ -2,6 +2,8 @@
 # AMI data for microservices: users-service, hotels-service
 # =========================================================
 
+# output "selena_base_ami_id" in /environments/dev/outputs.tf
+
 # Dynamic AMI lookup for Selena Base AMI
 data "aws_ami" "selena_base" {
   most_recent = true
@@ -27,3 +29,4 @@ data "aws_ami" "selena_base" {
     values = ["ebs"]
   }
 }
+

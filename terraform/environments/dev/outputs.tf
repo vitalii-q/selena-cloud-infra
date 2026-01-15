@@ -33,7 +33,7 @@ output "private_subnet_ids" {
   value = module.vpc.private_subnet_ids
 }
 
-# Users AMI(Packer) id
-output "users_ami_id" {
+output "selena_base_ami_id" {
   value = data.aws_ami.selena_base.id
+  description = "Latest Selena Base AMI ID for all microservices"
 }

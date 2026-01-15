@@ -71,11 +71,6 @@ variable "alert_email" {
   type        = string
 }
 
-variable "users_service_ami_id" {
-  description = "AMI ID for users-service instances"
-  type        = string
-}
-
 # Route53 zone ID for DNS validation
 variable "route53_zone_id" {
   description = "Route53 Hosted Zone ID for DNS validation"

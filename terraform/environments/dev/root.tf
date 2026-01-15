@@ -32,12 +32,11 @@ module "users" {
 
   private_subnet_cidr_2       = var.private_subnet_cidr_2
   availability_zone_2         = var.availability_zone_2
-  ami_id                      = var.ami_id
+  ami_id                      = data.aws_ami.selena_base.id
   key_name                    = var.key_name
   env                         = var.env
   alert_email                 = var.alert_email
   environment                 = var.environment
-  users_service_ami_id        = var.ami_id
   default_security_group_id   = module.vpc.default_security_group_id
 
   route53_zone_id             = data.aws_route53_zone.main_zone.zone_id 
