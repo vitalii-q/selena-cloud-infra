@@ -58,14 +58,14 @@ build {
   sources = ["source.amazon-ebs.selena_base"]
 
   provisioner "shell" {
-    script = "./scripts/packer/install_base.sh"
+    script = "../scripts/packer/install_base.sh"
   }
 
   provisioner "shell" {
-    script = "./scripts/packer/install_docker.sh"
+    script = "../scripts/packer/install_docker.sh"
   }
 
   provisioner "shell" {
-    script = "./scripts/packer/install_cloudwatch_agent.sh"
+    script = "../scripts/packer/install_cloudwatch_agent.sh"
   }
 }
