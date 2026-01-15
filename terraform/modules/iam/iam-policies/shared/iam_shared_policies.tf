@@ -51,6 +51,7 @@ resource "aws_iam_policy" "ec2_ecr_access_policy" {
         Effect = "Allow"
         Action = [
           "ecr:GetAuthorizationToken",
+          "ecr:GetDownloadUrlForLayer",
           "ecr:BatchCheckLayerAvailability",
           "ecr:CompleteLayerUpload",
           "ecr:UploadLayerPart",
