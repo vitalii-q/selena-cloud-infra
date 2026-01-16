@@ -26,15 +26,39 @@ variable "users_db_host" {
 
 variable "users_db_user" {
   type = string
+
+  validation {
+    condition     = length(var.users_db_host) > 0
+    error_message = "users_db_host must not be empty"
+  }
+}
+
+variable "users_db_user" {
+  type = string
+
+  validation {
+    condition     = length(var.users_db_user) > 0
+    error_message = "users_db_user must not be empty"
+  }
 }
 
 variable "users_db_pass" {
   type      = string
   sensitive = true
+
+  validation {
+    condition     = length(var.users_db_pass) > 0
+    error_message = "users_db_pass must not be empty"
+  }
 }
 
 variable "users_db_name" {
   type = string
+
+  validation {
+    condition     = length(var.users_db_name) > 0
+    error_message = "users_db_name must not be empty"
+  }
 }
 
 variable "users_db_port_inner" {
