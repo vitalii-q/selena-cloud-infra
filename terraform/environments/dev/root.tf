@@ -50,12 +50,6 @@ module "users" {
 
   # Policies
   ec2_ecr_access_policy_arn = module.shared_policies.ec2_ecr_access_policy_arn
-
-  # Secret variables
-  users_db_host               = var.users_db_host
-  users_db_user               = var.users_db_user
-  users_db_pass               = var.users_db_pass
-  users_db_name               = var.users_db_name
 }
 
 module "hotels" {
