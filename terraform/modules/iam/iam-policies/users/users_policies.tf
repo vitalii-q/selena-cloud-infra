@@ -33,7 +33,10 @@ resource "aws_iam_policy" "ec2_secrets_access_policy" {
     Statement = [
       {
         Effect   = "Allow",
-        Action   = ["secretsmanager:GetSecretValue"],
+        Action   = [
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:DescribeSecret",
+          ],
         Resource = "arn:aws:secretsmanager:${var.region}:${var.account_id}:secret:selena-users-db-dev*"
       }
     ]
