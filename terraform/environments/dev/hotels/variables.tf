@@ -20,3 +20,17 @@ variable "route53_zone_id" {
   type        = string
   default     = "Z09863231BVIDNICLY1A1"
 }
+
+variable "vpc_id" { 
+  type = string 
+}
+
+variable "public_subnet_1_id" {
+  description = "First public subnet ID"
+  type        = string
+}
+
+variable "public_subnet_2_id" {
+  description = "Second public subnet ID"
+  type        = string
+}

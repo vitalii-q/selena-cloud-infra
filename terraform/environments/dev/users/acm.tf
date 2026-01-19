@@ -2,13 +2,13 @@
 # ACM Certificate (SSL/TLS)
 # =========================
 
-# Provider для us-east-1 (Route53 Hosted Zone)
+# Provider for us-east-1 (Route53 Hosted Zone)
 provider "aws" {
   alias  = "us_east_1"
   region = "us-east-1"
 }
 
-# Hosted Zone в us-east-1
+# Hosted Zone in us-east-1
 data "aws_route53_zone" "main_zone_us_east_1" {
   provider    = aws.us_east_1
   name        = "selena-aws.com"

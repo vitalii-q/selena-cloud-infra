@@ -1,0 +1,20 @@
+module "hotels_alb" {
+  source             = "../../../modules/alb"
+  name               = "selena-hotels-alb"
+  vpc_id             = var.vpc_id
+
+  subnets            = [
+    var.public_subnet_1_id,      # subnet in AZ 1
+    var.public_subnet_2_id       # subnet in AZ 2
+  ]
+
+  alb_sg_name     = "hotels-alb-sg"
+
+  #security_group_id  = module.hotels_asg.asg_sg_id
+  security_group_id  = module.hotels_alb.alb_sg_id
+  target_port        = 9064
+  health_check       = "/test"
+
+  #certificate_arn    = aws_acm_certificate_validation.hotels_service_cert_validation.certificate_arn
+  certificate_arn = ""
+}

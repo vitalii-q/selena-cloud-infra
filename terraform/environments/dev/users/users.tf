@@ -99,23 +99,25 @@ module "ecr" {
 }*/
 
 module "users_alb" {
-  source             = "../../../modules/alb"
-  name               = "selena-users-service-alb"
-  vpc_id             = var.vpc_id
+  source               = "../../../modules/alb"
+  name                 = "selena-users-service-alb"
+  vpc_id               = var.vpc_id
 
-  subnets            = [
+  subnets              = [
     var.public_subnet_1_id,      # subnet in AZ 1
     var.public_subnet_2_id       # subnet in AZ 2
   ]
 
+  alb_sg_name          = "users-alb-sg"
+
   # ec2_instance_id    = module.ec2.instance_id
   # users_asg_name     = module.users_asg.asg_name
 
-  security_group_id  = module.users_asg.asg_sg_id
-  target_port        = 9065
-  health_check       = "/test"
+  security_group_id    = module.users_asg.asg_sg_id
+  target_port          = 9065
+  health_check         = "/test"
 
-  certificate_arn    = aws_acm_certificate_validation.users_service_cert_validation.certificate_arn
+  certificate_arn      = aws_acm_certificate_validation.users_service_cert_validation.certificate_arn
 }
 
 resource "aws_route53_record" "users_service_alb_record" {

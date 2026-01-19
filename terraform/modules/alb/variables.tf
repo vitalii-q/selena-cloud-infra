@@ -42,11 +42,7 @@ variable "certificate_arn" {
   default     = null
 }
 
-/*variable "ec2_instance_id" {
-  description = "EC2 instance ID to attach to Target Group"
+variable "alb_sg_name" {
+  description = "Security group name for ALB"
   type        = string
 }
-
-variable "users_asg_name" {
-  type = string
-}*/

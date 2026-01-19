@@ -1,5 +1,5 @@
 # Create Application Load Balancer
-resource "aws_lb" "users_alb" {
+resource "aws_lb" "service_alb" {
   name            = var.name
   internal        = false
   load_balancer_type = "application"
@@ -15,7 +15,7 @@ resource "aws_lb" "users_alb" {
   }
 }
 
-resource "aws_lb_target_group" "users_tg" {
+resource "aws_lb_target_group" "service_tg" {
   name     = "${var.name}-tg-${var.target_port}"
   port     = var.target_port
   protocol = "HTTP"
@@ -36,35 +36,9 @@ resource "aws_lb_target_group" "users_tg" {
   }
 }
 
-resource "aws_lb_listener" "users_http_listener" {
-  load_balancer_arn = aws_lb.users_alb.arn
-  port              = 80
-  protocol          = "HTTP"
-
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.users_tg.arn
-  }
-
-  depends_on = [aws_lb.users_alb, aws_lb_target_group.users_tg] # guarantee that Listener is created after ALB and Target Group
-}
-
-# For EC2 instances
-/*resource "aws_lb_target_group_attachment" "users_ec2_attachment" {
-  target_group_arn = aws_lb_target_group.users_tg.arn
-  target_id        = var.ec2_instance_id
-  port             = var.target_port
-}*/
-
-# For ASG EC2 instances
-/*resource "aws_autoscaling_attachment" "asg_to_tg" {
-  autoscaling_group_name = var.users_asg_name  # ASG name
-  lb_target_group_arn    = aws_lb_target_group.users_tg.arn
-}*/
-
 resource "aws_security_group" "alb_sg" {
-  name        = "users-alb-sg"
-  description = "Security group for users-service ALB"
+  name        = var.alb_sg_name
+  description = "Security group for microservice ALB"
   vpc_id      = var.vpc_id
 
   # Allow HTTP from anywhere
@@ -91,13 +65,28 @@ resource "aws_security_group" "alb_sg" {
   }
 
   tags = {
-    Name        = "users-alb-sg"
+    Name        = var.alb_sg_name
     Environment = var.environment
   }
 }
 
-resource "aws_lb_listener" "users_https_listener" {
-  load_balancer_arn = aws_lb.users_alb.arn
+resource "aws_lb_listener" "http_listener" {
+  load_balancer_arn = aws_lb.service_alb.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.service_tg.arn
+  }
+
+  depends_on = [aws_lb.service_alb, aws_lb_target_group.service_tg] # guarantee that Listener is created after ALB and Target Group
+}
+
+resource "aws_lb_listener" "https_listener" {
+  count             = var.certificate_arn != "" ? 1 : 0        # if the acm certificate does not exist, we do not create a listener for the microservice.
+
+  load_balancer_arn = aws_lb.service_alb.arn
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-FS-1-2-Res-2020-10"
@@ -105,11 +94,11 @@ resource "aws_lb_listener" "users_https_listener" {
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.users_tg.arn
+    target_group_arn = aws_lb_target_group.service_tg.arn
   }
 
   depends_on = [
-    aws_lb.users_alb,
-    aws_lb_target_group.users_tg
+    aws_lb.service_alb,
+    aws_lb_target_group.service_tg
   ]
 }

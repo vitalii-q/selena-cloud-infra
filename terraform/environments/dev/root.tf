@@ -59,6 +59,10 @@ module "hotels" {
   account_id      = data.aws_caller_identity.current.account_id
   region          = var.region
 
+  vpc_id                      = module.vpc.vpc_id
+  public_subnet_1_id          = module.vpc.public_subnet_id
+  public_subnet_2_id          = module.vpc.public_subnet_2_id
+
   route53_zone_id = var.route53_zone_id
   environment     = var.environment
 }
