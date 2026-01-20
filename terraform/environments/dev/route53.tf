@@ -1,3 +1,5 @@
+# !!! The response from the DNS with an error may be cached by the browser, checked without cache, or by third-party tools
+
 # Fetch the existing Hosted Zone for the main domain selena-aws.com
 data "aws_route53_zone" "main_zone" {
   name         = "selena-aws.com"

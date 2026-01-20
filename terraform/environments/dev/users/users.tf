@@ -119,11 +119,3 @@ module "users_alb" {
 
   certificate_arn      = aws_acm_certificate_validation.users_service_cert_validation.certificate_arn
 }
-
-resource "aws_route53_record" "users_service_alb_record" {
-  zone_id = var.route53_zone_id
-  name    = "users-service.selena-aws.com"
-  type    = "CNAME"
-  ttl     = 300
-  records = [module.users_alb.users_alb_dns_name]
-}
