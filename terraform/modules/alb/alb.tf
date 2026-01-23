@@ -84,8 +84,6 @@ resource "aws_lb_listener" "http_listener" {
 }
 
 resource "aws_lb_listener" "https_listener" {
-  count             = var.certificate_arn != "" ? 1 : 0        # if the acm certificate does not exist, we do not create a listener for the microservice.
-
   load_balancer_arn = aws_lb.service_alb.arn
   port              = 443
   protocol          = "HTTPS"
@@ -96,9 +94,4 @@ resource "aws_lb_listener" "https_listener" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.service_tg.arn
   }
-
-  depends_on = [
-    aws_lb.service_alb,
-    aws_lb_target_group.service_tg
-  ]
 }

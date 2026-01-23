@@ -13,20 +13,25 @@ module "ec2" {
 module "users_asg" {
   source = "../../../modules/asg"
 
-  desired_capacity      = 1
-  min_size              = 1
-  max_size              = 1
+  service_name           = "users"
+  service_port           = 9065
 
-  ami_id                = var.ami_id
-  vpc_id                = var.vpc_id
-  subnet_ids            = [var.public_subnet_1_id]
-  instance_type         = "t3.nano"
-  key_name              = var.key_name
-  iam_instance_profile  = module.users_role.instance_profile
-  environment           = var.environment
+  desired_capacity       = 0
+  min_size               = 0
+  max_size               = 0
+
+  user_data_file = "${path.root}/../../scripts/userdata/userdata_users_asg.sh"
+
+  ami_id                 = var.ami_id
+  vpc_id                 = var.vpc_id
+  subnet_ids             = [var.public_subnet_1_id]
+  instance_type          = "t3.nano"
+  key_name               = var.key_name
+  iam_instance_profile   = module.users_role.instance_profile
+  environment            = var.environment
   #ecs_cluster_name      = "selena-users-cluster"
 
-  users_alb_tg_arn = module.users_alb.users_tg_arn
+  alb_tg_arn = module.users_alb.alb_tg_arn
 }
 
 module "users_rds" {

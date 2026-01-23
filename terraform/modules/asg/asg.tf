@@ -10,12 +10,7 @@ resource "aws_launch_template" "this" {
     name = var.iam_instance_profile
   }
 
-  /*user_data = base64encode(<<EOF
-    #!/bin/bash
-    echo "ECS_CLUSTER=${var.ecs_cluster_name}" >> /etc/ecs/ecs.config
-    EOF
-  )*/
-  user_data = base64encode(file("${path.root}/../../scripts/userdata/userdata_asg.sh"))
+  user_data = base64encode(file(var.user_data_file))
 
   block_device_mappings {        # EBS
     device_name = "/dev/xvda"
@@ -29,15 +24,15 @@ resource "aws_launch_template" "this" {
   tag_specifications {
     resource_type = "instance"
     tags = {
-      Name        = "users-service-instance-asg"
+      Name        = "${var.service_name}-service-instance-asg"
       Environment = var.environment
-      Service     = "users-service"
+      Service     = "${var.service_name}-service"
     }
   }
 }
 
 resource "aws_autoscaling_group" "this" {
-  name                      = "selena-users-service-asg"
+  name                      = "selena-${var.service_name}-service-asg"
   desired_capacity          = var.desired_capacity
   min_size                  = var.min_size
   max_size                  = var.max_size
@@ -62,7 +57,7 @@ resource "aws_autoscaling_group" "this" {
   }
 
   target_group_arns = [
-    var.users_alb_tg_arn
+    var.alb_tg_arn
   ]
 
   # so that Terraform waits until the instances are up
@@ -72,14 +67,14 @@ resource "aws_autoscaling_group" "this" {
 
   tag {
     key                 = "Name"
-    value               = "users-service-asg"
+    value               = "${var.service_name}-service-asg"
     propagate_at_launch = true
   }
 }
 
 resource "aws_security_group" "asg_sg" {
-  name        = "selena-asg-sg"
-  description = "SG for ASG instances"
+  name        = "selena-${var.service_name}-asg-sg"
+  description = "SG for ${var.service_name}-service ASG instances"
   vpc_id      = var.vpc_id
 
   # Allow SSH
@@ -98,10 +93,10 @@ resource "aws_security_group" "asg_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Allow users-service port (9065)
+  # Allow users-service port (var.service_port)
   ingress {
-    from_port   = 9065
-    to_port     = 9065
+    from_port   = var.service_port
+    to_port     = var.service_port
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -114,28 +109,3 @@ resource "aws_security_group" "asg_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
-# ECS-Optimized Amazon Linux 2 AMI
-/*data "aws_ami" "ecs_optimized" {
-  most_recent = true
-  owners      = ["amazon"]
-
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-ecs-hvm-*-x86_64-ebs"]
-  }
-}*/
-
-# Target Tracking: keep the average CPU usage of the group around 50%
-/*resource "aws_autoscaling_policy" "cpu_tgt_tracking" {
-  name                   = "cpu-target-tracking"
-  policy_type            = "TargetTrackingScaling"
-  autoscaling_group_name = aws_autoscaling_group.this.name
-
-  target_tracking_configuration {
-    predefined_metric_specification {
-      predefined_metric_type = "ASGAverageCPUUtilization"
-    }
-    target_value = 50
-  }
-}*/

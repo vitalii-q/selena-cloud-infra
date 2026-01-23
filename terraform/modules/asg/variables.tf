@@ -1,6 +1,21 @@
+variable "service_name" {
+  description = "Service name (users, hotels, etc.)"
+  type        = string
+}
+
 variable "desired_capacity"     { type = number }
 variable "min_size"             { type = number }
 variable "max_size"             { type = number }
+
+variable "service_port" {
+  description = "Application port exposed by the service"
+  type        = number
+}
+
+variable "user_data_file" {
+  description = "Path to user_data script file"
+  type        = string
+}
 
 variable "ami_id"               { type = string }
 variable "instance_type"        { type = string }
@@ -14,12 +29,7 @@ variable "environment" {
   type        = string
 }
 
-/*variable "ecs_cluster_name" {
-  description = "ECS Cluster name to register instances"
-  type        = string
-}*/
-
-variable "users_alb_tg_arn" {
+variable "alb_tg_arn" {
   description = "ARN of the Target Group for users service ALB"
   type        = string
 }

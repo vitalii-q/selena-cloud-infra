@@ -53,18 +53,21 @@ module "users" {
 }
 
 module "hotels" {
-  source          = "./hotels"
+  source                      = "./hotels"
 
   # variables
-  account_id      = data.aws_caller_identity.current.account_id
-  region          = var.region
+  account_id                  = data.aws_caller_identity.current.account_id
+  region                      = var.region
+
+  ami_id                      = data.aws_ami.selena_base.id
+  key_name                    = var.key_name
 
   vpc_id                      = module.vpc.vpc_id
   public_subnet_1_id          = module.vpc.public_subnet_id
   public_subnet_2_id          = module.vpc.public_subnet_2_id
 
-  route53_zone_id = var.route53_zone_id
-  environment     = var.environment
+  route53_zone_id             = var.route53_zone_id
+  environment                 = var.environment
 }
 
 /*module "bookings" {

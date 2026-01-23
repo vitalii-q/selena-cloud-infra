@@ -12,8 +12,8 @@ output "users_rds_endpoint" {
   value       = module.users_rds.endpoint
 }
 
-output "users_alb_dns_name" {
-  value = module.users_alb.users_alb_dns_name
+output "alb_dns_name" {
+  value = module.users_alb.alb_dns_name
 }
 
 # AWS_ACCESS_KEY_ID

@@ -34,3 +34,12 @@ variable "public_subnet_2_id" {
   description = "Second public subnet ID"
   type        = string
 }
+
+variable "ami_id" {
+  type = string
+}
+
+variable "key_name" {
+  description = "SSH key pair name"
+  type        = string
+}

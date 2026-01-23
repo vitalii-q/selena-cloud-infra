@@ -1,6 +1,6 @@
-# =========================
-# ACM Certificate (SSL/TLS)
-# =========================
+# ===========================================
+# ACM Certificate for users-service (SSL/TLS)
+# ===========================================
 
 # Provider for us-east-1 (Route53 Hosted Zone)
 provider "aws" {
