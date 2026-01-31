@@ -28,7 +28,7 @@ module "hotels_asg" {
   min_size             = 1
   max_size             = 1
 
-  user_data_file = "${path.root}/../../scripts/userdata/userdata_hotels_asg.sh"
+  user_data_file       = "${path.root}/../../scripts/userdata/userdata_hotels_asg.sh"
 
   ami_id               = var.ami_id
   vpc_id               = var.vpc_id

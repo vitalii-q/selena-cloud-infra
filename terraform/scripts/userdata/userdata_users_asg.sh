@@ -1,6 +1,8 @@
 #!/bin/bash
 exec > /var/log/user-data.log 2>&1
 
+echo "[INFO] UserData started"
+
 # Start Docker
 systemctl start docker
 systemctl enable docker
