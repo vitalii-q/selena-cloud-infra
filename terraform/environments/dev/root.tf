@@ -49,7 +49,7 @@ module "users" {
   db_subnet_group             = module.vpc.db_subnet_group
 
   # Policies
-  ec2_ecr_access_policy_arn = module.shared_policies.ec2_ecr_access_policy_arn
+  ec2_ecr_access_policy_arn  = module.shared_policies.ec2_ecr_access_policy_arn
 }
 
 module "hotels" {
@@ -68,6 +68,9 @@ module "hotels" {
 
   route53_zone_id             = var.route53_zone_id
   environment                 = var.environment
+
+  # Policies
+  ec2_ecr_access_policy_arn  = module.shared_policies.ec2_ecr_access_policy_arn
 }
 
 /*module "bookings" {

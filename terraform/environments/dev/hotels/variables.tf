@@ -43,3 +43,13 @@ variable "key_name" {
   description = "SSH key pair name"
   type        = string
 }
+
+variable "iam_shared_module_source" {
+  description = "Path to the shared IAM policies module"
+  default     = "../../../modules/iam/iam-policies/shared"
+}
+
+variable "ec2_ecr_access_policy_arn" {
+  type        = string
+  description = "ECR access policy ARN from root shared_policies"
+}

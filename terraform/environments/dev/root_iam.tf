@@ -1,5 +1,5 @@
 # =============================================
-# ----- Shared policies for users-service -----
+# ----- Shared policies -----
 module "shared_policies" {
   source     = "../../modules/iam/iam-policies/shared"
   account_id = var.account_id
@@ -7,7 +7,7 @@ module "shared_policies" {
 }
 
 # =============================================
-# ---------- Roles for users-service ----------
+# ---------- Roles ----------
 
 module "selena_cloudwatch_role" {
   source        = "../../modules/iam/iam-roles/cloudwatch-role"

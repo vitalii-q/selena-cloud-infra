@@ -1,13 +1,6 @@
-# ============================================
-# -------- Policies for users-service --------
-module "users_policies" {
-  source     = "../../../modules/iam/iam-policies/users"
-  account_id = var.account_id
-  region     = var.region
-}
-
 # =============================================
 # ---------- Roles for users-service ----------
+# =============================================
 module "users_role" {
   source        = "../../../modules/iam/iam-roles/service-role"
   role_name     = "selena-users-role"
@@ -19,6 +12,15 @@ module "users_role" {
     Project = "Selena"
     Service = "users-service"
   }
+}
+
+# ============================================
+# -------- Policies for users-service --------
+# ============================================
+module "users_policies" {
+  source     = "../../../modules/iam/iam-policies/users"
+  account_id = var.account_id
+  region     = var.region
 }
 
 locals {
