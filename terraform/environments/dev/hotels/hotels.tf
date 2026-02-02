@@ -1,5 +1,7 @@
 module "hotels_alb" {
   source              = "../../../modules/alb"
+  count               = 0
+
   name                = "selena-hotels-alb"
   vpc_id              = var.vpc_id
 
@@ -24,9 +26,9 @@ module "hotels_asg" {
   service_name         = "hotels"
   service_port         = 9064
 
-  desired_capacity     = 1
-  min_size             = 1
-  max_size             = 1
+  desired_capacity     = 0
+  min_size             = 0
+  max_size             = 0
 
   user_data_file       = "${path.root}/../../scripts/userdata/userdata_hotels_asg.sh"
 
