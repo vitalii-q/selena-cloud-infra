@@ -13,7 +13,7 @@ module "hotels_alb" {
   alb_sg_name         = "hotels-alb-sg"
 
   #security_group_id  = module.hotels_asg.asg_sg_id
-  security_group_id   = module.hotels_alb.alb_sg_id
+  security_group_id   = try(module.hotels_alb[0].alb_sg_id, null)
   target_port         = 9064
   health_check        = "/test"
 
@@ -22,6 +22,7 @@ module "hotels_alb" {
 
 module "hotels_asg" {
   source = "../../../modules/asg"
+  count  = length(module.hotels_alb) == 0 ? 0 : 1     # # If ALB is disabled → ASG is not needed and is not being created.
 
   service_name         = "hotels"
   service_port         = 9064
@@ -40,5 +41,5 @@ module "hotels_asg" {
   iam_instance_profile = module.hotels_role.instance_profile
   environment          = var.environment
 
-  alb_tg_arn           = module.hotels_alb.alb_tg_arn
+  alb_tg_arn           = module.hotels_alb[0].alb_tg_arn
 }
