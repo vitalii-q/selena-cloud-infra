@@ -1,6 +1,6 @@
 module "hotels_alb" {
   source              = "../../../modules/alb"
-  count               = 0
+  count               = var.enable_hotels_alb ? 1 : 0
 
   name                = "selena-hotels-alb"
   vpc_id              = var.vpc_id
@@ -20,14 +20,14 @@ module "hotels_alb" {
 
 module "hotels_asg" {
   source               = "../../../modules/asg"
-  count                = length(module.hotels_alb) == 0 ? 0 : 1     # # If ALB is disabled → ASG is not needed and is not being created.
+  count                = var.enable_hotels_alb ? 1 : 0     # # If ALB is disabled → ASG is not needed and is not being created.
 
   service_name         = "hotels"
   service_port         = 9064
 
-  desired_capacity     = 0
-  min_size             = 0
-  max_size             = 0
+  desired_capacity     = 1
+  min_size             = 1
+  max_size             = 1
 
   user_data_file       = "${path.root}/../../scripts/userdata/userdata_hotels_asg.sh"
 
