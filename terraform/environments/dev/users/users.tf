@@ -1,17 +1,41 @@
 module "ec2" {
-  source           = "../../../modules/ec2"
+  source              = "../../../modules/ec2"
 
-  ami_id           = var.ami_id
-  instance_count   = 0
-  instance_type    = "t3.nano"
-  subnet_id        = var.public_subnet_1_id
-  vpc_id           = var.vpc_id
-  key_name         = var.key_name
-  instance_profile = module.users_role.instance_profile
+  ami_id              = var.ami_id
+  instance_count      = 0
+  instance_type       = "t3.nano"
+  subnet_id           = var.public_subnet_1_id
+  vpc_id              = var.vpc_id
+  key_name            = var.key_name
+  instance_profile    = module.users_role.instance_profile
+}
+
+module "users_alb" {
+  source               = "../../../modules/alb"
+  count                = 0
+
+  name                 = "selena-users-service-alb"
+  vpc_id               = var.vpc_id
+
+  subnets              = [
+    var.public_subnet_1_id,      # subnet in AZ 1
+    var.public_subnet_2_id       # subnet in AZ 2
+  ]
+
+  alb_sg_name          = "users-alb-sg"
+
+  # ec2_instance_id    = module.ec2.instance_id
+  # users_asg_name     = module.users_asg.asg_name
+
+  target_port          = 9065
+  health_check         = "/test"
+
+  certificate_arn      = aws_acm_certificate_validation.users_service_cert_validation.certificate_arn
 }
 
 module "users_asg" {
-  source = "../../../modules/asg"
+  source                 = "../../../modules/asg"
+  count                  = length(module.users_alb) == 0 ? 0 : 1     # # If ALB is disabled → ASG is not needed and is not being created.
 
   service_name           = "users"
   service_port           = 9065
@@ -20,7 +44,7 @@ module "users_asg" {
   min_size               = 0
   max_size               = 0
 
-  user_data_file = "${path.root}/../../scripts/userdata/userdata_users_asg.sh"
+  user_data_file         = "${path.root}/../../scripts/userdata/userdata_users_asg.sh"
 
   ami_id                 = var.ami_id
   vpc_id                 = var.vpc_id
@@ -31,7 +55,7 @@ module "users_asg" {
   environment            = var.environment
   #ecs_cluster_name      = "selena-users-cluster"
 
-  alb_tg_arn = module.users_alb.alb_tg_arn
+  alb_tg_arn             = try(module.users_alb[0].alb_tg_arn, null)
 }
 
 module "users_rds" {
@@ -56,8 +80,8 @@ module "users_rds" {
   db_subnet_group_name   = var.db_subnet_group
   env                    = var.env
 
-  users_ec2_sg_id        = module.ec2.users_sg_id        # security_groups EC2
-  users_asg_sg_id        = module.users_asg.asg_sg_id    # security_groups ASG
+  users_ec2_sg_id        = module.ec2.users_sg_id                      # security_groups EC2
+  users_asg_sg_id        = try(module.users_asg[0].asg_sg_id, null)    # security_groups ASG
 }
 
 module "users_service_s3" {
@@ -102,25 +126,3 @@ module "ecr" {
   subnet_ids           = [module.vpc.public_subnet_id, module.vpc.public_subnet_2_id]
   k8s_version          = "1.30"
 }*/
-
-module "users_alb" {
-  source               = "../../../modules/alb"
-  name                 = "selena-users-service-alb"
-  vpc_id               = var.vpc_id
-
-  subnets              = [
-    var.public_subnet_1_id,      # subnet in AZ 1
-    var.public_subnet_2_id       # subnet in AZ 2
-  ]
-
-  alb_sg_name          = "users-alb-sg"
-
-  # ec2_instance_id    = module.ec2.instance_id
-  # users_asg_name     = module.users_asg.asg_name
-
-  security_group_id    = module.users_asg.asg_sg_id
-  target_port          = 9065
-  health_check         = "/test"
-
-  certificate_arn      = aws_acm_certificate_validation.users_service_cert_validation.certificate_arn
-}

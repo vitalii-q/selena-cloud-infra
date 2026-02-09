@@ -1,5 +1,5 @@
 output "users_asg_name" {
-  value = module.users_asg.asg_name
+  value = try(module.users_asg[0].asg_name, null)
 }
 
 output "users_service_ecr_uri" {
@@ -13,7 +13,7 @@ output "users_rds_endpoint" {
 }
 
 output "alb_dns_name" {
-  value = module.users_alb.alb_dns_name
+  value = try(module.users_alb[0].alb_dns_name, null)
 }
 
 # AWS_ACCESS_KEY_ID

@@ -13,11 +13,6 @@ variable "subnets" {
   type        = list(string)
 }
 
-variable "security_group_id" {
-  description = "Security group for ALB"
-  type        = string
-}
-
 variable "target_port" {
   description = "Port where the target (EC2) listens"
   type        = number

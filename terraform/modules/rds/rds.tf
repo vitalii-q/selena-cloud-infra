@@ -75,6 +75,7 @@ resource "aws_security_group_rule" "allow_from_ec2" {
 # Allow Postgres from ASG
 resource "aws_security_group_rule" "allow_from_asg" {
   description              = "Allow Postgres from ASG users-service"
+  count                    = var.users_asg_sg_id == null ? 0 : 1
 
   type                     = "ingress"
   from_port                = 5432
