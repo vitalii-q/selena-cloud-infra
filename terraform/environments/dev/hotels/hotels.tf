@@ -41,3 +41,21 @@ module "hotels_asg" {
 
   alb_tg_arn           = module.hotels_alb[0].alb_tg_arn
 }
+
+module "hotels_db" {
+  source                = "../../../modules/ec2_hotels_db"
+
+  project               = "selena-hotels"
+  vpc_id                = var.vpc_id
+  vpc_cidr              = var.vpc_cidr
+  private_subnet_id     = var.private_subnet_1_id
+
+  ami_id                = var.ami_id
+  key_name              = var.key_name
+
+  bastion_sg_id         = var.bastion_sg_id
+  user_data_file        = "${path.root}/../../scripts/userdata/userdata_cockroachdb.sh"
+  ssh_allowed_cidr      = "0.0.0.0/32"
+  iam_instance_profile  = ""
+}
+

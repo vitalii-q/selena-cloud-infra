@@ -65,12 +65,21 @@ module "hotels" {
   vpc_id                      = module.vpc.vpc_id
   public_subnet_1_id          = module.vpc.public_subnet_id
   public_subnet_2_id          = module.vpc.public_subnet_2_id
+  private_subnet_1_id         = module.vpc.private_subnet_id
 
   route53_zone_id             = var.route53_zone_id
   environment                 = var.environment
 
+  bastion_sg_id               = module.bastion.bastion_sg_id
+  user_data_file              = "${path.root}/../../scripts/userdata/userdata_cockroach.sh"
+  ssh_allowed_cidr            = "0.0.0.0/32"
+  iam_instance_profile        = ""
+
+  vpc_cidr                    = module.vpc.vpc_cidr
+  my_ip_cidr                  = "0.0.0.0/32"
+
   # Policies
-  ec2_ecr_access_policy_arn  = module.shared_policies.ec2_ecr_access_policy_arn
+  ec2_ecr_access_policy_arn   = module.shared_policies.ec2_ecr_access_policy_arn
 }
 
 /*module "bookings" {
@@ -79,3 +88,14 @@ module "hotels" {
   route53_zone_id = var.route53_zone_id
   environment     = var.environment
 }*/
+
+module "bastion" {
+  source = "../../modules/ec2_bastion"
+
+  project          = "selena"
+  vpc_id           = module.vpc.vpc_id
+  public_subnet_id = module.vpc.public_subnet_id
+
+  ami_id   = data.aws_ami.selena_base.id
+  key_name = var.key_name
+}

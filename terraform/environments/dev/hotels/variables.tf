@@ -59,3 +59,21 @@ variable "ec2_ecr_access_policy_arn" {
   type        = string
   description = "ECR access policy ARN from root shared_policies"
 }
+
+variable "vpc_cidr" {
+  type = string
+}
+
+variable "private_subnet_1_id" {
+  type = string
+}
+
+variable "my_ip_cidr" {
+  type        = string
+  description = "Your IP or bastion CIDR for SSH access"
+}
+
+variable "bastion_sg_id" {}
+variable "user_data_file" {}
+variable "ssh_allowed_cidr" {}
+variable "iam_instance_profile" {}
