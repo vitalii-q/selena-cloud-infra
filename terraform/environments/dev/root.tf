@@ -90,12 +90,12 @@ module "hotels" {
 }*/
 
 module "bastion" {
-  source = "../../modules/ec2_bastion"
+  source           = "../../modules/bastion"
 
   project          = "selena"
   vpc_id           = module.vpc.vpc_id
   public_subnet_id = module.vpc.public_subnet_id
 
-  ami_id   = data.aws_ami.selena_base.id
-  key_name = var.key_name
+  ami_id           = data.aws_ami.selena_base.id
+  key_name         = var.key_name
 }

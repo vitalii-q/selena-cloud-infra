@@ -37,3 +37,29 @@ output "selena_base_ami_id" {
   value = data.aws_ami.selena_base.id
   description = "Latest Selena Base AMI ID for all microservices"
 }
+
+
+# Bastion public IP
+output "bastion_public_ip" {
+  value = module.bastion.bastion_public_ip
+}
+
+# Bastion private IP
+output "bastion_private_ip" {
+  value = module.bastion.bastion_private_ip
+}
+
+# Bastion security group id
+output "bastion_sg_id" {
+  value = module.bastion.bastion_sg_id
+}
+
+
+# environments/dev/hotels/outputs.tf
+output "hotels_db_private_dns" {
+  value = module.hotels.hotels_db_private_dns
+}
+
+output "hotels_db_private_ip" {
+  value = module.hotels.hotels_db_private_ip
+}
