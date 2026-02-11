@@ -10,7 +10,9 @@ resource "aws_launch_template" "this" {
     name = var.iam_instance_profile
   }
 
-  user_data = base64encode(file(var.user_data_file))
+  user_data = base64encode(templatefile(var.user_data_file, {
+    db_host = var.db_host
+  }))
 
   block_device_mappings {        # EBS
     device_name = "/dev/xvda"

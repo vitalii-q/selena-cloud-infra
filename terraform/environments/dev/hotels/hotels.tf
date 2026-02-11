@@ -40,6 +40,9 @@ module "hotels_asg" {
   environment          = var.environment
 
   alb_tg_arn           = module.hotels_alb[0].alb_tg_arn
+
+  # DB 
+  db_host              = module.hotels_db.private_dns
 }
 
 module "hotels_db" {

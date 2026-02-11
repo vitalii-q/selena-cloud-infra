@@ -33,3 +33,8 @@ variable "alb_tg_arn" {
   description = "ARN of the Target Group for users service ALB"
   type        = string
 }
+
+variable "db_host" {
+  description = "Database hostname for hotels service"
+  type        = string
+}

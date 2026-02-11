@@ -56,6 +56,8 @@ module "users_asg" {
   #ecs_cluster_name      = "selena-users-cluster"
 
   alb_tg_arn             = try(module.users_alb[0].alb_tg_arn, null)
+
+  db_host                = ""     # Plug
 }
 
 module "users_rds" {

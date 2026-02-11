@@ -3,6 +3,9 @@ exec > /var/log/user-data.log 2>&1
 
 echo "[INFO] UserData started"
 
+DB_HOST="${db_host}"
+export DB_HOST=$DB_HOST
+
 # Start Docker
 systemctl start docker
 systemctl enable docker
@@ -47,8 +50,7 @@ echo "[INFO] Run hotels-service container"
 docker run -d \
   --name hotels-service \
   --network host \
-  -p ${HOTELS_SERVICE_PORT}:${HOTELS_SERVICE_PORT} \
-  -e PROJECT_SUFFIX \
+  -p $${HOTELS_SERVICE_PORT}:$${HOTELS_SERVICE_PORT} \    # Variable + shielding
   -e LOCALHOST \
   -e DB_SSLMODE \
   -e HOTELS_SERVICE_PORT \

@@ -33,12 +33,12 @@ variable "user_data_file" {
 
 variable "ssh_allowed_cidr" {
   type    = string
-  default = "0.0.0.0/32" # временно, потом можем сделать bastion-only
+  default = "0.0.0.0/32" # temporarily, then we can do bastion-only
 }
 
 variable "iam_instance_profile" {
   type = string
-  default = ""  # если есть IAM для EC2, передадим сюда
+  default = ""  # if there is an IAM for EC2, we will send it here
 }
 
 variable "vpc_cidr" {
