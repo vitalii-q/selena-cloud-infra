@@ -39,3 +39,38 @@ resource "aws_route53_record" "hotels_service_alb_record" {
   records = [module.hotels.alb_dns_name]
 }
 
+
+# ==========================================================
+# Private Hosted Zone for internal services
+# ==========================================================
+
+resource "aws_route53_zone" "internal_zone" {
+  name = "internal.selena"
+
+  vpc {
+    vpc_id = module.vpc.vpc_id
+  }
+
+  comment = "Private hosted zone for internal Selena services"
+
+  tags = {
+    Name        = "selena-internal-zone"
+    Environment = var.environment
+    Project     = "selena"
+  }
+}
+
+# ==========================================================
+# Internal DNS record for Hotels DB (CockroachDB)
+# ==========================================================
+
+resource "aws_route53_record" "hotels_db_internal_record" {
+  zone_id = aws_route53_zone.internal_zone.zone_id
+  name    = "hotels_db.internal.selena"
+  type    = "A"
+  ttl     = 300
+
+  records = [
+    module.hotels.hotels_db_private_ip
+  ]
+}
