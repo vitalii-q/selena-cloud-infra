@@ -49,6 +49,9 @@ locals {
 
     # Shared policy from shared module
     ECRAccessPolicy        = var.ec2_ecr_access_policy_arn
+
+    # Allow hotels-service EC2 to read CockroachDB client certs from SSM
+    HotelsServiceSSMPolicy = module.hotels_policies.hotels_db_ssm_policy_arn
   }
 }
 

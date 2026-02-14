@@ -67,6 +67,7 @@ module "hotels_db" {
 
   # Path to CockroachDB certificates
   certs_path            = "${path.root}/../../../../infrastructure/certs/hotels_db"
+  client_certs_path     = "${path.root}/../../../../infrastructure/certs/hotels_service"
 
   # Attach IAM role to CockroachDB EC2
   iam_instance_profile  = module.hotels_db_role.instance_profile

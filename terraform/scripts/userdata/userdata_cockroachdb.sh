@@ -2,9 +2,10 @@
 set -e
 
 yum update -y
-yum install -y docker jq
+yum install -y docker jq awscli
 systemctl enable docker
 systemctl start docker
+
 
 mkdir -p /cockroach/certs
 
@@ -12,6 +13,8 @@ mkdir -p /cockroach/certs
 aws ssm get-parameter --name "/selena/cockroachdb/ca.crt" --with-decryption --query "Parameter.Value" --output text > /cockroach/certs/ca.crt
 aws ssm get-parameter --name "/selena/cockroachdb/node.crt" --with-decryption --query "Parameter.Value" --output text > /cockroach/certs/node.crt
 aws ssm get-parameter --name "/selena/cockroachdb/node.key" --with-decryption --query "Parameter.Value" --output text > /cockroach/certs/node.key
+
+chmod 600 /cockroach/certs/node.key
 
 docker run -d \
   --name cockroachdb \

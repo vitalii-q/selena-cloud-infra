@@ -6,6 +6,9 @@ echo "[INFO] UserData started"
 DB_HOST="${db_host}"
 export DB_HOST=$DB_HOST
 
+yum update -y
+yum install -y docker jq awscli
+
 # Start Docker
 systemctl start docker
 systemctl enable docker
@@ -13,8 +16,14 @@ systemctl enable docker
 # Add ec2-user to docker group
 usermod -aG docker ec2-user
 
-# Install jq (just in case)
-dnf install -y jq
+mkdir -p /cockroach/certs
+
+# Getting client certs for hotels-service from SSM
+aws ssm get-parameter --name "/selena/cockroachdb/client.hotels_user.crt" --with-decryption --query "Parameter.Value" --output text > /cockroach/certs/client.hotels_user.crt
+aws ssm get-parameter --name "/selena/cockroachdb/client.hotels_user.key" --with-decryption --query "Parameter.Value" --output text > /cockroach/certs/client.hotels_user.key
+aws ssm get-parameter --name "/selena/cockroachdb/ca.crt" --with-decryption --query "Parameter.Value" --output text > /cockroach/certs/ca.crt
+
+chmod 600 /cockroach/certs/client.hotels_user.key
 
 # Login to ECR
 aws ecr get-login-password --region eu-central-1 \

@@ -51,3 +51,8 @@ variable "certs_path" {
   description = "Path to CockroachDB certs directory"
   type        = string
 }
+
+variable "client_certs_path" {
+  description = "Path to CockroachDB client certs"
+  type        = string
+}

@@ -21,3 +21,19 @@ resource "aws_ssm_parameter" "node_key" {
 
   value = file("${var.certs_path}/node.key")
 }
+
+# client cert
+resource "aws_ssm_parameter" "client_crt" {
+  name  = "/selena/cockroachdb/client.hotels_user.crt"
+  type  = "SecureString"
+
+  value = file("${var.client_certs_path}/client.hotels_user.crt")
+}
+
+# client key
+resource "aws_ssm_parameter" "client_key" {
+  name  = "/selena/cockroachdb/client.hotels_user.key"
+  type  = "SecureString"
+
+  value = file("${var.client_certs_path}/client.hotels_user.key")
+}
