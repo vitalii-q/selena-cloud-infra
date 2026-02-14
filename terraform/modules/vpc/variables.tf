@@ -18,3 +18,8 @@ variable "private_subnet_cidr_2" {
   description = "CIDR block for second private subnet"
   type        = string
 }
+
+variable "region" {
+  description = "AWS region"
+  type        = string
+}
