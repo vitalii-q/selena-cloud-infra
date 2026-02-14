@@ -45,3 +45,9 @@ variable "vpc_cidr" {
   description = "VPC CIDR for security group ingress rules"
   type        = string
 }
+
+# Path to hotels DB (CockroachDB) certificates directory
+variable "certs_path" {
+  description = "Path to CockroachDB certs directory"
+  type        = string
+}

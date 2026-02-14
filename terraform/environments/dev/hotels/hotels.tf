@@ -64,5 +64,10 @@ module "hotels_db" {
   bastion_sg_id         = var.bastion_sg_id
   user_data_file        = "${path.root}/../../scripts/userdata/userdata_cockroachdb.sh"
   ssh_allowed_cidr      = "0.0.0.0/32"
-  iam_instance_profile  = ""
+
+  # Path to CockroachDB certificates
+  certs_path            = "${path.root}/../../../../infrastructure/certs/hotels_db"
+
+  # Attach IAM role to CockroachDB EC2
+  iam_instance_profile  = module.hotels_db_role.instance_profile
 }

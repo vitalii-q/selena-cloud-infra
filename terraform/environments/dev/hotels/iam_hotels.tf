@@ -14,6 +14,25 @@ module "hotels_role" {
   }
 }
 
+# =============================================
+# ---------- Role for CockroachDB EC2 ---------
+# =============================================
+module "hotels_db_role" {
+  source    = "../../../modules/iam/iam-roles/service-role"
+  role_name = "selena-hotels_db-role"
+  service   = "ec2.amazonaws.com"
+  policies = {
+    # Allow EC2 to read hotel DB (CockroachDB) certs from SSM
+    HotelsDBSSMPolicy = module.hotels_policies.hotels_db_ssm_policy_arn
+  }
+
+  tags = {
+    Project = "Selena"
+    Service = "hotels_db"
+  }
+}
+
+
 # ============================================
 # -------- Policies for hotels-service -------
 # ============================================

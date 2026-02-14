@@ -43,6 +43,8 @@ resource "aws_instance" "cockroachdb" {
   vpc_security_group_ids      = [aws_security_group.db_sg.id]
   key_name                    = var.key_name
   associate_public_ip_address = false
+
+  # Attach IAM role with SSM policy
   iam_instance_profile        = var.iam_instance_profile
 
   root_block_device {

@@ -17,3 +17,22 @@ resource "aws_iam_policy" "ec2_secrets_access_policy" {
     ]
   })
 }
+
+# IAM Policy for CockroachDB EC2 to read certs from SSM
+resource "aws_iam_policy" "hotels_db_ssm_policy" {
+  name        = "HotelsDBSSMPolicy"
+  description = "Allow EC2 to read hotels DB (CockroachDB) certificates from SSM"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "ssm:GetParameter"
+        ],
+        Resource = "arn:aws:ssm:${var.region}:${var.account_id}:parameter/selena/cockroachdb/*"
+      }
+    ]
+  })
+}
