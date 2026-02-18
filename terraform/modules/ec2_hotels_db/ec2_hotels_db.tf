@@ -37,7 +37,7 @@ resource "aws_security_group" "db_sg" {
 }
 
 resource "aws_instance" "cockroachdb" {
-  ami                         = var.ami_id
+  ami                         = "ami-025ce1fb05928304b"    # get in infrastructure/terraform/packer/templates/cockroachdb.pkr.hcl
   instance_type               = var.instance_type
   subnet_id                   = var.private_subnet_id
   vpc_security_group_ids      = [aws_security_group.db_sg.id]
@@ -47,15 +47,41 @@ resource "aws_instance" "cockroachdb" {
   # Attach IAM role with SSM policy
   iam_instance_profile        = var.iam_instance_profile
 
-  root_block_device {
-    volume_size = 20
+  /*root_block_device {
+    volume_size = 15
     volume_type = "gp3"
-  }
-
-  user_data = file(var.user_data_file)
+  }*/
 
   tags = {
     Name = "cockroachdb-ec2"
     Role = "database"
   }
+}
+
+# ============================================================
+# Persistent EBS volume for CockroachDB data
+# ============================================================
+
+resource "aws_ebs_volume" "cockroachdb_data" {
+  availability_zone = aws_instance.cockroachdb.availability_zone
+  size = 20
+  type = "gp3"
+
+  tags = {
+    Name = "cockroachdb-data"
+  }
+
+  lifecycle {
+    prevent_destroy = true           # to avoid losing hotels DB data
+  }
+}
+
+# ============================================================
+# Attach volume to EC2
+# ============================================================
+
+resource "aws_volume_attachment" "cockroachdb_data_attach" {
+  device_name = "/dev/xvdb"
+  volume_id = aws_ebs_volume.cockroachdb_data.id
+  instance_id = aws_instance.cockroachdb.id
 }
