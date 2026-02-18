@@ -77,3 +77,7 @@ variable "bastion_sg_id" {}
 variable "user_data_file" {}
 variable "ssh_allowed_cidr" {}
 variable "iam_instance_profile" {}
+
+variable "availability_zone" {
+  type = string
+}

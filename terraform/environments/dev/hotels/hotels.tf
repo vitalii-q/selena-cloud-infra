@@ -46,9 +46,7 @@ module "hotels_asg" {
 }
 
 # ProxyJump SSH connection to EC2 instance (DNS hotels_db.internal.selena) with hotels DB via Bastion EC2
-# ssh -i ~/.ssh/selena-aws-key.pem -o ProxyCommand="ssh -i ~/.ssh/selena-aws-key.pem -W %h:%p ec2-user@<bastion_public_ip>" -L 5433:<hotels_db_private_ip>:5432 ec2-user@<hotels_db_private_ip>
-# 
-# ssh -i ~/.ssh/selena-aws-key.pem -o ProxyCommand="ssh -i ~/.ssh/selena-aws-key.pem -W %h:%p ec2-user@18.153.207.232" -L 5433:10.0.2.82:5432 ec2-user@10.0.2.82
+# ssh -i ~/.ssh/selena-aws-key.pem -o ProxyCommand="ssh -i ~/.ssh/selena-aws-key.pem -W %h:%p ec2-user@<bastion_public_ip>" -L 5433:<hotels_db_private_ip>:26257 ubuntu@<hotels_db_private_ip>
 
 module "hotels_db" {
   source                = "../../../modules/ec2_hotels_db"
@@ -57,6 +55,7 @@ module "hotels_db" {
   vpc_id                = var.vpc_id
   vpc_cidr              = var.vpc_cidr
   private_subnet_id     = var.private_subnet_1_id
+  availability_zone     = var.availability_zone
 
   ami_id                = var.ami_id
   key_name              = var.key_name

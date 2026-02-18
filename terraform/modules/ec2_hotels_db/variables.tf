@@ -56,3 +56,8 @@ variable "client_certs_path" {
   description = "Path to CockroachDB client certs"
   type        = string
 }
+
+variable "availability_zone" {
+  description = "AZ for EBS volume"
+  type = string
+}

@@ -20,7 +20,7 @@ module "vpc" {
   public_subnet_cidr_2  = "10.0.3.0/24"
   private_subnet_cidr_2 = "10.0.4.0/24"
 
-  availability_zone     = "eu-central-1a"
+  availability_zone     = var.availability_zone
   availability_zone_2   = var.availability_zone_2
 }
 
@@ -59,6 +59,7 @@ module "hotels" {
   # variables
   account_id                  = data.aws_caller_identity.current.account_id
   region                      = var.region
+  availability_zone           = var.availability_zone
 
   ami_id                      = data.aws_ami.selena_base.id
   key_name                    = var.key_name

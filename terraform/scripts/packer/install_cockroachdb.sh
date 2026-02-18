@@ -42,7 +42,7 @@ sudo chown cockroach:cockroach /data
 sudo tee /usr/local/bin/mount-data.sh > /dev/null << 'EOF'
 #!/bin/bash
 
-DEVICE="/dev/xvdb"
+DEVICE=$(lsblk -dpno NAME | grep nvme | tail -n1)
 MOUNT_POINT="/data"
 
 while [ ! -b $DEVICE ]; do
@@ -95,21 +95,25 @@ Requires=mount-data.service
 
 [Service]
 
+Type=simple
+
 User=cockroach
 
 ExecStart=/usr/local/bin/cockroach start-single-node \
 --store=/data \
---listen-addr=0.0.0.0 \
+--listen-addr=0.0.0.0:26257 \
 --http-addr=0.0.0.0:8080 \
 --insecure
 
 Restart=always
+RestartSec=5
 
 LimitNOFILE=65536
 
 [Install]
 WantedBy=multi-user.target
 EOF
+
 
 
 # ============================================================

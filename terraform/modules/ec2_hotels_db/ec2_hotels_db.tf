@@ -37,7 +37,7 @@ resource "aws_security_group" "db_sg" {
 }
 
 resource "aws_instance" "cockroachdb" {
-  ami                         = "ami-025ce1fb05928304b"    # get in infrastructure/terraform/packer/templates/cockroachdb.pkr.hcl
+  ami                         = "ami-05542aad8ef270947"    # get in infrastructure/terraform/packer/templates/cockroachdb.pkr.hcl
   instance_type               = var.instance_type
   subnet_id                   = var.private_subnet_id
   vpc_security_group_ids      = [aws_security_group.db_sg.id]
@@ -63,9 +63,9 @@ resource "aws_instance" "cockroachdb" {
 # ============================================================
 
 resource "aws_ebs_volume" "cockroachdb_data" {
-  availability_zone = aws_instance.cockroachdb.availability_zone
-  size = 20
-  type = "gp3"
+  availability_zone = var.availability_zone
+  size              = 20
+  type              = "gp3"
 
   tags = {
     Name = "cockroachdb-data"

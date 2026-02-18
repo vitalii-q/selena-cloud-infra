@@ -16,14 +16,14 @@ systemctl enable docker
 # Add ec2-user to docker group
 usermod -aG docker ec2-user
 
-mkdir -p /cockroach/certs
+#mkdir -p /cockroach/certs
 
 # Getting client certs for hotels-service from SSM
-aws ssm get-parameter --name "/selena/cockroachdb/client.hotels_user.crt" --with-decryption --query "Parameter.Value" --output text > /cockroach/certs/client.hotels_user.crt
-aws ssm get-parameter --name "/selena/cockroachdb/client.hotels_user.key" --with-decryption --query "Parameter.Value" --output text > /cockroach/certs/client.hotels_user.key
-aws ssm get-parameter --name "/selena/cockroachdb/ca.crt" --with-decryption --query "Parameter.Value" --output text > /cockroach/certs/ca.crt
+#aws ssm get-parameter --name "/selena/cockroachdb/client.hotels_user.crt" --with-decryption --query "Parameter.Value" --output text > /cockroach/certs/client.hotels_user.crt
+#aws ssm get-parameter --name "/selena/cockroachdb/client.hotels_user.key" --with-decryption --query "Parameter.Value" --output text > /cockroach/certs/client.hotels_user.key
+#aws ssm get-parameter --name "/selena/cockroachdb/ca.crt" --with-decryption --query "Parameter.Value" --output text > /cockroach/certs/ca.crt
 
-chmod 600 /cockroach/certs/client.hotels_user.key
+#chmod 600 /cockroach/certs/client.hotels_user.key
 
 # Login to ECR
 aws ecr get-login-password --region eu-central-1 \
