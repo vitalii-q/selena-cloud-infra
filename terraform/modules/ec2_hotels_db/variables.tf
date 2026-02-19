@@ -61,3 +61,8 @@ variable "availability_zone" {
   description = "AZ for EBS volume"
   type = string
 }
+
+variable "security_group_ids" {
+  type = list(string)
+  description = "List of SG IDs to attach to CockroachDB instance"
+}
