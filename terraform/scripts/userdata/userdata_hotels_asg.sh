@@ -31,7 +31,8 @@ aws ecr get-login-password --region eu-central-1 \
 
 # Fetch secrets from AWS Secrets Manager
 SECRET_JSON=$(aws secretsmanager get-secret-value \
-  --secret-id selena-hotels-db-dev \
+  --region eu-central-1 \
+  --secret-id selena-hotels-db \
   --query SecretString \
   --output text)
 
@@ -59,7 +60,7 @@ echo "[INFO] Run hotels-service container"
 docker run -d \
   --name hotels-service \
   --network host \
-  -p $${HOTELS_SERVICE_PORT}:$${HOTELS_SERVICE_PORT} \    # Variable + shielding
+  -p $${HOTELS_SERVICE_PORT}:$${HOTELS_SERVICE_PORT} \
   -e LOCALHOST \
   -e DB_SSLMODE \
   -e HOTELS_SERVICE_PORT \
