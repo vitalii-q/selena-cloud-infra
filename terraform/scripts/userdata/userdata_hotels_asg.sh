@@ -44,7 +44,7 @@ export HOTELS_COCKROACH_PORT_INNER=$(echo $SECRET_JSON | jq -r '.HOTELS_COCKROAC
 export DB_SSLMODE=$(echo $SECRET_JSON | jq -r '.DB_SSLMODE')
 
 # Non-sensitive env variables
-export PROJECT_SUFFIX=dev
+export PROJECT_SUFFIX=prod
 export LOCALHOST=localhost
 export HOTELS_SERVICE_PORT=9064
 export HOTELS_COCKROACH_PORT=9264
@@ -60,7 +60,9 @@ echo "[INFO] Run hotels-service container"
 docker run -d \
   --name hotels-service \
   --network host \
+  -v /cockroach/certs:/certs-cloud \
   -p $${HOTELS_SERVICE_PORT}:$${HOTELS_SERVICE_PORT} \
+  -e PROJECT_SUFFIX \
   -e LOCALHOST \
   -e DB_SSLMODE \
   -e HOTELS_SERVICE_PORT \

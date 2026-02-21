@@ -102,8 +102,7 @@ User=cockroach
 ExecStart=/usr/local/bin/cockroach start-single-node \
 --store=/data \
 --listen-addr=0.0.0.0:26257 \
---http-addr=0.0.0.0:8080 \
---insecure
+--http-addr=0.0.0.0:8080
 
 Restart=always
 RestartSec=5

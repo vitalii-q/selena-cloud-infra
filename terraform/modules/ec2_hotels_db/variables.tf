@@ -47,8 +47,8 @@ variable "vpc_cidr" {
 }
 
 # Path to hotels DB (CockroachDB) certificates directory
-variable "certs_path" {
-  description = "Path to CockroachDB certs directory"
+variable "server_certs_path" {
+  description = "Path to cloud CockroachDB certs directory"
   type        = string
 }
 
