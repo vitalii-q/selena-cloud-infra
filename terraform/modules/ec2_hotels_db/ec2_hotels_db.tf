@@ -3,12 +3,14 @@
 # ============================================================
 
 resource "aws_instance" "cockroachdb" {
-  ami                         = "ami-05542aad8ef270947"    # get in infrastructure/terraform/packer/templates/cockroachdb.pkr.hcl
+  ami                         = "ami-0bbe31068b1daedf4"    # get in infrastructure/terraform/packer/templates/cockroachdb.pkr.hcl
   instance_type               = var.instance_type
   subnet_id                   = var.private_subnet_id
   vpc_security_group_ids      = var.security_group_ids
   key_name                    = var.key_name
   associate_public_ip_address = false
+
+  private_ip    = "10.0.2.50"                              # we are fixing a private ip for a steady connection from the hotels-service
 
   # Attach IAM role with SSM policy
   iam_instance_profile        = var.iam_instance_profile

@@ -34,6 +34,10 @@ sudo mkdir -p /data
 
 sudo chown cockroach:cockroach /data
 
+sudo mkdir -p /cockroach/certs
+sudo chown cockroach:cockroach /cockroach/certs
+sudo chmod 700 /cockroach/certs
+
 
 # ============================================================
 # Create mount script
@@ -94,15 +98,14 @@ After=network.target mount-data.service
 Requires=mount-data.service
 
 [Service]
-
 Type=simple
-
 User=cockroach
 
 ExecStart=/usr/local/bin/cockroach start-single-node \
 --store=/data \
 --listen-addr=0.0.0.0:26257 \
---http-addr=0.0.0.0:8080
+--http-addr=0.0.0.0:8080 \
+--certs-dir=/cockroach/certs
 
 Restart=always
 RestartSec=5
