@@ -38,3 +38,8 @@ variable "db_host" {
   description = "Database hostname for hotels service"
   type        = string
 }
+
+variable "volume_ebs" {
+  description = "EBS volume for instances"
+  type        = number
+}

@@ -50,6 +50,7 @@ module "users_asg" {
   vpc_id                 = var.vpc_id
   subnet_ids             = [var.public_subnet_1_id]
   instance_type          = "t3.nano"
+  volume_ebs             = 5
   key_name               = var.key_name
   iam_instance_profile   = module.users_role.instance_profile
   environment            = var.environment

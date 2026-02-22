@@ -35,6 +35,7 @@ module "hotels_asg" {
   vpc_id               = var.vpc_id
   subnet_ids           = [var.public_subnet_1_id, var.public_subnet_2_id]
   instance_type        = "t3.nano"
+  volume_ebs           = 8
   key_name             = var.key_name
   iam_instance_profile = module.hotels_role.instance_profile
   environment          = var.environment
