@@ -26,6 +26,8 @@ source "amazon-ebs" "cockroachdb" {
   associate_public_ip_address = true
   ssh_timeout = "2m"
 
+  iam_instance_profile = "packer-ssm-role-instance-profile"
+
   source_ami_filter {
     filters = {
       name                = "ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"

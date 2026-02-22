@@ -48,7 +48,7 @@ resource "aws_iam_policy" "hotels_db_ssm_policy" {
 
 resource "aws_iam_policy" "hotels_service_ssm_policy" {
   name        = "HotelsServiceSSMPolicy"
-  description = "Allow hotels-service EC2 to read client CockroachDB certs from SSM"
+  description = "Allow role to read client CockroachDB certs from SSM"
 
   policy = jsonencode({
     Version = "2012-10-17",
@@ -56,11 +56,11 @@ resource "aws_iam_policy" "hotels_service_ssm_policy" {
       {
         Effect = "Allow",
         Action = [
-          "ssm:GetParameter"
+          "ssm:GetParameter", 
+          "ssm:GetParameters"
         ],
         Resource = [
-          "arn:aws:ssm:${var.region}:${var.account_id}:parameter/selena/cockroachdb/client.*",
-          "arn:aws:ssm:${var.region}:${var.account_id}:parameter/selena/cockroachdb/ca.crt"
+          "arn:aws:ssm:${var.region}:${var.account_id}:parameter/selena/cockroachdb/*",
         ]
       }
     ]

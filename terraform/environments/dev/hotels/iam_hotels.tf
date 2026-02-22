@@ -32,6 +32,21 @@ module "hotels_db_role" {
   }
 }
 
+module "packer_role" {
+  source    = "../../../modules/iam/iam-roles/service-role"
+  role_name = "packer-ssm-role"
+  service   = "ec2.amazonaws.com"
+  policies = {
+    # Allow Packer when it creates AMI to read hotel DB (CockroachDB) certs from SSM
+    PackerSSMPolicy = module.hotels_policies.hotels_db_ssm_policy_arn
+  }
+
+  tags = {
+    Project = "Selena"
+    Service = "packer"
+  }
+}
+
 
 # ============================================
 # -------- Policies for hotels-service -------

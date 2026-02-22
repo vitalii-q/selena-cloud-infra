@@ -14,6 +14,19 @@ sudo cp cockroach-v23.1.11.linux-amd64/cockroach /usr/local/bin/
 
 sudo chmod +x /usr/local/bin/cockroach
 
+# ============================================================
+# Install AWS CLI v2
+# ============================================================
+
+sudo apt-get update -y
+sudo apt-get install -y unzip
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
+unzip /tmp/awscliv2.zip
+sudo ./aws/install
+rm -rf /tmp/awscliv2.zip ./aws
+
+aws --version
 
 # ============================================================
 # Create cockroach user
@@ -37,6 +50,18 @@ sudo chown cockroach:cockroach /data
 sudo mkdir -p /cockroach/certs
 sudo chown cockroach:cockroach /cockroach/certs
 sudo chmod 700 /cockroach/certs
+
+# ============================================================
+# Download certificates from SSM
+# ============================================================
+
+aws ssm get-parameter --name "/selena/cockroachdb/ca.crt" --with-decryption --query "Parameter.Value" --output text | sudo tee /cockroach/certs/ca.crt > /dev/null
+aws ssm get-parameter --name "/selena/cockroachdb/node.crt" --with-decryption --query "Parameter.Value" --output text | sudo tee /cockroach/certs/node.crt > /dev/null
+aws ssm get-parameter --name "/selena/cockroachdb/node.key" --with-decryption --query "Parameter.Value" --output text | sudo tee /cockroach/certs/node.key > /dev/null
+
+sudo chown -R cockroach:cockroach /cockroach/certs
+sudo chmod 600 /cockroach/certs/*.key
+sudo chmod 644 /cockroach/certs/*.crt
 
 
 # ============================================================
