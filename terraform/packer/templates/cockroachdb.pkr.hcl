@@ -50,6 +50,39 @@ build {
   sources = [
     "source.amazon-ebs.cockroachdb"
   ]
+
+  # ============================================================
+  # Create certs directory
+  # ============================================================
+  provisioner "shell" {
+    inline = [
+      "mkdir -p /tmp/certs"
+    ]
+  }
+
+  # ============================================================
+  # Copy CockroachDB certificates to temporary EC2 instance
+  # ============================================================
+
+  provisioner "file" {
+    source      = "../../../../hotels-service/secure/certs-cloud/ca.crt"
+    destination = "/tmp/certs/ca.crt"
+  }
+
+  provisioner "file" {
+    source      = "../../../../hotels-service/secure/certs-cloud/node.crt"
+    destination = "/tmp/certs/node.crt"
+  }
+
+  provisioner "file" {
+    source      = "../../../../hotels-service/secure/certs-cloud/node.key"
+    destination = "/tmp/certs/node.key"
+  }
+
+  # ============================================================
+  # Install CockroachDB and configure system
+  # ============================================================
+
   provisioner "shell" {
     script = "../../scripts/packer/install_cockroachdb.sh"
   }

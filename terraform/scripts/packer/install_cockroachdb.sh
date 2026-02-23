@@ -51,17 +51,24 @@ sudo mkdir -p /cockroach/certs
 sudo chown cockroach:cockroach /cockroach/certs
 sudo chmod 700 /cockroach/certs
 
+
 # ============================================================
-# Download certificates from SSM
+# Copy certificates from temporary location (Packer)
 # ============================================================
 
-aws ssm get-parameter --name "/selena/cockroachdb/ca.crt" --with-decryption --query "Parameter.Value" --output text | sudo tee /cockroach/certs/ca.crt > /dev/null
-aws ssm get-parameter --name "/selena/cockroachdb/node.crt" --with-decryption --query "Parameter.Value" --output text | sudo tee /cockroach/certs/node.crt > /dev/null
-aws ssm get-parameter --name "/selena/cockroachdb/node.key" --with-decryption --query "Parameter.Value" --output text | sudo tee /cockroach/certs/node.key > /dev/null
+sudo mkdir -p /cockroach/certs
+
+sudo cp /tmp/certs/ca.crt /cockroach/certs/
+sudo cp /tmp/certs/node.crt /cockroach/certs/
+sudo cp /tmp/certs/node.key /cockroach/certs/
 
 sudo chown -R cockroach:cockroach /cockroach/certs
-sudo chmod 600 /cockroach/certs/*.key
-sudo chmod 644 /cockroach/certs/*.crt
+
+sudo chmod 600 /cockroach/certs/node.key
+sudo chmod 644 /cockroach/certs/ca.crt
+sudo chmod 644 /cockroach/certs/node.crt
+
+rm -rf /tmp/certs
 
 
 # ============================================================
@@ -129,6 +136,7 @@ User=cockroach
 ExecStart=/usr/local/bin/cockroach start-single-node \
 --store=/data \
 --listen-addr=0.0.0.0:26257 \
+--advertise-addr=10.0.2.50:26257 \
 --http-addr=0.0.0.0:8080 \
 --certs-dir=/cockroach/certs
 

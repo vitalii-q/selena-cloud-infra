@@ -1,9 +1,11 @@
+# refresh SSH connection to DB instance via Bastion: ssh-keygen -R 10.0.2.50
+
 # ============================================================
 # CockroachDB EC2 instance
 # ============================================================
 
 resource "aws_instance" "cockroachdb" {
-  ami                         = "ami-0bbe31068b1daedf4"    # get in infrastructure/terraform/packer/templates/cockroachdb.pkr.hcl
+  ami                         = "ami-0ac618b571420361d"    # get in infrastructure/terraform/packer/templates/cockroachdb.pkr.hcl
   instance_type               = var.instance_type
   subnet_id                   = var.private_subnet_id
   vpc_security_group_ids      = var.security_group_ids

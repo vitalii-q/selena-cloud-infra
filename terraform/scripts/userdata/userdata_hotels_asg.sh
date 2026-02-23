@@ -23,7 +23,10 @@ aws ssm get-parameter --name "/selena/cockroachdb/client.hotels_user.crt" --with
 aws ssm get-parameter --name "/selena/cockroachdb/client.hotels_user.key" --with-decryption --query "Parameter.Value" --output text > /cockroach/certs/client.hotels_user.key
 aws ssm get-parameter --name "/selena/cockroachdb/ca.crt" --with-decryption --query "Parameter.Value" --output text > /cockroach/certs/ca.crt
 
+# Set owner and permissions for ec2-user
+chown -R ec2-user:ec2-user /cockroach/certs
 chmod 600 /cockroach/certs/client.hotels_user.key
+chmod 644 /cockroach/certs/client.hotels_user.crt /cockroach/certs/ca.crt
 
 # Login to ECR
 aws ecr get-login-password --region eu-central-1 \
