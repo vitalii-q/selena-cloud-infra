@@ -66,7 +66,7 @@ build {
 
   provisioner "file" {
     source      = "../../../../hotels-service/secure/certs-cloud/ca.crt"
-    destination = "/tmp/certs/ca.crt"
+    destination = "/tmp/certs/ca.crt"    # temporary directory in EC2
   }
 
   provisioner "file" {

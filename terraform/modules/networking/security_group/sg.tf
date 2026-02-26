@@ -27,18 +27,22 @@ resource "aws_security_group" "this" {
     }
   }
 
-    # allow SSH from bastion only if provided
-    dynamic "ingress" {
-      for_each = var.bastion_sg_id != null ? [1] : []
+  # allow SSH from bastion only if provided
+  dynamic "ingress" {
+    for_each = var.bastion_sg_id != null ? [1] : []
 
-      content {
-          description     = "SSH from bastion"
-          from_port       = 22
-          to_port         = 22
-          protocol        = "tcp"
-          security_groups = [var.bastion_sg_id]
-      }
+    content {
+        description     = "SSH from bastion"
+        from_port       = 22
+        to_port         = 22
+        protocol        = "tcp"
+        security_groups = [var.bastion_sg_id]
     }
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 
   tags = {
     Name = var.name

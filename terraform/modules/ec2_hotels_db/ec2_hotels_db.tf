@@ -5,7 +5,7 @@
 # ============================================================
 
 resource "aws_instance" "cockroachdb" {
-  ami                         = "ami-0ac618b571420361d"    # get in infrastructure/terraform/packer/templates/cockroachdb.pkr.hcl
+  ami                         = "ami-0d3ee1b3c22b0eed1"    # get in infrastructure/terraform/packer/templates/cockroachdb.pkr.hcl
   instance_type               = var.instance_type
   subnet_id                   = var.private_subnet_id
   vpc_security_group_ids      = var.security_group_ids

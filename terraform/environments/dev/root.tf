@@ -72,7 +72,7 @@ module "hotels" {
   route53_zone_id             = var.route53_zone_id
   environment                 = var.environment
 
-  bastion_sg_id               = module.bastion.bastion_sg_id
+  bastion_sg_id               = length(module.bastion) > 0 ? module.bastion[0].bastion_sg_id : null
   user_data_file              = "${path.root}/../../scripts/userdata/userdata_cockroach.sh"
   ssh_allowed_cidr            = "0.0.0.0/32"
   iam_instance_profile        = ""
@@ -93,6 +93,7 @@ module "hotels" {
 
 module "bastion" {
   source           = "../../modules/bastion"
+  count            = var.enable_bastion ? 1 : 0
 
   project          = "selena"
   vpc_id           = module.vpc.vpc_id

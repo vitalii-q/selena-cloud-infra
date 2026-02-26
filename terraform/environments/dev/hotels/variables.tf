@@ -1,6 +1,6 @@
 variable "enable_hotels_alb" {
   type    = bool
-  default = true
+  default = false
   description = "Enable ALB and related resources for the service"
 }
 

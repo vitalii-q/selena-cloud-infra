@@ -41,17 +41,17 @@ output "selena_base_ami_id" {
 
 # Bastion public IP
 output "bastion_public_ip" {
-  value = module.bastion.bastion_public_ip
+  value = length(module.bastion) > 0 ? module.bastion[0].bastion_public_ip : null
 }
 
 # Bastion private IP
 output "bastion_private_ip" {
-  value = module.bastion.bastion_private_ip
+  value = length(module.bastion) > 0 ? module.bastion[0].bastion_private_ip : null
 }
 
 # Bastion security group id
 output "bastion_sg_id" {
-  value = module.bastion.bastion_sg_id
+  value = length(module.bastion) > 0 ? module.bastion[0].bastion_sg_id : null
 }
 
 

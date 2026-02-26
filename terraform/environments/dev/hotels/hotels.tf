@@ -107,13 +107,13 @@ module "hotels_db_sg" {
 
   bastion_sg_id = var.bastion_sg_id
 
-  ingress_rules = [
+  ingress_rules = var.enable_hotels_alb ? [
     {
       from_port       = 26257
       to_port         = 26257
       protocol        = "tcp"
-      security_groups = [module.hotels_asg[0].asg_sg_id]  # ASG hotels service
+      security_groups = [module.hotels_asg[0].asg_sg_id]    # ASG hotels service
       description     = "Allow CockroachDB access from hotels service"
     }
-  ]
+  ] : []
 }

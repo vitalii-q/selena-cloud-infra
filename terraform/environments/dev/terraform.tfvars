@@ -3,8 +3,12 @@ project     = "selena"
 account_id  = "235484063004"
 env         = "dev"
 
+
 # Resource management
-enable_hotels_alb = true
+enable_hotels_alb = false
+
+enable_bastion = false
+
 
 # Variables
 instance_type  = "t3.micro"
