@@ -16,6 +16,7 @@ resource "aws_instance" "users_service" {
   root_block_device {
     volume_size = 10
     volume_type = "gp3"
+    delete_on_termination = true
   }
 
   user_data = file("${path.root}/../../scripts/userdata/userdata_ec2.sh") # v2
