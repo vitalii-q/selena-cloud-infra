@@ -6,8 +6,9 @@ env         = "dev"
 
 # Resource management
 enable_hotels_alb = false
+enable_hotels_db  = false
 
-enable_bastion = false
+enable_bastion    = false
 
 
 # Variables

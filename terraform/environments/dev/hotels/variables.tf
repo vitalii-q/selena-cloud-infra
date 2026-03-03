@@ -4,6 +4,12 @@ variable "enable_hotels_alb" {
   description = "Enable ALB and related resources for the service"
 }
 
+variable "enable_hotels_db" {
+  type    = bool
+  default = false
+  description = "Enable hotels DB and related resources for the service"
+}
+
 variable "environment" {
   description = "Environment (dev, prod etc.)"
   type        = string

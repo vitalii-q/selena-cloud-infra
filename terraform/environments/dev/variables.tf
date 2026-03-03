@@ -4,6 +4,11 @@ variable "enable_hotels_alb" {
   description = "Enable ALB and related resources for hotel service"
 }
 
+variable "enable_hotels_db" {
+  type    = bool
+  default = true
+}
+
 variable "enable_bastion" {
   description = "Enable bastion host"
   type        = bool

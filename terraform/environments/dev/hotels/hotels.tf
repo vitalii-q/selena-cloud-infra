@@ -43,7 +43,7 @@ module "hotels_asg" {
   alb_tg_arn           = module.hotels_alb[0].alb_tg_arn
 
   # DB 
-  db_host              = module.hotels_db.private_dns
+  db_host              = var.enable_hotels_db ? module.hotels_db[0].private_dns : null
 }
 
 # ProxyJump SSH connection to EC2 instance (DNS hotels_db.internal.selena) with hotels DB via Bastion EC2 (get data from dev outputs)
@@ -53,6 +53,7 @@ module "hotels_asg" {
 
 module "hotels_db" {
   source                = "../../../modules/ec2_hotels_db"
+  enable_instance       = var.enable_hotels_db
 
   project               = "selena-hotels"
   vpc_id                = var.vpc_id

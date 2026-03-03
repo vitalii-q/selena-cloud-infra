@@ -14,9 +14,10 @@ resource "aws_instance" "users_service" {
   iam_instance_profile        = var.instance_profile
 
   root_block_device {
-    volume_size = 10
-    volume_type = "gp3"
+    volume_size           = 10
+    volume_type           = "gp3"
     delete_on_termination = true
+    encrypted             = true
   }
 
   user_data = file("${path.root}/../../scripts/userdata/userdata_ec2.sh") # v2

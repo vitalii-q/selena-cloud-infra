@@ -1,3 +1,7 @@
+variable "enable_instance" {
+  type = bool
+}
+
 variable "project" {
   type = string
 }

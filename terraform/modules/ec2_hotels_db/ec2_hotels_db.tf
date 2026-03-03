@@ -5,6 +5,8 @@
 # ============================================================
 
 resource "aws_instance" "cockroachdb" {
+  count                       = var.enable_instance ? 1 : 0
+  
   ami                         = "ami-0d3ee1b3c22b0eed1"    # get in infrastructure/terraform/packer/templates/cockroachdb.pkr.hcl
   instance_type               = var.instance_type
   subnet_id                   = var.private_subnet_id
@@ -12,7 +14,7 @@ resource "aws_instance" "cockroachdb" {
   key_name                    = var.key_name
   associate_public_ip_address = false
 
-  private_ip    = "10.0.2.50"                              # we are fixing a private ip for a steady connection from the hotels-service
+  private_ip                  = "10.0.2.50"                # we are fixing a private ip for a steady connection from the hotels-service
 
   # Attach IAM role with SSM policy
   iam_instance_profile        = var.iam_instance_profile
@@ -51,7 +53,9 @@ resource "aws_ebs_volume" "cockroachdb_data" {
 # ============================================================
 
 resource "aws_volume_attachment" "cockroachdb_data_attach" {
+  count       = var.enable_instance ? 1 : 0
+
   device_name = "/dev/xvdb"
-  volume_id = aws_ebs_volume.cockroachdb_data.id
-  instance_id = aws_instance.cockroachdb.id
+  volume_id   = aws_ebs_volume.cockroachdb_data.id
+  instance_id = aws_instance.cockroachdb[0].id
 }

@@ -3,9 +3,9 @@ output "alb_dns_name" {
 }
 
 output "hotels_db_private_dns" {
-  value = module.hotels_db.private_dns
+  value = try(module.hotels_db[0].private_dns, null)
 }
 
 output "hotels_db_private_ip" {
-  value = module.hotels_db.private_ip
+  value = try(module.hotels_db[0].private_ip, null)
 }
