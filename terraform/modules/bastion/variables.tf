@@ -1,3 +1,7 @@
+variable "enable_instance" {
+  type = bool
+}
+
 variable "project" {
   type = string
 }
@@ -21,4 +25,9 @@ variable "key_name" {
 variable "instance_type" {
   type    = string
   default = "t3.nano"
+}
+
+variable "bastion_sg_id" {
+  description = "Security group ID for bastion"
+  type        = string
 }

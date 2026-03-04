@@ -65,8 +65,8 @@ resource "aws_route53_zone" "internal_zone" {
 # ==========================================================
 
 resource "aws_route53_record" "hotels_db_internal_record" {
-  count = var.enable_hotels_db ? 1 : 0
-  
+  count   = module.hotels.hotels_db_private_ip == null ? 0 : 1
+
   zone_id = aws_route53_zone.internal_zone.zone_id
   name    = "hotels_db.internal.selena"                     # Hotels DB certificates have been issued for this DNS
   type    = "A"

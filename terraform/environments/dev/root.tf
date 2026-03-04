@@ -56,6 +56,10 @@ module "users" {
 module "hotels" {
   source                      = "./hotels"
 
+  # Resource management
+  enable_hotels_alb           = var.enable_hotels_alb
+  enable_hotels_db            = var.enable_hotels_db
+
   # variables
   account_id                  = data.aws_caller_identity.current.account_id
   region                      = var.region
@@ -72,7 +76,7 @@ module "hotels" {
   route53_zone_id             = var.route53_zone_id
   environment                 = var.environment
 
-  bastion_sg_id               = length(module.bastion) > 0 ? module.bastion[0].bastion_sg_id : null
+  bastion_sg_id               = module.bastion_sg.id
   user_data_file              = "${path.root}/../../scripts/userdata/userdata_cockroach.sh"
   ssh_allowed_cidr            = "0.0.0.0/32"
   iam_instance_profile        = ""
@@ -93,7 +97,7 @@ module "hotels" {
 
 module "bastion" {
   source           = "../../modules/bastion"
-  count            = var.enable_bastion ? 1 : 0
+  enable_instance  = var.enable_bastion
 
   project          = "selena"
   vpc_id           = module.vpc.vpc_id
@@ -101,4 +105,39 @@ module "bastion" {
 
   ami_id           = data.aws_ami.selena_base.id
   key_name         = var.key_name
+
+  bastion_sg_id    = module.bastion_sg.id
+}
+
+
+# ============================================================
+# Root SG
+# ============================================================
+
+module "bastion_sg" {
+  source = "../../modules/networking/security_group"
+
+  name   = "selena-bastion-sg"
+  vpc_id = module.vpc.vpc_id
+
+  ingress_rules = [
+    {
+      description = "SSH from anywhere (temporary, dev only)"
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  ]
+
+  egress_rules = [
+    {
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  ]
+
+  bastion_sg_id = null
 }

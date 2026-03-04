@@ -6,7 +6,7 @@ variable "enable_hotels_alb" {
 
 variable "enable_hotels_db" {
   type    = bool
-  default = true
+  default = false
 }
 
 variable "enable_bastion" {

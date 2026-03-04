@@ -12,7 +12,7 @@ enable_bastion    = false
 
 
 # Variables
-instance_type  = "t3.micro"
+instance_type  = "t3.nano"
 subnet_id      = "subnet-0b8db83bda509afbb"
 vpc_id         = "vpc-030a96bd31fb160d2"
 key_name       = "selena-aws-key"
