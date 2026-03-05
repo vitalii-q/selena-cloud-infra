@@ -1,3 +1,15 @@
+variable "enable_users_alb" {
+  description = "Toggle to enable Users Service ALB"
+  type        = bool
+  default     = false
+}
+
+variable "enable_users_db" {
+  description = "Toggle to enable Users Service RDS"
+  type        = bool
+  default     = false
+}
+
 variable "environment" {
   description = "Environment (dev, prod etc.)"
   type        = string

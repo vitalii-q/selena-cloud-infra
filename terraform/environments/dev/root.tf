@@ -27,6 +27,10 @@ module "vpc" {
 module "users" {
   source = "./users"
 
+  # Resource management
+  enable_users_alb            = var.enable_users_alb
+  enable_users_db             = var.enable_users_db
+
   # variables
   account_id                  = data.aws_caller_identity.current.account_id
   region                      = var.region

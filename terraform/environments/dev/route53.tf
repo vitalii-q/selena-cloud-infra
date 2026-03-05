@@ -12,7 +12,7 @@ data "aws_route53_zone" "main_zone" {
 
 # Create DNS record for users-service pointing to ALB
 resource "aws_route53_record" "users_service_alb_record" {
-  count   = module.users.alb_dns_name == null ? 0 : 1        # If ALB is disabled → DNS is not needed and is not being created.
+  count   = var.enable_users_alb ? 1 : 0        # If ALB is disabled → DNS is not needed and is not being created.
 
   zone_id = data.aws_route53_zone.main_zone.zone_id
   name    = "users-service.selena-aws.com"
@@ -20,7 +20,7 @@ resource "aws_route53_record" "users_service_alb_record" {
   ttl     = 300
 
   # ALB hostname from module.users
-  records = [module.users.alb_dns_name]
+  records = [module.users.users_alb_dns_name]
 }
 
 

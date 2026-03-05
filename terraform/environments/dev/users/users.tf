@@ -8,11 +8,13 @@ module "ec2" {
   vpc_id              = var.vpc_id
   key_name            = var.key_name
   instance_profile    = module.users_role.instance_profile
+
+  users_sg_id         = module.users_service_sg.id
 }
 
 module "users_alb" {
   source               = "../../../modules/alb"
-  count                = 0
+  count                = var.enable_users_alb ? 1 : 0
 
   name                 = "selena-users-service-alb"
   vpc_id               = var.vpc_id
@@ -35,14 +37,14 @@ module "users_alb" {
 
 module "users_asg" {
   source                 = "../../../modules/asg"
-  count                  = length(module.users_alb) == 0 ? 0 : 1     # # If ALB is disabled → ASG is not needed and is not being created.
+  count                  = var.enable_users_alb ? 1 : 0
 
   service_name           = "users"
   service_port           = 9065
 
-  desired_capacity       = 0
-  min_size               = 0
-  max_size               = 0
+  desired_capacity       = 1
+  min_size               = 1
+  max_size               = 1
 
   user_data_file         = "${path.root}/../../scripts/userdata/userdata_users_asg.sh"
 
@@ -55,7 +57,7 @@ module "users_asg" {
   iam_instance_profile   = module.users_role.instance_profile
   environment            = var.environment
   #ecs_cluster_name      = "selena-users-cluster"
-  sg_ids               = [module.users_service_sg.id]
+  sg_ids                 = [module.users_service_sg.id]
 
   alb_tg_arn             = try(module.users_alb[0].alb_tg_arn, null)
 
@@ -63,7 +65,8 @@ module "users_asg" {
 }
 
 module "users_rds" {
-  source = "../../../modules/rds"
+  source                 = "../../../modules/rds"
+  count                  = var.enable_users_db ? 1 : 0
 
   db_identifier          = "users-db-${var.env}"
   instance_class         = "db.t3.micro"
@@ -84,7 +87,7 @@ module "users_rds" {
   db_subnet_group_name   = var.db_subnet_group
   env                    = var.env
 
-  users_ec2_sg_id        = module.ec2.users_sg_id               # security_groups EC2
+  users_ec2_sg_id        = module.users_service_sg.id           # security_groups EC2
   users_asg_sg_id        = module.users_service_sg.id           # security_groups ASG
 }
 

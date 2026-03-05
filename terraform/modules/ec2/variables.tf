@@ -50,3 +50,8 @@ variable "instance_profile" {
   description = "Instance profile for Selena EC2 instances"
   type        = string
 }
+
+variable "users_sg_id" {
+  type        = string
+  description = "Security Group ID для users-service (общая для EC2 и ASG)"
+}

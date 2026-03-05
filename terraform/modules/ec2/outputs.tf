@@ -11,8 +11,3 @@ output "instance_id" {
   value = length(aws_instance.users_service) > 0 ? aws_instance.users_service[0].id : null
   description = "ID созданного EC2 экземпляра"
 }
-
-output "users_sg_id" {
-  value = aws_security_group.users_sg.id
-  description = "ID of the EC2 users-service security group"
-}

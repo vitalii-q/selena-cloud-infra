@@ -5,6 +5,9 @@ env         = "dev"
 
 
 # Resource management
+enable_users_alb  = true
+enable_users_db   = true
+
 enable_hotels_alb = false
 enable_hotels_db  = false
 

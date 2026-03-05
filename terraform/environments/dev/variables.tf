@@ -1,3 +1,15 @@
+variable "enable_users_db" {
+  description = "Enable Users Service RDS"
+  type        = bool
+  default     = false
+}
+
+variable "enable_users_alb" {
+  description = "Enable Users Service ALB"
+  type        = bool
+  default     = false
+}
+
 variable "enable_hotels_alb" {
   type        = bool
   default     = false

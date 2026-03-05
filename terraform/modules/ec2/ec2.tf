@@ -8,7 +8,7 @@ resource "aws_instance" "users_service" {
   # ami                       = data.aws_ami.amazon_linux_2023.id # dynamic
   instance_type               = var.instance_type
   subnet_id                   = var.subnet_id
-  vpc_security_group_ids      = [aws_security_group.users_sg.id]
+  vpc_security_group_ids      = [var.users_sg_id]
   key_name                    = var.key_name
   associate_public_ip_address = true
   iam_instance_profile        = var.instance_profile
@@ -27,7 +27,7 @@ resource "aws_instance" "users_service" {
   }
 }
 
-resource "aws_security_group" "users_sg" {
+/*resource "aws_security_group" "users_sg" {
   name        = "users-service-sg"
   description = "Allow SSH and HTTP"
   vpc_id      = var.vpc_id
@@ -58,7 +58,7 @@ resource "aws_security_group" "users_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-}
+}*/
 
 data "aws_ami" "amazon_linux_2023" {
   most_recent = true
