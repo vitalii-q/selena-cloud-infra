@@ -43,3 +43,8 @@ variable "volume_ebs" {
   description = "EBS volume for instances"
   type        = number
 }
+
+variable "sg_ids" {
+  type        = list(string)
+  description = "List of Security Group IDs to attach to ASG instances"
+}

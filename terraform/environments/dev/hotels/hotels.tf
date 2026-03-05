@@ -39,6 +39,7 @@ module "hotels_asg" {
   key_name             = var.key_name
   iam_instance_profile = module.hotels_role.instance_profile
   environment          = var.environment
+  sg_ids               = [module.hotels_service_sg.id]
 
   alb_tg_arn           = module.hotels_alb[0].alb_tg_arn
 
@@ -91,6 +92,20 @@ module "hotels_service_sg" {
 
   ingress_rules = [
     {
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+      description = "SSH access"
+    },
+    {
+      from_port   = 80
+      to_port     = 80
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+      description = "HTTP access"
+    },
+    {
       from_port   = 9064
       to_port     = 9064
       protocol    = "tcp"
@@ -113,7 +128,7 @@ module "hotels_db_sg" {
       from_port       = 26257
       to_port         = 26257
       protocol        = "tcp"
-      security_groups = [module.hotels_asg[0].asg_sg_id]    # ASG hotels service
+      security_groups = [module.hotels_service_sg.id]    # ASG hotels service
       description     = "Allow CockroachDB access from hotels service"
     }
   ] : []

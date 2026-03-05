@@ -55,6 +55,7 @@ module "users_asg" {
   iam_instance_profile   = module.users_role.instance_profile
   environment            = var.environment
   #ecs_cluster_name      = "selena-users-cluster"
+  sg_ids               = [module.users_service_sg.id]
 
   alb_tg_arn             = try(module.users_alb[0].alb_tg_arn, null)
 
@@ -83,8 +84,8 @@ module "users_rds" {
   db_subnet_group_name   = var.db_subnet_group
   env                    = var.env
 
-  users_ec2_sg_id        = module.ec2.users_sg_id                      # security_groups EC2
-  users_asg_sg_id        = try(module.users_asg[0].asg_sg_id, null)    # security_groups ASG
+  users_ec2_sg_id        = module.ec2.users_sg_id               # security_groups EC2
+  users_asg_sg_id        = module.users_service_sg.id           # security_groups ASG
 }
 
 module "users_service_s3" {
@@ -129,3 +130,39 @@ module "ecr" {
   subnet_ids           = [module.vpc.public_subnet_id, module.vpc.public_subnet_2_id]
   k8s_version          = "1.30"
 }*/
+
+
+# ============================================================
+# Users SG
+# ============================================================
+
+module "users_service_sg" {
+  source = "../../../modules/networking/security_group"
+
+  name   = "users-service-sg"
+  vpc_id = var.vpc_id
+
+  ingress_rules = [
+    {
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+      description = "SSH access"
+    },
+    {
+      from_port   = 80
+      to_port     = 80
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+      description = "HTTP access"
+    },
+    {
+      from_port   = 9065
+      to_port     = 9065
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+      description = "Users service access"
+    }
+  ]
+}
