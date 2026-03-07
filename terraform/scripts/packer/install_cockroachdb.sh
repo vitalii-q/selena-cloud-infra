@@ -139,6 +139,8 @@ ExecStart=/usr/local/bin/cockroach start-single-node \
 --advertise-addr=10.0.2.50:26257 \
 --http-addr=0.0.0.0:8080 \
 --certs-dir=/cockroach/certs
+--cache=256MiB \
+--max-sql-memory=256MiB
 
 Restart=always
 RestartSec=5

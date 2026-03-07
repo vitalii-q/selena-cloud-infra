@@ -77,4 +77,9 @@ docker run -d \
   -e HOTELS_COCKROACH_PORT_INNER \
   235484063004.dkr.ecr.eu-central-1.amazonaws.com/selena-hotels-service:amd64
 
+echo $HOTELS_COCKROACH_HOST
+echo $HOTELS_COCKROACH_PORT_INNER
+echo $HOTELS_COCKROACH_USER
+echo $HOTELS_COCKROACH_DB_NAME
+
 echo "[INFO] UserData finished"

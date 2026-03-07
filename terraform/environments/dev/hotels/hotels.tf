@@ -51,12 +51,15 @@ module "hotels_asg" {
 # ssh -i ~/.ssh/selena-aws-key.pem -o ProxyCommand="ssh -i ~/.ssh/selena-aws-key.pem -W %h:%p ec2-user@<bastion_public_ip>" -L 5433:<hotels_db_private_ip>:26257 ubuntu@<hotels_db_private_ip>
 # 
 # ssh -i ~/.ssh/selena-aws-key.pem -o ProxyCommand="ssh -i ~/.ssh/selena-aws-key.pem -W %h:%p ec2-user@35.158.123.81" -L 5433:10.0.2.83:26257 ubuntu@10.0.2.83
+#
+# Update keygen when SSH connection error: ssh-keygen -R 10.0.2.50
 
 module "hotels_db" {
   source                = "../../../modules/ec2_hotels_db"
   enable_instance       = var.enable_hotels_db
 
   project               = "selena-hotels"
+  instance_type         = "t3.small"         # CockroachDB requires at least ~2GB RAM
   vpc_id                = var.vpc_id
   vpc_cidr              = var.vpc_cidr
   private_subnet_id     = var.private_subnet_1_id

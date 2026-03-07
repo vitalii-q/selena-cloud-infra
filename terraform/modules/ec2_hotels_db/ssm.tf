@@ -1,3 +1,14 @@
+# Update certificates in SSM with commands:
+# aws ssm put-parameter --name "/selena/cockroachdb/ca.crt" --type SecureString --overwrite --value "$(cat /opt/homebrew/var/www/_projects/selena-dev/infrastructure/certs/hotels_service/ca.crt)"
+# aws ssm put-parameter --name "/selena/cockroachdb/client.hotels_user.crt" --type SecureString --overwrite --value "$(cat /opt/homebrew/var/www/_projects/selena-dev/infrastructure/certs/hotels_service/client.hotels_user.crt)"
+# aws ssm put-parameter --name "/selena/cockroachdb/client.hotels_user.key" --type SecureString --overwrite --value "$(cat /opt/homebrew/var/www/_projects/selena-dev/infrastructure/certs/hotels_service/client.hotels_user.key)"
+
+# Check certificates in SSM with commands:
+# aws ssm get-parameter --name "/selena/cockroachdb/ca.crt" --with-decryption --query "Parameter.Value" --output text | sha256sum
+# aws ssm get-parameter --name "/selena/cockroachdb/client.hotels_user.crt" --with-decryption --query "Parameter.Value" --output text | sha256sum
+# aws ssm get-parameter --name "/selena/cockroachdb/client.hotels_user.key" --with-decryption --query "Parameter.Value" --output text | sha256sum
+
+
 # Update CockroachDB CA certificate in SSM with command:
 # aws ssm put-parameter --name "/selena/cockroachdb/ca.crt" --type SecureString --overwrite --value "$(cat ca.crt)"
 resource "aws_ssm_parameter" "ca_crt" {
@@ -7,6 +18,10 @@ resource "aws_ssm_parameter" "ca_crt" {
   value = file("${var.server_certs_path}/ca.crt")
 
   overwrite = true      # auto overwrite the file when it has changed
+
+  lifecycle {
+    
+  }
 }
 
 # Store CockroachDB node certificate in SSM
@@ -38,6 +53,10 @@ resource "aws_ssm_parameter" "client_crt" {
   value = file("${var.client_certs_path}/client.hotels_user.crt")
 
   overwrite = true   # auto overwrite the file when it has changed
+
+  lifecycle {
+
+  }
 }
 
 # Update client key in SSM with command:
@@ -49,4 +68,8 @@ resource "aws_ssm_parameter" "client_key" {
   value = file("${var.client_certs_path}/client.hotels_user.key")
 
   overwrite = true   # auto overwrite the file when it has changed
+
+  lifecycle {
+
+  }
 }

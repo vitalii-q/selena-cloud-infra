@@ -32,7 +32,8 @@ module "hotels_db_role" {
   }
 }
 
-/*module "packer_role" {
+# For Packer AMI creation
+module "packer_role" {
   source    = "../../../modules/iam/iam-roles/service-role"
   role_name = "packer-ssm-role"
   service   = "ec2.amazonaws.com"
@@ -45,7 +46,7 @@ module "hotels_db_role" {
     Project = "Selena"
     Service = "packer"
   }
-}*/
+}
 
 
 # ============================================
