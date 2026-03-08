@@ -28,7 +28,7 @@ resource "aws_ssm_parameter" "ca_crt" {
   name  = "/selena/cockroachdb/ca.crt"
   type  = "SecureString"
 
-  value = file("${var.server_certs_path}/ca.crt")
+  value = chomp(file("${var.server_certs_path}/ca.crt"))     # chomp - truncates extra characters so as not to break the hash of the certificate
 
   overwrite = true      # auto overwrite the file when it has changed
 
