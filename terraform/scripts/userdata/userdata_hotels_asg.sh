@@ -19,9 +19,13 @@ usermod -aG docker ec2-user
 mkdir -p /cockroach/certs
 
 # Getting client certs for hotels-service from SSM
+aws ssm get-parameter --name "/selena/cockroachdb/ca.crt" --with-decryption --query "Parameter.Value" --output text > /cockroach/certs/ca.crt
+
+aws ssm get-parameter --name "/selena/cockroachdb/client.root.crt" --with-decryption --query "Parameter.Value" --output text > /cockroach/certs/client.root.crt
+aws ssm get-parameter --name "/selena/cockroachdb/client.root.key" --with-decryption --query "Parameter.Value" --output text > /cockroach/certs/client.root.key
+
 aws ssm get-parameter --name "/selena/cockroachdb/client.hotels_user.crt" --with-decryption --query "Parameter.Value" --output text > /cockroach/certs/client.hotels_user.crt
 aws ssm get-parameter --name "/selena/cockroachdb/client.hotels_user.key" --with-decryption --query "Parameter.Value" --output text > /cockroach/certs/client.hotels_user.key
-aws ssm get-parameter --name "/selena/cockroachdb/ca.crt" --with-decryption --query "Parameter.Value" --output text > /cockroach/certs/ca.crt
 
 # Set owner and permissions for ec2-user
 chown -R ec2-user:ec2-user /cockroach/certs

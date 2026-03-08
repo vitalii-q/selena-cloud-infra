@@ -8,10 +8,10 @@ env         = "dev"
 enable_users_alb  = false
 enable_users_db   = false
 
-enable_hotels_alb = true
-enable_hotels_db  = true
+enable_hotels_alb = false
+enable_hotels_db  = false
 
-enable_bastion    = true
+enable_bastion    = false
 
 
 # Variables

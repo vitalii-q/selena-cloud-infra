@@ -1,12 +1,25 @@
 # Update certificates in SSM with commands:
 # aws ssm put-parameter --name "/selena/cockroachdb/ca.crt" --type SecureString --overwrite --value "$(cat /opt/homebrew/var/www/_projects/selena-dev/infrastructure/certs/hotels_service/ca.crt)"
+
+# hotels_user
 # aws ssm put-parameter --name "/selena/cockroachdb/client.hotels_user.crt" --type SecureString --overwrite --value "$(cat /opt/homebrew/var/www/_projects/selena-dev/infrastructure/certs/hotels_service/client.hotels_user.crt)"
 # aws ssm put-parameter --name "/selena/cockroachdb/client.hotels_user.key" --type SecureString --overwrite --value "$(cat /opt/homebrew/var/www/_projects/selena-dev/infrastructure/certs/hotels_service/client.hotels_user.key)"
 
+# root
+# aws ssm put-parameter --name "/selena/cockroachdb/client.root.crt" --type SecureString --overwrite --value "$(cat /opt/homebrew/var/www/_projects/selena-dev/infrastructure/certs/hotels_service/client.root.crt)"
+# aws ssm put-parameter --name "/selena/cockroachdb/client.root.key" --type SecureString --overwrite --value "$(cat /opt/homebrew/var/www/_projects/selena-dev/infrastructure/certs/hotels_service/client.root.key)"
+
+
 # Check certificates in SSM with commands:
 # aws ssm get-parameter --name "/selena/cockroachdb/ca.crt" --with-decryption --query "Parameter.Value" --output text | sha256sum
+
+# hotels_user
 # aws ssm get-parameter --name "/selena/cockroachdb/client.hotels_user.crt" --with-decryption --query "Parameter.Value" --output text | sha256sum
 # aws ssm get-parameter --name "/selena/cockroachdb/client.hotels_user.key" --with-decryption --query "Parameter.Value" --output text | sha256sum
+
+# root
+# aws ssm get-parameter --name "/selena/cockroachdb/client.root.crt" --with-decryption --query "Parameter.Value" --output text | sha256sum
+# aws ssm get-parameter --name "/selena/cockroachdb/client.root.key" --with-decryption --query "Parameter.Value" --output text | sha256sum
 
 
 # Update CockroachDB CA certificate in SSM with command:

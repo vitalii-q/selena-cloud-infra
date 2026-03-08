@@ -32,7 +32,7 @@ module "hotels_db_role" {
   }
 }
 
-# For Packer AMI creation
+# Role for Packer AMI creation ( /infrastructure/terraform/packer/templates/cockroachdb.pkr.hcl )
 module "packer_role" {
   source    = "../../../modules/iam/iam-roles/service-role"
   role_name = "packer-ssm-role"
