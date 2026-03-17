@@ -1,7 +1,7 @@
 region      = "eu-central-1"
 project     = "selena"
 account_id  = "235484063004"
-env         = "dev"
+env         = "prod"
 
 
 # Resource management
@@ -30,4 +30,4 @@ public_subnet_cidr_2   = "10.0.3.0/24"
 private_subnet_cidr    = "10.0.2.0/24"
 private_subnet_cidr_2  = "10.0.4.0/24"
 
-alert_email            = "vitaly2822@gmail.com"
+alert_email            = "vitalii2822@gmail.com"

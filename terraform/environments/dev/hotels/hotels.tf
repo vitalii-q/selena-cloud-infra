@@ -13,7 +13,7 @@ module "hotels_alb" {
   alb_sg_name         = "hotels-alb-sg"
 
   target_port         = 9064
-  health_check        = "/test"
+  health_check        = "/health/live"
 
   certificate_arn     = aws_acm_certificate_validation.hotels_service_cert_validation.certificate_arn
 }
