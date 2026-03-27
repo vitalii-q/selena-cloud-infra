@@ -51,34 +51,35 @@ export HOTELS_COCKROACH_PORT_INNER=$(echo $SECRET_JSON | jq -r '.HOTELS_COCKROAC
 export DB_SSLMODE=$(echo $SECRET_JSON | jq -r '.DB_SSLMODE')
 
 # Non-sensitive env variables
-export PROJECT_SUFFIX=prod
+export APP_ENV=prod
 export LOCALHOST=localhost
 export HOTELS_SERVICE_PORT=9064
 export HOTELS_COCKROACH_PORT=9264
 
 echo "[INFO] Pull hotels-service image from ECR"
-
-# Pull image
 docker pull 235484063004.dkr.ecr.eu-central-1.amazonaws.com/selena-hotels-service:amd64
 
-echo "[INFO] Run hotels-service container"
 
-# Run container
+echo "APP_ENV=$$APP_ENV"
+echo "DB_SSLMODE=$$DB_SSLMODE"
+echo "HOTELS_COCKROACH_PORT_INNER=$$HOTELS_COCKROACH_PORT_INNER"
+
+echo "[INFO] Run hotels-service container"
 docker run -d \
   --name hotels-service \
   --network host \
   -v /cockroach/certs:/certs-cloud \
   -p $${HOTELS_SERVICE_PORT}:$${HOTELS_SERVICE_PORT} \
-  -e PROJECT_SUFFIX \
-  -e LOCALHOST \
-  -e DB_SSLMODE \
-  -e HOTELS_SERVICE_PORT \
-  -e HOTELS_COCKROACH_USER \
-  -e HOTELS_COCKROACH_PASSWORD \
-  -e HOTELS_COCKROACH_DB_NAME \
-  -e HOTELS_COCKROACH_HOST \
-  -e HOTELS_COCKROACH_PORT \
-  -e HOTELS_COCKROACH_PORT_INNER \
+  -e APP_ENV="$APP_ENV" \
+  -e LOCALHOST="$LOCALHOST" \
+  -e DB_SSLMODE="$DB_SSLMODE" \
+  -e HOTELS_SERVICE_PORT="$HOTELS_SERVICE_PORT" \
+  -e HOTELS_COCKROACH_USER="$HOTELS_COCKROACH_USER" \
+  -e HOTELS_COCKROACH_PASSWORD="$HOTELS_COCKROACH_PASSWORD" \
+  -e HOTELS_COCKROACH_DB_NAME="$HOTELS_COCKROACH_DB_NAME" \
+  -e HOTELS_COCKROACH_HOST="$HOTELS_COCKROACH_HOST" \
+  -e HOTELS_COCKROACH_PORT="$HOTELS_COCKROACH_PORT" \
+  -e HOTELS_COCKROACH_PORT_INNER="$HOTELS_COCKROACH_PORT_INNER" \
   235484063004.dkr.ecr.eu-central-1.amazonaws.com/selena-hotels-service:amd64
 
 echo "[INFO] UserData finished"
