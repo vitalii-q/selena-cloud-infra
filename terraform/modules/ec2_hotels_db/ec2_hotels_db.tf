@@ -7,7 +7,7 @@
 resource "aws_instance" "cockroachdb" {
   count                       = var.enable_instance ? 1 : 0
 
-  ami                         = "ami-0a83af7e51c7e696a"    # get in infrastructure/terraform/packer/templates/cockroachdb.pkr.hcl
+  ami                         = "ami-04d924198d703217c"    # get in infrastructure/terraform/packer/templates/cockroachdb.pkr.hcl
   instance_type               = var.instance_type
   subnet_id                   = var.private_subnet_id
   vpc_security_group_ids      = var.security_group_ids
@@ -19,10 +19,12 @@ resource "aws_instance" "cockroachdb" {
   # Attach IAM role with SSM policy
   iam_instance_profile        = var.iam_instance_profile
 
-  /*root_block_device {
-    volume_size = 15
-    volume_type = "gp3"
-  }*/
+  # explicitly define only one root disk
+  root_block_device {
+    volume_size           = 15     # Override AMI root volume size (AWS will create 15 GB instead of 8 GB in launch_block_device_mappings {})
+    volume_type           = "gp3"
+    delete_on_termination = true   # Ensure root EBS is deleted when instance is terminated
+  }
 
   tags = {
     Name = "cockroachdb-ec2"

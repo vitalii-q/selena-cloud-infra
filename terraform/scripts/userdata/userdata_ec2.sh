@@ -40,6 +40,7 @@ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip
 unzip awscliv2.zip
 sudo ./aws/install
 
+# TODO: Remake to using Secret Manager instead of s3 users.env.cloud
 # Проверяем наличие .env в репозитории и скачиваем из S3 при отсутствии
 if [ ! -f selena-users-service/.env ]; then
     echo ".env (s3 users.env.cloud) не найден, скачиваем из S3..."

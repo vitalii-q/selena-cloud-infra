@@ -59,7 +59,7 @@ module "hotels_db" {
   enable_instance       = var.enable_hotels_db
 
   project               = "selena-hotels"
-  instance_type         = "t3.small"         # CockroachDB requires at least ~2GB RAM
+  instance_type         = "t3.micro"         # CockroachDB requires at least ~2GB RAM
   vpc_id                = var.vpc_id
   vpc_cidr              = var.vpc_cidr
   private_subnet_id     = var.private_subnet_1_id

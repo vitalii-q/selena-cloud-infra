@@ -39,10 +39,15 @@ source "amazon-ebs" "cockroachdb" {
     owners = ["099720109477"]    # Canonical Ubuntu official AMI 8GB
   }
 
-  launch_block_device_mappings {
-    device_name = "/dev/xvda"
-    volume_size = 15
+  # Override the root block device of the base Ubuntu AMI.
+  # The original Ubuntu AMI already contains a root disk (/dev/sda1).
+  # Without this override, adding another mapping could create an additional EBS volume.
+  # This block ensures the AMI has exactly one root disk with the defined configuration.
+  launch_block_device_mappings { 
+    device_name           = "/dev/sda1"
+    volume_size           = 8
     volume_type = "gp3"
+    delete_on_termination = true 
   }
 }
 
@@ -51,19 +56,14 @@ build {
     "source.amazon-ebs.cockroachdb"
   ]
 
-  # ============================================================
-  # Create certs directory
-  # ============================================================
+  # --- Create certs directory ---
   provisioner "shell" {
     inline = [
       "mkdir -p /tmp/certs"
     ]
   }
 
-  # ============================================================
-  # Copy CockroachDB certificates to temporary EC2 instance
-  # ============================================================
-
+  # --- Copy CockroachDB certificates to temporary EC2 instance ---
   provisioner "file" {
     source      = "../../../../hotels-service/secure/certs-cloud/ca.crt"
     destination = "/tmp/certs/ca.crt"    # temporary directory in EC2
@@ -79,9 +79,7 @@ build {
     destination = "/tmp/certs/node.key"
   }
 
-  # ============================================================
-  # Install CockroachDB and configure system
-  # ============================================================
+  # --- Install CockroachDB and configure system ---
 
   provisioner "shell" {
     script = "../../scripts/packer/install_cockroachdb.sh"

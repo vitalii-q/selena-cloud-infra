@@ -8,10 +8,10 @@ env         = "prod"
 enable_users_alb  = false
 enable_users_db   = false
 
-enable_hotels_alb = false
-enable_hotels_db  = false
+enable_hotels_alb = true
+enable_hotels_db  = true
 
-enable_bastion    = false
+enable_bastion    = true
 
 
 # Variables
