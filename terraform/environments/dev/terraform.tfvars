@@ -1,12 +1,12 @@
-region      = "eu-central-1"
-project     = "selena"
-account_id  = "235484063004"
-env         = "prod"
+region         = "eu-central-1"
+project        = "selena"
+account_id     = "235484063004"
+env            = "prod"
 
 
 # Resource management
-enable_users_alb  = false
-enable_users_db   = false
+enable_users_alb  = true
+enable_users_db   = true
 
 enable_hotels_alb = true
 enable_hotels_db  = true

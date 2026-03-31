@@ -7,6 +7,10 @@ provider "aws" {
 data "aws_caller_identity" "current" {}
 
 
+locals {
+  enable_shared_alb = var.enable_users_alb || var.enable_hotels_alb
+}
+
 module "vpc" {
   source                = "../../modules/vpc"
 
@@ -22,6 +26,21 @@ module "vpc" {
 
   availability_zone     = var.availability_zone
   availability_zone_2   = var.availability_zone_2
+}
+
+module "shared_alb" {
+  source          = "../../modules/alb_shared"
+  name            = "selena-shared-alb"
+  count           = local.enable_shared_alb ? 1 : 0
+
+  vpc_id          = module.vpc.vpc_id
+  subnets         = [
+    module.vpc.public_subnet_id,
+    module.vpc.public_subnet_2_id
+  ]
+
+  certificate_arn = aws_acm_certificate.shared_services_cert.arn
+  environment     = var.environment
 }
 
 module "users" {
@@ -44,9 +63,10 @@ module "users" {
   environment                 = var.environment
   default_security_group_id   = module.vpc.default_security_group_id
 
-  route53_zone_id             = data.aws_route53_zone.main_zone.zone_id 
+  alb_tg_arn                  = try(module.shared_alb[0].users_tg_arn, null)
+  alb_listener_arn            = try(module.shared_alb[0].https_listener_arn, null)
 
-  # certificate_arn           = aws_acm_certificate_validation.users_service_cert_validation.certificate_arn
+  route53_zone_id             = data.aws_route53_zone.main_zone.zone_id
 
   public_subnet_1_id          = module.vpc.public_subnet_id
   public_subnet_2_id          = module.vpc.public_subnet_2_id
@@ -87,6 +107,9 @@ module "hotels" {
 
   vpc_cidr                    = module.vpc.vpc_cidr
   my_ip_cidr                  = "0.0.0.0/32"
+
+  alb_tg_arn                  = try(module.shared_alb[0].hotels_tg_arn, null)
+  alb_listener_arn            = try(module.shared_alb[0].https_listener_arn, null)
 
   # Policies
   ec2_ecr_access_policy_arn   = module.shared_policies.ec2_ecr_access_policy_arn

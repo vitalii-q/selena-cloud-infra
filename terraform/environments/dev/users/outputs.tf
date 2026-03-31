@@ -13,6 +13,6 @@ output "users_rds_endpoint" {
 }
 
 output "users_alb_dns_name" {
-  value       = try(module.users_alb[0].alb_dns_name, null)
+  value       = try(module.users_alb_service[0].alb_dns_name, null)
   description = "DNS name of Users Service ALB"
 }

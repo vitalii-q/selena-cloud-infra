@@ -29,7 +29,7 @@ export LOCALHOST=localhost
 export USERS_SERVICE_PORT=9065
 export USERS_POSTGRES_DB_PORT=9265
 export USERS_REDIS_PORT=9765
-export HOTELS_SERVICE_URL=http://hotels-service:9064
+export HOTELS_SERVICE_URL=https://hotels-service.selena-aws.com
 
 # Pull latest image
 docker pull 235484063004.dkr.ecr.eu-central-1.amazonaws.com/selena-users-service:amd64

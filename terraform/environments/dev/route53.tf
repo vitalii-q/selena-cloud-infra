@@ -16,11 +16,13 @@ resource "aws_route53_record" "users_service_alb_record" {
 
   zone_id = data.aws_route53_zone.main_zone.zone_id
   name    = "users-service.selena-aws.com"
-  type    = "CNAME"
-  ttl     = 300
+  type    = "A"
 
-  # ALB hostname from module.users
-  records = [module.users.users_alb_dns_name]
+  alias {
+    name                   = module.shared_alb[0].alb_dns_name
+    zone_id                = module.shared_alb[0].alb_zone_id
+    evaluate_target_health = true
+  }
 }
 
 
@@ -33,10 +35,13 @@ resource "aws_route53_record" "hotels_service_alb_record" {
 
   zone_id = data.aws_route53_zone.main_zone.zone_id
   name    = "hotels-service.selena-aws.com"
-  type    = "CNAME"
-  ttl     = 300
+  type    = "A"
 
-  records = [module.hotels.alb_dns_name]
+  alias {
+    name                   = module.shared_alb[0].alb_dns_name
+    zone_id                = module.shared_alb[0].alb_zone_id
+    evaluate_target_health = true
+  }
 }
 
 

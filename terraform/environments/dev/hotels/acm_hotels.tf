@@ -2,8 +2,13 @@
 # ACM Certificate for hotels-service (SSL/TLS)
 # ============================================
 
+
+# !!!
+# All certificate settings now go through a single file /environments/dev/acm_shared.tf
+
+
 # Fetch the existing Hosted Zone for the main domain selena-aws.com
-data "aws_route53_zone" "main_zone" {
+/*data "aws_route53_zone" "main_zone" {
   name         = "selena-aws.com"
   private_zone = false
 }
@@ -45,4 +50,4 @@ resource "aws_route53_record" "hotels_service_cert_validation_record" {
 resource "aws_acm_certificate_validation" "hotels_service_cert_validation" {
   certificate_arn         = aws_acm_certificate.hotels_service_cert.arn
   validation_record_fqdns = [for record in aws_route53_record.hotels_service_cert_validation_record : record.fqdn]
-}
+}*/

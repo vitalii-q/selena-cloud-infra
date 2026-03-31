@@ -87,3 +87,15 @@ variable "iam_instance_profile" {}
 variable "availability_zone" {
   type = string
 }
+
+variable "alb_listener_arn" {
+  description = "ARN of the HTTPS listener for hotels ALB"
+  type        = string
+  default     = null
+}
+
+variable "alb_tg_arn" {
+  description = "ARN of the target group for hotels service ALB"
+  type        = string
+  default     = null
+}

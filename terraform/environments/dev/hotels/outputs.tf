@@ -1,5 +1,5 @@
 output "alb_dns_name" {
-  value = try(module.hotels_alb[0].alb_dns_name, null)
+  value = try(module.hotels_alb_service[0].alb_dns_name, null)
 }
 
 output "hotels_db_private_dns" {

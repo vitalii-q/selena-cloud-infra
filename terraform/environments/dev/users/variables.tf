@@ -104,3 +104,15 @@ variable "ec2_ecr_access_policy_arn" {
   type        = string
   description = "ECR access policy ARN from root shared_policies"
 }
+
+variable "alb_listener_arn" {
+  description = "ARN of the HTTPS listener for users ALB"
+  type        = string
+  default     = null
+}
+
+variable "alb_tg_arn" {
+  description = "ARN of the target group for users service ALB"
+  type        = string
+  default     = null
+}

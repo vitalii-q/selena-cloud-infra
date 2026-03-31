@@ -2,8 +2,13 @@
 # ACM Certificate for users-service (SSL/TLS)
 # ===========================================
 
+
+# !!!
+# All certificate settings now go through a single file /environments/dev/acm_shared.tf
+
+
 # Provider for us-east-1 (Route53 Hosted Zone)
-provider "aws" {
+/*provider "aws" {
   alias  = "us_east_1"
   region = "us-east-1"
 }
@@ -46,4 +51,4 @@ resource "aws_route53_record" "users_service_cert_validation" {
 resource "aws_acm_certificate_validation" "users_service_cert_validation" {
   certificate_arn         = aws_acm_certificate.users_service_cert.arn
   validation_record_fqdns = [for record in aws_route53_record.users_service_cert_validation : record.fqdn]
-}
+}*/

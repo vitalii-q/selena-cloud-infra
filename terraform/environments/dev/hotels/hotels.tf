@@ -1,21 +1,16 @@
-module "hotels_alb" {
-  source              = "../../../modules/alb"
-  count               = var.enable_hotels_alb ? 1 : 0
+module "hotels_alb_service" {
+  source = "../../../modules/alb_service"
+  count = var.enable_hotels_alb ? 1 : 0
+  service_name = "hotels"
 
-  name                = "selena-hotels-alb"
-  vpc_id              = var.vpc_id
+  listener_arn = var.alb_listener_arn
+  vpc_id = var.vpc_id
+  target_port = 9064
+  health_check = "/health"
+  path_pattern = "hotels-service.selena-aws.com"
+  priority = 10
 
-  subnets             = [
-    var.public_subnet_1_id,      # subnet in AZ 1
-    var.public_subnet_2_id       # subnet in AZ 2
-  ]
-
-  alb_sg_name         = "hotels-alb-sg"
-
-  target_port         = 9064
-  health_check        = "/health/live"
-
-  certificate_arn     = aws_acm_certificate_validation.hotels_service_cert_validation.certificate_arn
+  environment = var.environment
 }
 
 module "hotels_asg" {
@@ -41,7 +36,7 @@ module "hotels_asg" {
   environment          = var.environment
   sg_ids               = [module.hotels_service_sg.id]
 
-  alb_tg_arn           = module.hotels_alb[0].alb_tg_arn
+  alb_tg_arn           = try(module.hotels_alb_service[0].alb_tg_arn, null)
 
   # DB 
   db_host              = var.enable_hotels_db ? module.hotels_db.private_dns : null

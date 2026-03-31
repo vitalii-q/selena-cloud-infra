@@ -1,38 +1,16 @@
-module "ec2" {
-  source              = "../../../modules/ec2"
+module "users_alb_service" {
+  source = "../../../modules/alb_service"
+  count = var.enable_users_alb ? 1 : 0
+  service_name = "users"
 
-  ami_id              = var.ami_id
-  instance_count      = 0
-  instance_type       = "t3.nano"
-  subnet_id           = var.public_subnet_1_id
-  vpc_id              = var.vpc_id
-  key_name            = var.key_name
-  instance_profile    = module.users_role.instance_profile
+  listener_arn = var.alb_listener_arn
+  vpc_id = var.vpc_id
+  target_port = 9065
+  health_check = "/health"
+  path_pattern = "users-service.selena-aws.com"
+  priority = 20
 
-  users_sg_id         = module.users_service_sg.id
-}
-
-module "users_alb" {
-  source               = "../../../modules/alb"
-  count                = var.enable_users_alb ? 1 : 0
-
-  name                 = "selena-users-service-alb"
-  vpc_id               = var.vpc_id
-
-  subnets              = [
-    var.public_subnet_1_id,      # subnet in AZ 1
-    var.public_subnet_2_id       # subnet in AZ 2
-  ]
-
-  alb_sg_name          = "users-alb-sg"
-
-  # ec2_instance_id    = module.ec2.instance_id
-  # users_asg_name     = module.users_asg.asg_name
-
-  target_port          = 9065
-  health_check         = "/health"
-
-  certificate_arn      = aws_acm_certificate_validation.users_service_cert_validation.certificate_arn
+  environment = var.environment
 }
 
 module "users_asg" {
@@ -59,7 +37,7 @@ module "users_asg" {
   #ecs_cluster_name      = "selena-users-cluster"
   sg_ids                 = [module.users_service_sg.id]
 
-  alb_tg_arn             = try(module.users_alb[0].alb_tg_arn, null)
+  alb_tg_arn             = try(module.users_alb_service[0].alb_tg_arn, null)
 
   db_host                = ""     # Plug
 }
@@ -91,6 +69,20 @@ module "users_rds" {
   users_asg_sg_id        = module.users_service_sg.id           # security_groups ASG
 }
 
+/*module "ec2" {
+  source              = "../../../modules/ec2"
+
+  ami_id              = var.ami_id
+  instance_count      = 0
+  instance_type       = "t3.nano"
+  subnet_id           = var.public_subnet_1_id
+  vpc_id              = var.vpc_id
+  key_name            = var.key_name
+  instance_profile    = module.users_role.instance_profile
+
+  users_sg_id         = module.users_service_sg.id
+}*/
+
 module "users_service_s3" {
   source      = "../../../modules/s3"
   bucket_name = "selena-users-service-env-${var.environment}"
@@ -100,7 +92,7 @@ module "users_service_s3" {
   }
 }
 
-module "cloudwatch" {
+/*module "cloudwatch" {
   source = "../../../modules/cloudwatch"
 
   ec2_instance_id              = module.ec2.instance_id
@@ -108,7 +100,7 @@ module "cloudwatch" {
   selena_ec2_instance_profile  = module.users_role.instance_profile
 
   alerts_topic_arn             = module.sns.alerts_topic_arn
-}
+}*/
 
 module "sns" {
   source      = "../../../modules/sns"
