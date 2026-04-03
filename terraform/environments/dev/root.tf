@@ -160,7 +160,8 @@ module "bastion" {
 # ============================================================
 
 # ProxyJump SSH connection: 
-# ssh -i ~/.ssh/selena-aws-key.pem -o ProxyJump=ec2-user@<bastion_public_ip> ec2-user@<service_private_ip>
+# ssh -i ~/.ssh/selena-aws-key.pem -o ProxyCommand="ssh -i ~/.ssh/selena-aws-key.pem -W %h:%p ec2-user@<bastion_public_ip>" ec2-user@<service_private_ip>
+# ssh -i /Users/vitaly/.ssh/selena-aws-key.pem -o ProxyJump=ec2-user@<bastion_public_ip> ec2-user@<service_private_ip>
 module "bastion_sg" {
   source = "../../modules/networking/security_group"
 

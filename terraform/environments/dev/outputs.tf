@@ -63,3 +63,35 @@ output "hotels_db_private_dns" {
 output "hotels_db_private_ip" {
   value = module.hotels.hotels_db_private_ip
 }
+
+# ============================================================
+# Hotels and Users services private IPs
+# ============================================================
+data "aws_instances" "users_service_instances" {
+  filter {
+    name   = "tag:Name"
+    values = ["users-service-asg"]
+  }
+  filter {
+    name   = "instance-state-name"
+    values = ["running"]
+  }
+}
+
+data "aws_instances" "hotels_service_instances" {
+  filter {
+    name   = "tag:Name"
+    values = ["hotels-service-asg"]
+  }
+  filter {
+    name   = "instance-state-name"
+    values = ["running"]
+  }
+}
+
+output "services_private_ips" {
+  value = {
+    users_service  = data.aws_instances.users_service_instances.private_ips
+    hotels_service = data.aws_instances.hotels_service_instances.private_ips
+  }
+}
