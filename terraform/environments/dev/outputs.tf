@@ -95,3 +95,15 @@ output "services_private_ips" {
     hotels_service = data.aws_instances.hotels_service_instances.private_ips
   }
 }
+
+locals {
+  bastion_ip = module.bastion.bastion_public_ip
+}
+
+output "services_ssh_commands" {
+  value = {
+    users_service  = [for ip in data.aws_instances.users_service_instances.private_ips : "ssh -i ~/.ssh/selena-aws-key.pem -o ProxyCommand='ssh -i ~/.ssh/selena-aws-key.pem -W %h:%p ec2-user@${local.bastion_ip}' ec2-user@${ip}"]
+    hotels_service = [for ip in data.aws_instances.hotels_service_instances.private_ips : "ssh -i ~/.ssh/selena-aws-key.pem -o ProxyCommand='ssh -i ~/.ssh/selena-aws-key.pem -W %h:%p ec2-user@${local.bastion_ip}' ec2-user@${ip}"]
+  }
+  description = "Ready SSH commands to connect to services via Bastion"
+}
