@@ -28,7 +28,10 @@ module "users_asg" {
 
   ami_id                 = var.ami_id
   vpc_id                 = var.vpc_id
-  subnet_ids             = [var.public_subnet_1_id]
+  subnet_ids = [
+    var.private_subnet_1_id,
+    var.private_subnet_2_id
+  ]
   instance_type          = "t3.nano"
   volume_ebs             = 5
   key_name               = var.key_name
@@ -158,6 +161,13 @@ module "users_service_sg" {
       protocol    = "tcp"
       cidr_blocks = ["0.0.0.0/0"]
       description = "Users service access"
+    },
+    {
+      from_port       = 9065
+      to_port         = 9065
+      protocol        = "tcp"
+      security_groups = [var.internal_alb_sg_id]
+      description     = "Allow traffic from internal ALB"
     }
   ]
 }

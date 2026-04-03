@@ -41,10 +41,18 @@ variable "public_subnet_1_id" {
   description = "First public subnet ID"
   type        = string
 }
-
 variable "public_subnet_2_id" {
   description = "Second public subnet ID"
   type        = string
+}
+
+variable "private_subnet_1_id" {
+  description = "First private subnet ID"
+  type = string
+}
+variable "private_subnet_2_id" {
+  description = "Second private subnet ID"
+  type = string
 }
 
 variable "ami_id" {
@@ -67,10 +75,6 @@ variable "ec2_ecr_access_policy_arn" {
 }
 
 variable "vpc_cidr" {
-  type = string
-}
-
-variable "private_subnet_1_id" {
   type = string
 }
 
@@ -98,4 +102,8 @@ variable "alb_tg_arn" {
   description = "ARN of the target group for hotels service ALB"
   type        = string
   default     = null
+}
+
+variable "internal_alb_sg_id" {
+  type        = string
 }

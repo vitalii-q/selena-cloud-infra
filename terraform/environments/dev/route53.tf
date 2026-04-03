@@ -81,3 +81,17 @@ resource "aws_route53_record" "hotels_db_internal_record" {
     module.hotels.hotels_db_private_ip
   ]
 }
+# ==========================================================
+# Internal DNS record for Internal ALB
+# ==========================================================
+resource "aws_route53_record" "internal_alb_record" {
+  zone_id = aws_route53_zone.internal_zone.zone_id
+  name    = "internal-alb.selena"
+  type    = "A"
+
+  alias {
+    name                   = module.internal_alb.alb_dns_name
+    zone_id                = module.internal_alb.alb_zone_id
+    evaluate_target_health = true
+  }
+}

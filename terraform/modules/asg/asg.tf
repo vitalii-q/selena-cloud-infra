@@ -4,7 +4,6 @@ resource "aws_launch_template" "this" {
   instance_type = var.instance_type
   key_name      = var.key_name
 
-  #vpc_security_group_ids = [aws_security_group.asg_sg.id]
   vpc_security_group_ids = var.sg_ids
 
   iam_instance_profile {
@@ -73,41 +72,3 @@ resource "aws_autoscaling_group" "this" {
     propagate_at_launch = true
   }
 }
-
-/*resource "aws_security_group" "asg_sg" {
-  name        = "selena-${var.service_name}-asg-sg"
-  description = "SG for ${var.service_name}-service ASG instances"
-  vpc_id      = var.vpc_id
-
-  # Allow SSH
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  # Allow HTTP
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  # Allow users-service port (var.service_port)
-  ingress {
-    from_port   = var.service_port
-    to_port     = var.service_port
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  # Allow all outbound traffic
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}*/

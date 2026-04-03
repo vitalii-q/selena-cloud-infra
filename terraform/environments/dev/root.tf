@@ -43,6 +43,17 @@ module "shared_alb" {
   environment     = var.environment
 }
 
+module "internal_alb" {
+  source            = "../../modules/alb_internal"
+  service_name      = "internal"
+  vpc_id            = module.vpc.vpc_id
+  private_subnets   = [module.vpc.private_subnet_id, module.vpc.private_subnet_2_id]
+
+  vpc_cidr          = module.vpc.vpc_cidr
+
+  environment       = var.environment
+}
+
 module "users" {
   source = "./users"
 
@@ -68,10 +79,14 @@ module "users" {
 
   route53_zone_id             = data.aws_route53_zone.main_zone.zone_id
 
+  vpc_id                      = module.vpc.vpc_id
   public_subnet_1_id          = module.vpc.public_subnet_id
   public_subnet_2_id          = module.vpc.public_subnet_2_id
-  vpc_id                      = module.vpc.vpc_id
+  private_subnet_1_id         = module.vpc.private_subnet_id
+  private_subnet_2_id         = module.vpc.private_subnet_2_id
   db_subnet_group             = module.vpc.db_subnet_group
+
+  internal_alb_sg_id          = module.internal_alb.internal_alb_sg_id
 
   # Policies
   ec2_ecr_access_policy_arn  = module.shared_policies.ec2_ecr_access_policy_arn
@@ -96,6 +111,7 @@ module "hotels" {
   public_subnet_1_id          = module.vpc.public_subnet_id
   public_subnet_2_id          = module.vpc.public_subnet_2_id
   private_subnet_1_id         = module.vpc.private_subnet_id
+  private_subnet_2_id         = module.vpc.private_subnet_2_id
 
   route53_zone_id             = var.route53_zone_id
   environment                 = var.environment
@@ -110,6 +126,8 @@ module "hotels" {
 
   alb_tg_arn                  = try(module.shared_alb[0].hotels_tg_arn, null)
   alb_listener_arn            = try(module.shared_alb[0].https_listener_arn, null)
+
+  internal_alb_sg_id          = module.internal_alb.internal_alb_sg_id
 
   # Policies
   ec2_ecr_access_policy_arn   = module.shared_policies.ec2_ecr_access_policy_arn
@@ -141,6 +159,8 @@ module "bastion" {
 # Root SG
 # ============================================================
 
+# ProxyJump SSH connection: 
+# ssh -i ~/.ssh/selena-aws-key.pem -o ProxyJump=ec2-user@<bastion_public_ip> ec2-user@<service_private_ip>
 module "bastion_sg" {
   source = "../../modules/networking/security_group"
 

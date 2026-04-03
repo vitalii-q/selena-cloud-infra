@@ -48,3 +48,9 @@ variable "sg_ids" {
   type        = list(string)
   description = "List of Security Group IDs to attach to ASG instances"
 }
+
+variable "service_registry_arn" {
+  description = "Cloud Map service registry ARN"
+  type        = string
+  default     = null
+}

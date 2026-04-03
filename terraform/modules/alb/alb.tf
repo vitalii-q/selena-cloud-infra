@@ -1,5 +1,5 @@
 # Create Application Load Balancer
-resource "aws_lb" "service_alb" {
+/*resource "aws_lb" "service_alb" {
   name            = var.name
   internal        = false
   load_balancer_type = "application"
@@ -94,4 +94,4 @@ resource "aws_lb_listener" "https_listener" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.service_tg.arn
   }
-}
+}*/
