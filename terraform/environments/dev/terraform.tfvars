@@ -5,13 +5,13 @@ env            = "prod"
 
 
 # Resource management
-enable_users_alb  = false
-enable_users_db   = false
+enable_users_alb  = true
+enable_users_db   = true
 
-enable_hotels_alb = false
-enable_hotels_db  = false
+enable_hotels_alb = true
+enable_hotels_db  = true
 
-enable_bastion    = false
+enable_bastion    = true
 
 
 # Variables

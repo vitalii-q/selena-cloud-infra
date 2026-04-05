@@ -71,6 +71,10 @@ module "nat_instance" {
 module "users" {
   source = "./users"
 
+  depends_on = [
+    module.nat_instance
+  ]
+
   # Resource management
   enable_users_alb            = var.enable_users_alb
   enable_users_db             = var.enable_users_db
@@ -108,6 +112,10 @@ module "users" {
 
 module "hotels" {
   source                      = "./hotels"
+
+  depends_on = [
+    module.nat_instance
+  ]
 
   # Resource management
   enable_hotels_alb           = var.enable_hotels_alb

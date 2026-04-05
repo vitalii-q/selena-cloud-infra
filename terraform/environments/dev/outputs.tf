@@ -64,10 +64,15 @@ output "hotels_db_private_ip" {
   value = module.hotels.hotels_db_private_ip
 }
 
+
 # ============================================================
-# Hotels and Users services private IPs
+# Hotels and Users services private IPs (for raedy SSH CLI commands)
 # ============================================================
 data "aws_instances" "users_service_instances" {
+  depends_on = [
+    module.users
+  ]
+
   filter {
     name   = "tag:Name"
     values = ["users-service-asg"]
@@ -79,6 +84,10 @@ data "aws_instances" "users_service_instances" {
 }
 
 data "aws_instances" "hotels_service_instances" {
+  depends_on = [
+    module.hotels
+  ]
+
   filter {
     name   = "tag:Name"
     values = ["hotels-service-asg"]
