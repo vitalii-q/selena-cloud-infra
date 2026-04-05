@@ -42,3 +42,10 @@ output "private_subnet_ids" {
 output "vpc_cidr" {
   value = var.vpc_cidr
 }
+
+output "private_route_table_ids" {
+  value = [
+    aws_route_table.private_rt_1.id,
+    aws_route_table.private_rt_2.id
+  ]
+}

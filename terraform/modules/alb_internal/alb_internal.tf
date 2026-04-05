@@ -1,6 +1,6 @@
 # Internal Application Load Balancer
 resource "aws_lb" "internal_alb" {
-  name               = "${var.environment}-${var.service_name}-alb"
+  name               = "${var.environment}-${var.service_name}"
   internal           = true
   load_balancer_type = "application"
   subnets            = var.private_subnets
@@ -10,14 +10,14 @@ resource "aws_lb" "internal_alb" {
   idle_timeout               = 60
 
   tags = {
-    Name        = "${var.service_name}-alb"
+    Name        = "${var.service_name}"
     Environment = var.environment
   }
 }
 
 # Security Group for internal ALB
 resource "aws_security_group" "internal_alb_sg" {
-  name        = "${var.service_name}-alb-sg"
+  name        = "${var.service_name}-sg"
   vpc_id      = var.vpc_id
   description = "Internal ALB for microservices communication"
 
@@ -25,7 +25,7 @@ resource "aws_security_group" "internal_alb_sg" {
     from_port       = 0
     to_port         = 65535
     protocol        = "tcp"
-    cidr_blocks = [var.vpc_cidr]
+    cidr_blocks     = [var.vpc_cidr]
     description     = "Allow traffic from microservices"
   }
 

@@ -85,13 +85,15 @@ resource "aws_route53_record" "hotels_db_internal_record" {
 # Internal DNS record for Internal ALB
 # ==========================================================
 resource "aws_route53_record" "internal_alb_record" {
+  count   = local.enable_shared_alb ? 1 : 0 
+
   zone_id = aws_route53_zone.internal_zone.zone_id
   name    = "internal-alb.selena"
   type    = "A"
 
   alias {
-    name                   = module.internal_alb.alb_dns_name
-    zone_id                = module.internal_alb.alb_zone_id
+    name                   = module.internal_alb[0].alb_dns_name
+    zone_id                = module.internal_alb[0].alb_zone_id 
     evaluate_target_health = true
   }
 }

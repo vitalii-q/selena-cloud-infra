@@ -45,13 +45,27 @@ module "shared_alb" {
 
 module "internal_alb" {
   source            = "../../modules/alb_internal"
-  service_name      = "internal"
+  service_name      = "internal-alb"
+  count             = local.enable_shared_alb ? 1 : 0
+
   vpc_id            = module.vpc.vpc_id
   private_subnets   = [module.vpc.private_subnet_id, module.vpc.private_subnet_2_id]
 
   vpc_cidr          = module.vpc.vpc_cidr
 
   environment       = var.environment
+}
+
+module "nat_instance" {
+  source                  = "../../modules/nat-instance"
+  count                   = local.enable_shared_alb ? 1 : 0
+
+  instance_type           = "t3.nano"
+
+  vpc_id                  = module.vpc.vpc_id
+  public_subnet_id        = module.vpc.public_subnet_ids[0]
+  private_route_table_ids = module.vpc.private_route_table_ids
+  key_name                = "selena-aws-key"
 }
 
 module "users" {
@@ -86,10 +100,10 @@ module "users" {
   private_subnet_2_id         = module.vpc.private_subnet_2_id
   db_subnet_group             = module.vpc.db_subnet_group
 
-  internal_alb_sg_id          = module.internal_alb.internal_alb_sg_id
+  internal_alb_sg_id          = try(module.internal_alb[0].internal_alb_sg_id, null)
 
   # Policies
-  ec2_ecr_access_policy_arn  = module.shared_policies.ec2_ecr_access_policy_arn
+  ec2_ecr_access_policy_arn   = module.shared_policies.ec2_ecr_access_policy_arn
 }
 
 module "hotels" {
@@ -127,7 +141,7 @@ module "hotels" {
   alb_tg_arn                  = try(module.shared_alb[0].hotels_tg_arn, null)
   alb_listener_arn            = try(module.shared_alb[0].https_listener_arn, null)
 
-  internal_alb_sg_id          = module.internal_alb.internal_alb_sg_id
+  internal_alb_sg_id          = try(module.internal_alb[0].internal_alb_sg_id, null)
 
   # Policies
   ec2_ecr_access_policy_arn   = module.shared_policies.ec2_ecr_access_policy_arn

@@ -166,7 +166,7 @@ module "users_service_sg" {
       from_port       = 9065
       to_port         = 9065
       protocol        = "tcp"
-      security_groups = [var.internal_alb_sg_id]
+      security_groups = compact([var.internal_alb_sg_id])
       description     = "Allow traffic from internal ALB"
     }
   ]
