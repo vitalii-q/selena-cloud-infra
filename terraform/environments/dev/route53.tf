@@ -100,12 +100,13 @@ resource "aws_route53_record" "internal_alb_record" {
 }
 
 # ==========================================================
-# Internal DNS record for Hotels Service
+# Internal DNS record for Users Service
 # ==========================================================
-resource "aws_route53_record" "hotels_internal_record" {
+resource "aws_route53_record" "users_internal_record" {
+  count = var.enable_users_alb ? 1 : 0
 
   zone_id = aws_route53_zone.internal_zone.zone_id
-  name    = "hotels.internal.selena"
+  name    = "users.internal.selena"
   type    = "A"
 
   alias {
@@ -116,12 +117,13 @@ resource "aws_route53_record" "hotels_internal_record" {
 }
 
 # ==========================================================
-# Internal DNS record for Users Service
+# Internal DNS record for Hotels Service
 # ==========================================================
-resource "aws_route53_record" "users_internal_record" {
+resource "aws_route53_record" "hotels_internal_record" {
+  count = var.enable_hotels_alb ? 1 : 0
 
   zone_id = aws_route53_zone.internal_zone.zone_id
-  name    = "users.internal.selena"
+  name    = "hotels.internal.selena"
   type    = "A"
 
   alias {
