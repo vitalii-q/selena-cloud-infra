@@ -81,6 +81,7 @@ resource "aws_route53_record" "hotels_db_internal_record" {
     module.hotels.hotels_db_private_ip
   ]
 }
+
 # ==========================================================
 # Internal DNS record for Internal ALB
 # ==========================================================
@@ -94,6 +95,38 @@ resource "aws_route53_record" "internal_alb_record" {
   alias {
     name                   = module.internal_alb[0].alb_dns_name
     zone_id                = module.internal_alb[0].alb_zone_id 
+    evaluate_target_health = true
+  }
+}
+
+# ==========================================================
+# Internal DNS record for Hotels Service
+# ==========================================================
+resource "aws_route53_record" "hotels_internal_record" {
+
+  zone_id = aws_route53_zone.internal_zone.zone_id
+  name    = "hotels.internal.selena"
+  type    = "A"
+
+  alias {
+    name                   = module.internal_alb[0].alb_dns_name
+    zone_id                = module.internal_alb[0].alb_zone_id
+    evaluate_target_health = true
+  }
+}
+
+# ==========================================================
+# Internal DNS record for Users Service
+# ==========================================================
+resource "aws_route53_record" "users_internal_record" {
+
+  zone_id = aws_route53_zone.internal_zone.zone_id
+  name    = "users.internal.selena"
+  type    = "A"
+
+  alias {
+    name                   = module.internal_alb[0].alb_dns_name
+    zone_id                = module.internal_alb[0].alb_zone_id
     evaluate_target_health = true
   }
 }

@@ -50,9 +50,7 @@ module "internal_alb" {
 
   vpc_id            = module.vpc.vpc_id
   private_subnets   = [module.vpc.private_subnet_id, module.vpc.private_subnet_2_id]
-
   vpc_cidr          = module.vpc.vpc_cidr
-
   environment       = var.environment
 }
 
@@ -105,6 +103,7 @@ module "users" {
   db_subnet_group             = module.vpc.db_subnet_group
 
   internal_alb_sg_id          = try(module.internal_alb[0].internal_alb_sg_id, null)
+  users_internal_tg           = try(module.internal_alb[0].users_target_group_arn, null) 
 
   # Policies
   ec2_ecr_access_policy_arn   = module.shared_policies.ec2_ecr_access_policy_arn
@@ -150,6 +149,7 @@ module "hotels" {
   alb_listener_arn            = try(module.shared_alb[0].https_listener_arn, null)
 
   internal_alb_sg_id          = try(module.internal_alb[0].internal_alb_sg_id, null)
+  hotels_internal_tg          = try(module.internal_alb[0].hotels_target_group_arn, null) 
 
   # Policies
   ec2_ecr_access_policy_arn   = module.shared_policies.ec2_ecr_access_policy_arn

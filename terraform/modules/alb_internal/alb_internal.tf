@@ -99,8 +99,8 @@ resource "aws_lb_listener_rule" "users_rule" {
   }
 
   condition {
-    path_pattern {
-      values = ["/users*"]
+    host_header {
+      values = ["users.internal.selena"]
     }
   }
 }
@@ -116,8 +116,8 @@ resource "aws_lb_listener_rule" "hotels_rule" {
   }
 
   condition {
-    path_pattern {
-      values = ["/hotels*"]
+    host_header {
+      values = ["hotels.internal.selena"]
     }
   }
 }

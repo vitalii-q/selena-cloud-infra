@@ -107,3 +107,8 @@ variable "alb_tg_arn" {
 variable "internal_alb_sg_id" {
   type        = string
 }
+
+variable "hotels_internal_tg" {
+  type    = string
+  default = null
+}

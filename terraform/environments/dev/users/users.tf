@@ -40,7 +40,10 @@ module "users_asg" {
   #ecs_cluster_name      = "selena-users-cluster"
   sg_ids                 = [module.users_service_sg.id]
 
-  alb_tg_arn             = try(module.users_alb_service[0].alb_tg_arn, null)
+  alb_target_group_arns = compact([
+    try(module.users_alb_service[0].alb_tg_arn, null),         # external ALB
+    var.users_internal_tg                                      # internal ALB
+  ])
 
   db_host                = ""     # Plug
 }

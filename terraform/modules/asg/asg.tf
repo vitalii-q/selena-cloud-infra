@@ -59,7 +59,7 @@ resource "aws_autoscaling_group" "this" {
     #triggers = ["launch_template"]   # restart instances when updating aws_launch_template
   }
 
-  target_group_arns = var.alb_tg_arn != null ? [var.alb_tg_arn] : []
+  target_group_arns = var.alb_target_group_arns
 
   # so that Terraform waits until the instances are up
   lifecycle {

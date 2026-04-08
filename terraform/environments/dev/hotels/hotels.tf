@@ -39,7 +39,10 @@ module "hotels_asg" {
   environment          = var.environment
   sg_ids               = [module.hotels_service_sg.id]
 
-  alb_tg_arn           = try(module.hotels_alb_service[0].alb_tg_arn, null)
+  alb_target_group_arns = compact([
+    try(module.hotels_alb_service[0].alb_tg_arn, null),     # external ALB
+    var.hotels_internal_tg                                  # internal ALB
+  ])
 
   # DB 
   db_host              = var.enable_hotels_db ? module.hotels_db.private_dns : null

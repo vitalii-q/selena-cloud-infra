@@ -29,9 +29,10 @@ variable "environment" {
   type        = string
 }
 
-variable "alb_tg_arn" {
-  description = "ARN of the Target Group for users service ALB"
-  type        = string
+variable "alb_target_group_arns" {
+  description = "List of ALB target groups"
+  type        = list(string)
+  default     = []
 }
 
 variable "db_host" {

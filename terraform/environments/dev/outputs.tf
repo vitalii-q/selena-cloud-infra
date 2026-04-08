@@ -64,6 +64,14 @@ output "hotels_db_private_ip" {
   value = module.hotels.hotels_db_private_ip
 }
 
+output "users_internal_tg" {
+  value = try(module.internal_alb[0].users_target_group_arn, null)
+}
+
+output "hotels_internal_tg" {
+  value = try(module.internal_alb[0].hotels_target_group_arn, null)
+}
+
 
 # ============================================================
 # Hotels and Users services private IPs (for raedy SSH CLI commands)
