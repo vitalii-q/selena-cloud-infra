@@ -13,6 +13,9 @@ enable_hotels_db  = false
 
 enable_bastion    = false
 
+# Settings
+allow_ssh_from_anywhere = false     # debug mode
+
 
 # Variables
 instance_type  = "t3.nano"

@@ -128,3 +128,9 @@ variable "instance_type" {
   type        = string
   default     = "t3.nano"
 }
+
+variable "allow_ssh_from_anywhere" {
+  type        = bool
+  description = "Allow SSH access from anywhere (0.0.0.0/0) for debugging"
+  default = false
+}

@@ -3,12 +3,17 @@ provider "aws" {
   profile = "terraform"
 }
 
+data "http" "my_ip" {
+  url = "https://ipv4.icanhazip.com"
+}
+
 # Account id
 data "aws_caller_identity" "current" {}
 
 
 locals {
   enable_shared_alb = var.enable_users_alb || var.enable_hotels_alb
+  my_ip_cidr = "${chomp(data.http.my_ip.response_body)}/32"
 }
 
 module "vpc" {
@@ -190,17 +195,17 @@ module "bastion_sg" {
   name   = "selena-bastion-sg"
   vpc_id = module.vpc.vpc_id
 
-  ingress_rules = [
+  ingress_rules = [      # Incoming traffic
     {
-      description = "SSH from anywhere (temporary, dev only)"
+      description = "SSH access (debug controlled by allow_ssh_from_anywhere)"
       from_port   = 22
       to_port     = 22
       protocol    = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
+      cidr_blocks = var.allow_ssh_from_anywhere ? ["0.0.0.0/0"] : [local.my_ip_cidr]
     }
   ]
 
-  egress_rules = [
+  egress_rules = [       # Outcoming traffic
     {
       from_port   = 0
       to_port     = 0

@@ -106,12 +106,12 @@ data "aws_instances" "hotels_service_instances" {
   }
 }
 
-output "services_private_ips" {
+/*output "services_private_ips" {
   value = {
     users_service  = data.aws_instances.users_service_instances.private_ips
     hotels_service = data.aws_instances.hotels_service_instances.private_ips
   }
-}
+}*/
 
 locals {
   bastion_ip = module.bastion.bastion_public_ip
