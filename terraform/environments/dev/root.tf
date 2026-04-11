@@ -82,7 +82,7 @@ module "users" {
   enable_users_alb            = var.enable_users_alb
   enable_users_db             = var.enable_users_db
 
-  # variables
+  # Variables
   account_id                  = data.aws_caller_identity.current.account_id
   region                      = var.region
 
@@ -95,9 +95,6 @@ module "users" {
   environment                 = var.environment
   default_security_group_id   = module.vpc.default_security_group_id
 
-  alb_tg_arn                  = try(module.shared_alb[0].users_tg_arn, null)
-  alb_listener_arn            = try(module.shared_alb[0].https_listener_arn, null)
-
   route53_zone_id             = data.aws_route53_zone.main_zone.zone_id
 
   vpc_id                      = module.vpc.vpc_id
@@ -107,6 +104,11 @@ module "users" {
   private_subnet_2_id         = module.vpc.private_subnet_2_id
   db_subnet_group             = module.vpc.db_subnet_group
 
+  # Shared ALB
+  alb_tg_arn                  = try(module.shared_alb[0].users_tg_arn, null)
+  alb_listener_arn            = try(module.shared_alb[0].https_listener_arn, null)
+
+  # Internal ALB
   internal_alb_sg_id          = try(module.internal_alb[0].internal_alb_sg_id, null)
   users_internal_tg           = try(module.internal_alb[0].users_target_group_arn, null) 
 
@@ -150,9 +152,11 @@ module "hotels" {
   vpc_cidr                    = module.vpc.vpc_cidr
   my_ip_cidr                  = "0.0.0.0/32"
 
+  # Shared ALB
   alb_tg_arn                  = try(module.shared_alb[0].hotels_tg_arn, null)
   alb_listener_arn            = try(module.shared_alb[0].https_listener_arn, null)
 
+  # Internal ALB
   internal_alb_sg_id          = try(module.internal_alb[0].internal_alb_sg_id, null)
   hotels_internal_tg          = try(module.internal_alb[0].hotels_target_group_arn, null) 
 
