@@ -10,7 +10,7 @@ output "alb_zone_id" {
 
 output "internal_alb_sg_id" {
   description = "Security group of internal ALB"
-  value       = aws_security_group.internal_alb_sg.id
+  value       = module.internal_alb_sg.id
 }
 
 output "users_target_group_arn" {
