@@ -57,6 +57,18 @@ module "internal_alb" {
   private_subnets   = [module.vpc.private_subnet_id, module.vpc.private_subnet_2_id]
   vpc_cidr          = module.vpc.vpc_cidr
   environment       = var.environment
+
+  services = {
+    users = {
+      port = 9065
+      host = "users.internal.selena"
+    }
+
+    hotels = {
+      port = 9064
+      host = "hotels.internal.selena"
+    }
+  }
 }
 
 module "nat_instance" {

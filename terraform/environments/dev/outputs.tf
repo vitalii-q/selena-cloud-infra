@@ -65,11 +65,11 @@ output "hotels_db_private_ip" {
 }
 
 output "users_internal_tg" {
-  value = try(module.internal_alb[0].users_target_group_arn, null)
+  value = try(module.internal_alb[0].target_groups["users"], null)
 }
 
 output "hotels_internal_tg" {
-  value = try(module.internal_alb[0].hotels_target_group_arn, null)
+  value = try(module.internal_alb[0].target_groups["hotels"], null)
 }
 
 

@@ -13,10 +13,10 @@ output "internal_alb_sg_id" {
   value       = module.internal_alb_sg.id
 }
 
-output "users_target_group_arn" {
-  value = aws_lb_target_group.users_tg.arn
-}
-
-output "hotels_target_group_arn" {
-  value = aws_lb_target_group.hotels_tg.arn
+# Map of service -> target group arn
+output "target_groups" {
+  value = {
+    for service, tg in aws_lb_target_group.services :
+    service => tg.arn
+  }
 }

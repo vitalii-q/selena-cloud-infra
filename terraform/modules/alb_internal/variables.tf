@@ -22,3 +22,17 @@ variable "vpc_cidr" {
   description = "CIDR of VPC to allow internal traffic"
   type        = string
 }
+
+# Map of internal services behind the ALB
+# Each service automatically creates:
+# - Target Group
+# - Listener Rule
+variable "services" {
+  description = "Internal services behind ALB"
+
+  type = map(object({
+    port              = number
+    host              = string
+    health_check_path = optional(string, "/health")
+  }))
+}
