@@ -23,3 +23,8 @@ variable "key_name" {
   description = "SSH key name"
   type        = string
 }
+
+variable "vpc_cidr" {
+  description = "VPC CIDR block"
+  type        = string
+}
