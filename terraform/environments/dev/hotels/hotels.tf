@@ -37,7 +37,10 @@ module "hotels_asg" {
   key_name             = var.key_name
   iam_instance_profile = module.hotels_role.instance_profile
   environment          = var.environment
-  sg_ids               = [module.hotels_service_sg.id]
+  sg_ids               = [
+    module.hotels_service_sg.id,
+    var.private_services_sg_id
+  ]
 
   alb_target_group_arns = compact([
     try(module.hotels_alb_service[0].alb_tg_arn, null),     # external ALB

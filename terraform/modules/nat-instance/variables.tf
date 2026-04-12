@@ -24,7 +24,7 @@ variable "key_name" {
   type        = string
 }
 
-variable "vpc_cidr" {
-  description = "VPC CIDR block"
+variable "private_services_sg_id" {
+  description = "Security group for private services allowed to use NAT"
   type        = string
 }

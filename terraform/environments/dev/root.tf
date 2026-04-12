@@ -78,10 +78,11 @@ module "nat_instance" {
   instance_type           = "t3.nano"
 
   vpc_id                  = module.vpc.vpc_id
-  vpc_cidr                = module.vpc.vpc_cidr
   public_subnet_id        = module.vpc.public_subnet_ids[0]
   private_route_table_ids = module.vpc.private_route_table_ids
   key_name                = "selena-aws-key"
+
+  private_services_sg_id  = module.private_services_sg.id
 }
 
 module "users" {
@@ -116,6 +117,8 @@ module "users" {
   private_subnet_1_id         = module.vpc.private_subnet_id
   private_subnet_2_id         = module.vpc.private_subnet_2_id
   db_subnet_group             = module.vpc.db_subnet_group
+
+  private_services_sg_id      = module.private_services_sg.id
 
   # Shared ALB
   alb_tg_arn                  = try(module.shared_alb[0].users_tg_arn, null)
@@ -165,6 +168,8 @@ module "hotels" {
   vpc_cidr                    = module.vpc.vpc_cidr
   my_ip_cidr                  = "0.0.0.0/32"
 
+  private_services_sg_id      = module.private_services_sg.id
+
   # Shared ALB
   alb_tg_arn                  = try(module.shared_alb[0].hotels_tg_arn, null)
   alb_listener_arn            = try(module.shared_alb[0].https_listener_arn, null)
@@ -198,6 +203,38 @@ module "bastion" {
   bastion_sg_id    = module.bastion_sg.id
 }
 
+
+# ============================================================
+# Private Services SG (shared between services)
+# ============================================================
+
+module "private_services_sg" { 
+  source = "../../modules/networking/security_group"
+
+  name   = "selena-private-services-sg"
+  vpc_id = module.vpc.vpc_id
+
+  ingress_rules = [ 
+    {
+      description = "Allow all traffic between private services"
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      security_groups = []  # will be self-referenced via attachments
+    }
+  ]
+
+  egress_rules = [
+    {
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  ]
+
+  bastion_sg_id = null
+}
 
 # ============================================================
 # Root SG

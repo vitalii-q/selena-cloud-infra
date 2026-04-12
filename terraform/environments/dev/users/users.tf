@@ -38,7 +38,10 @@ module "users_asg" {
   iam_instance_profile   = module.users_role.instance_profile
   environment            = var.environment
   #ecs_cluster_name      = "selena-users-cluster"
-  sg_ids                 = [module.users_service_sg.id]
+  sg_ids                 = [
+    module.users_service_sg.id,
+    var.private_services_sg_id
+  ]
 
   alb_target_group_arns = compact([
     try(module.users_alb_service[0].alb_tg_arn, null),         # external ALB

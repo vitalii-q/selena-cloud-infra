@@ -112,3 +112,8 @@ variable "hotels_internal_tg" {
   type    = string
   default = null
 }
+
+variable "private_services_sg_id" {
+  description = "Shared SG for private services"
+  type        = string
+}

@@ -4,15 +4,15 @@ module "nat_sg" {
   name   = "nat-instance-sg"
   vpc_id = var.vpc_id
 
-  ingress_rules = [
+    ingress_rules = [
     {
-      description = "Allow all from VPC"
-      from_port   = 0
-      to_port     = 0
-      protocol    = "-1"
-      cidr_blocks = [var.vpc_cidr]
+        description = "Allow traffic only from private services SG"
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        security_groups = [var.private_services_sg_id]
     }
-  ]
+    ]
 
   egress_rules = [
     {
