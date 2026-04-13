@@ -1,5 +1,5 @@
 module "nat_sg" {
-  source = "../networking/security_group"
+  source = "../../networking/security_group"
 
   name   = "nat-instance-sg"
   vpc_id = var.vpc_id

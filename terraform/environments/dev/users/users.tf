@@ -27,17 +27,16 @@ module "users_asg" {
   user_data_file         = "${path.root}/../../scripts/userdata/userdata_users_asg.sh"
 
   ami_id                 = var.ami_id
-  vpc_id                 = var.vpc_id
-  subnet_ids = [
-    var.private_subnet_1_id,
-    var.private_subnet_2_id
-  ]
   instance_type          = "t3.nano"
   volume_ebs             = 5
   key_name               = var.key_name
   iam_instance_profile   = module.users_role.instance_profile
   environment            = var.environment
   #ecs_cluster_name      = "selena-users-cluster"
+
+  vpc_id                 = var.vpc_id
+  subnet_ids             = var.private_subnet_ids
+
   sg_ids                 = [
     module.users_service_sg.id,
     var.private_services_sg_id
@@ -55,6 +54,9 @@ module "users_rds" {
   source                 = "../../../modules/rds"
   count                  = var.enable_users_db ? 1 : 0
 
+  env                    = var.env
+  project                = var.project
+
   db_identifier          = "users-db-${var.env}"
   instance_class         = "db.t3.micro"
   allocated_storage      = 20
@@ -66,13 +68,7 @@ module "users_rds" {
 
   vpc_id                 = var.vpc_id
   
-  /*vpc_security_group_ids = [
-    var.default_security_group_id, 
-    module.ec2.users_sg_id
-  ]*/
-
-  db_subnet_group_name   = var.db_subnet_group
-  env                    = var.env
+  subnet_ids             = var.private_subnet_ids
 
   users_ec2_sg_id        = module.users_service_sg.id           # security_groups EC2
   users_asg_sg_id        = module.users_service_sg.id           # security_groups ASG
@@ -124,16 +120,6 @@ module "ecr" {
   source      = "../../../modules/ecr"
   environment = var.environment
 }
-
-/*module "eks" {
-  source               = "../../../modules/eks"
-
-  eks_cluster_role_arn = module.iam.eks_cluster_role_arn
-
-  cluster_name         = "selena-eks"
-  subnet_ids           = [module.vpc.public_subnet_id, module.vpc.public_subnet_2_id]
-  k8s_version          = "1.30"
-}*/
 
 
 # ============================================================

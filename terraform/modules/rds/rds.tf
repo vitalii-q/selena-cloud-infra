@@ -13,7 +13,7 @@ resource "aws_db_instance" "users_postgres" {
   publicly_accessible     = var.publicly_accessible
 
   vpc_security_group_ids  = [aws_security_group.rds_sg.id]
-  db_subnet_group_name    = var.db_subnet_group_name
+  db_subnet_group_name    = aws_db_subnet_group.main.name
   
   skip_final_snapshot     = true
 
@@ -25,6 +25,16 @@ resource "aws_db_instance" "users_postgres" {
   tags = {
     Name = var.db_identifier
     Env  = var.env
+  }
+}
+
+resource "aws_db_subnet_group" "main" {
+  name        = "${var.project}-db-subnet-group"
+  subnet_ids  = var.subnet_ids
+  description = "Subnet group for RDS"
+
+  tags = {
+    Name = "${var.project}-db-subnet-group"
   }
 }
 

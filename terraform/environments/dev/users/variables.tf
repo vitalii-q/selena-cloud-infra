@@ -10,6 +10,7 @@ variable "enable_users_db" {
   default     = false
 }
 
+variable "project" {}
 variable "environment" {
   description = "Environment (dev, prod etc.)"
   type        = string
@@ -27,10 +28,6 @@ variable "region" {
 }
 
 variable "vpc_id" { 
-  type = string 
-}
-
-variable "db_subnet_group" { 
   type = string 
 }
 
@@ -90,22 +87,12 @@ variable "route53_zone_id" {
   default     = "Z09863231BVIDNICLY1A1"
 }
 
-variable "public_subnet_1_id" {
-  description = "First public subnet ID"
-  type        = string
-}
-variable "public_subnet_2_id" {
-  description = "Second public subnet ID"
-  type        = string
+variable "public_subnet_ids" {
+  type = list(string)
 }
 
-variable "private_subnet_1_id" {
-  description = "First private subnet ID"
-  type        = string
-}
-variable "private_subnet_2_id" {
-  description = "Second private subnet ID"
-  type        = string
+variable "private_subnet_ids" {
+  type = list(string)
 }
 
 variable "ec2_ecr_access_policy_arn" {
