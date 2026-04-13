@@ -17,9 +17,9 @@ locals {
 }
 
 module "vpc" {
-  source                = "../../modules/vpc"
+  source                = "../../modules/networking/vpc"
 
-  project               = "selena"
+  project               = var.project
   region                = var.region
   vpc_cidr              = "10.0.0.0/16"
 
@@ -31,6 +31,18 @@ module "vpc" {
 
   availability_zone     = var.availability_zone
   availability_zone_2   = var.availability_zone_2
+}
+
+module "routing" {
+  source              = "../../modules/networking/routing"
+
+  project             = "selena"
+
+  vpc_id              = module.vpc.vpc_id
+  igw_id              = module.vpc.igw_id
+
+  public_subnet_ids   = module.vpc.public_subnet_ids
+  private_subnet_ids  = module.vpc.private_subnet_ids
 }
 
 module "shared_alb" {
@@ -72,14 +84,14 @@ module "internal_alb" {
 }
 
 module "nat_instance" {
-  source                  = "../../modules/nat-instance"
+  source                  = "../../modules/networking/nat-instance"
   count                   = local.enable_shared_alb ? 1 : 0
 
   instance_type           = "t3.nano"
 
   vpc_id                  = module.vpc.vpc_id
   public_subnet_id        = module.vpc.public_subnet_ids[0]
-  private_route_table_ids = module.vpc.private_route_table_ids
+  private_route_table_ids = module.routing.private_route_table_ids
   key_name                = "selena-aws-key"
 
   private_services_sg_id  = module.private_services_sg.id
@@ -98,6 +110,7 @@ module "users" {
 
   # Variables
   account_id                  = data.aws_caller_identity.current.account_id
+  project                     = var.project
   region                      = var.region
 
   private_subnet_cidr_2       = var.private_subnet_cidr_2
@@ -112,11 +125,8 @@ module "users" {
   route53_zone_id             = data.aws_route53_zone.main_zone.zone_id
 
   vpc_id                      = module.vpc.vpc_id
-  public_subnet_1_id          = module.vpc.public_subnet_id
-  public_subnet_2_id          = module.vpc.public_subnet_2_id
-  private_subnet_1_id         = module.vpc.private_subnet_id
-  private_subnet_2_id         = module.vpc.private_subnet_2_id
-  db_subnet_group             = module.vpc.db_subnet_group
+  public_subnet_ids           = module.vpc.public_subnet_ids
+  private_subnet_ids          = module.vpc.private_subnet_ids
 
   private_services_sg_id      = module.private_services_sg.id
 

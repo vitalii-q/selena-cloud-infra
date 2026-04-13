@@ -1,3 +1,4 @@
+variable "project" {}
 variable "db_identifier" {}
 variable "instance_class" {}
 variable "allocated_storage" {}
@@ -9,7 +10,6 @@ variable "publicly_accessible" {}
 /*variable "vpc_security_group_ids" {
   type = list(string)
 }*/
-variable "db_subnet_group_name" {}
 variable "env" {}
 
 variable "users_ec2_sg_id" {
@@ -24,4 +24,8 @@ variable "users_asg_sg_id" {
 variable "vpc_id" {
   description = "VPC ID for the RDS instance"
   type        = string
+}
+
+variable "subnet_ids" {
+  type = list(string)
 }

@@ -2,12 +2,12 @@ output "vpc_id" {
   value = aws_vpc.main.id
 }
 
-output "default_security_group_id" {
-  value = aws_vpc.main.default_security_group_id
+output "igw_id" {
+  value = aws_internet_gateway.igw.id
 }
 
-output "db_subnet_group" {
-  value = aws_db_subnet_group.main.name
+output "default_security_group_id" {
+  value = aws_vpc.main.default_security_group_id
 }
 
 # nets
@@ -41,11 +41,4 @@ output "private_subnet_ids" {
 
 output "vpc_cidr" {
   value = var.vpc_cidr
-}
-
-output "private_route_table_ids" {
-  value = [
-    aws_route_table.private_rt_1.id,
-    aws_route_table.private_rt_2.id
-  ]
 }
