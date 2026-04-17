@@ -102,7 +102,7 @@ The infrastructure is built with an emphasis on:
 <!--- Route tables:
     -- Public → Internet Gateway  (`0.0.0.0/0`)
     -- Private → NAT Instance  (`0.0.0.0/0`)-->
-<br><br>
+<br>
 
 ### 💻 Compute
 
@@ -117,7 +117,7 @@ The infrastructure is built with an emphasis on:
     -- max: 3 instances
 - Instances use a custom AMI built with Packer-->
 
-<br><br>
+<br>
 
 ### ⚖️ Load Balancing
 
@@ -133,7 +133,7 @@ Used for service-to-service communication inside VPC:
  - `users.internal.selena`
  - `hotels.internal.selena`
 
-<br><br>
+<br>
 
 ### 🌐 DNS & TLS
 
@@ -145,7 +145,7 @@ Used for service-to-service communication inside VPC:
  - Wildcard certificate: `*.selena-aws.com`
  - DNS validation
 
-<br><br>
+<br>
 
 ### 📦 Containerization
 
@@ -157,7 +157,7 @@ Used for service-to-service communication inside VPC:
 - Authenticate to ECR
 - Pull images on startup via UserData scripts
 
-<br><br>
+<br>
 
 ### 🔐 Secrets Management
 
@@ -168,7 +168,7 @@ Used for service-to-service communication inside VPC:
 - Database credentials
 - Service configuration
 
-<br><br>
+<br>
 
 ### ⚙️ Service Bootstrap (UserData)
 
