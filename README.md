@@ -8,7 +8,7 @@
 
 ## 📌 Overview
 
-This repository defines the AWS cloud infrastructure required to run the Selena microservice platform in a scalable and production-ready environment using Terraform
+This repository defines the **AWS Cloud Infrastructure** required to run the selena microservice platform in a scalable and production-ready environment using Terraform
 
 The platform consists of two core services:
 
@@ -89,8 +89,8 @@ The infrastructure is built with an emphasis on:
 
 - Custom VPC <!--(`10.0.0.0/16`)-->
 - Public and private subnets across 2 Availability Zones:
-    -- `eu-central-1a`
-    -- `eu-central-1b`
+    - `eu-central-1a`
+    - `eu-central-1b`
 - Internet Gateway for public access
 - Custom NAT Instance (not NAT Gateway)
 
@@ -102,6 +102,7 @@ The infrastructure is built with an emphasis on:
 <!--- Route tables:
     -- Public → Internet Gateway  (`0.0.0.0/0`)
     -- Private → NAT Instance  (`0.0.0.0/0`)-->
+<br><br>
 
 ### 💻 Compute
 
@@ -115,6 +116,8 @@ The infrastructure is built with an emphasis on:
     -- min: 1 instance
     -- max: 3 instances
 - Instances use a custom AMI built with Packer-->
+
+<br><br>
 
 ### ⚖️ Load Balancing
 
@@ -130,15 +133,19 @@ Used for service-to-service communication inside VPC:
  - `users.internal.selena`
  - `hotels.internal.selena`
 
+<br><br>
+
 ### 🌐 DNS & TLS
 
-### Route53
+#### Route53
  - Public hosted zone: `selena-aws.com`
  - Private hosted zone: `internal.selena`
 
-### ACM (AWS Certificate Manager)
+#### ACM (AWS Certificate Manager)
  - Wildcard certificate: `*.selena-aws.com`
  - DNS validation
+
+<br><br>
 
 ### 📦 Containerization
 
@@ -150,6 +157,8 @@ Used for service-to-service communication inside VPC:
 - Authenticate to ECR
 - Pull images on startup via UserData scripts
 
+<br><br>
+
 ### 🔐 Secrets Management
 
 - AWS Secrets Manager
@@ -158,6 +167,8 @@ Used for service-to-service communication inside VPC:
 
 - Database credentials
 - Service configuration
+
+<br><br>
 
 ### ⚙️ Service Bootstrap (UserData)
 
