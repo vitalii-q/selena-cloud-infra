@@ -8,7 +8,7 @@ Selena Infrastructure (AWS + Terraform)
 
 📌 Overview
 
-This repository defines the AWS cloud infrastructure required to run the Selena microservice platform in a scalable and production-ready environment using Terraform.
+This repository defines the AWS cloud infrastructure required to run the Selena microservice platform in a scalable and production-ready environment using Terraform
 
 The platform consists of two core services:
 
@@ -45,38 +45,38 @@ The infrastructure is built with an emphasis on:
 
 🏗️ Architecture
 
-                                Internet
-                                    │
-                          ┌─────────▼─────────┐
-                          │    Public ALB     │
-                          └─────────┬─────────┘
-                                    │
-        ┌───────────────────────────┴───────────────────────────┐
-        │                                                       │
-        │                                                       │
-        │              ┌───────────────────────┐                │
-┌───────▼────────┐     │     Internal ALB      │     ┌──────────▼────────┐
-│ users-service  │◄───►│      (private)        │◄───►│ hotels-service    │
-│     (ASG EC2)  │     └───────────────────────┘     │      (ASG EC2)    │
-│                │                                   │                   │
-│  Private Subnet│◄────┌───────────────────────┐────►│  Private Subnet   │
-└──┬─────────────┘     │       Bastion         │     └────────────────┬──┘
-   │          ▲        │   (SSH connetion)     │        ▲             │
-   │          │        └───────────────────────┘        │             │
-   │          │                           │             │             │
-   │          ▼                           ▼             ▼             │
-   │       ┌───────────────────┐       ┌───────────────────┐          │
-   │       │       RDS         │       │    CockroachDB    │          │
-   │       │    (private)      │       │   (EC2, private)  │          │
-   │       └───────────────────┘       └───────────────────┘          │
-   │                                                                  │
-   │                                                                  │
-   │                    ┌───────────────────────┐                     │
-   └───────────────────►│     NAT Instance      │◄────────────────────┘
-                        │    (public subnet)    │
-                        └───────────┬───────────┘
-                                    │
-                                 Internet
+                                    Internet
+                                        │
+                              ┌─────────▼─────────┐
+                              │    Public ALB     │
+                              └─────────┬─────────┘
+                                        │
+            ┌───────────────────────────┴───────────────────────────┐
+            │                                                       │
+            │                                                       │
+            │              ┌───────────────────────┐                │
+    ┌───────▼────────┐     │     Internal ALB      │     ┌──────────▼────────┐
+    │ users-service  │◄───►│      (private)        │◄───►│ hotels-service    │
+    │     (ASG EC2)  │     └───────────────────────┘     │      (ASG EC2)    │
+    │                │                                   │                   │
+    │  Private Subnet│◄────┌───────────────────────┐────►│  Private Subnet   │
+    └──┬─────────────┘     │       Bastion         │     └────────────────┬──┘
+       │          ▲        │   (SSH connetion)     │        ▲             │
+       │          │        └───────────────────────┘        │             │
+       │          │                           │             │             │
+       │          ▼                           ▼             ▼             │
+       │       ┌───────────────────┐       ┌───────────────────┐          │
+       │       │       RDS         │       │    CockroachDB    │          │
+       │       │    (private)      │       │   (EC2, private)  │          │
+       │       └───────────────────┘       └───────────────────┘          │
+       │                                                                  │
+       │                                                                  │
+       │                    ┌───────────────────────┐                     │
+       └───────────────────►│     NAT Instance      │◄────────────────────┘
+                            │    (public subnet)    │
+                            └───────────┬───────────┘
+                                        │
+                                     Internet
 
 
 ☁️ Infrastructure Components
@@ -248,59 +248,59 @@ Internal endpoints:
 
 🧱 Project Structure
 
-infrastructure/terraform/
-    ├── packer/
-    │   ├── templates/
-    │   └── scripts/
-    │
-    ├── scripts/
-    │
-    ├── environments/
-    │   └── dev/
-    │       ├── root.tf
-    │       ├── root_iam.tf
-    │       ├── route53.tf
-    │       ├── acm_shared.tf
-    │       │
-    │       ├── users/
-    │       │   ├── users.tf
-    │       │   ├── iam_users.tf
-    │       │
-    │       ├── hotels/
-    │       │   ├── hotels.tf
-    │       │   └── iam_hotels.tf
-    │       │
-    │       └── s3_files/
-    │           └── users.env.cloud
-    │
-    └── modules/
-        ├── alb_internal/
-        ├── alb_shared/
-        ├── alb_service/
-        ├── asg/
-        ├── ec2/
-        ├── ec2_db/
-        ├── ecr/
-        ├── iam/
-        │   ├── iam-policies/
-        │   │   ├── users/
-        │   │   └── hotels/
-        │   └── iam-roles/
+    infrastructure/terraform/
+        ├── packer/
+        │   ├── templates/
+        │   └── scripts/
         │
-        ├── rds/
-        ├── s3/
-        ├── sns/
-        └── vpc/
-        ├── networking/
-        │   ├── nat-instance/
-        │   ├── routing/
-        │   ├── security_group/
-        │   ├── vpc/
+        ├── scripts/
+        │
+        ├── environments/
+        │   └── dev/
+        │       ├── root.tf
+        │       ├── root_iam.tf
+        │       ├── route53.tf
+        │       ├── acm_shared.tf
+        │       │
+        │       ├── users/
+        │       │   ├── users.tf
+        │       │   ├── iam_users.tf
+        │       │
+        │       ├── hotels/
+        │       │   ├── hotels.tf
+        │       │   └── iam_hotels.tf
+        │       │
+        │       └── s3_files/
+        │           └── users.env.cloud
+        │
+        └── modules/
+            ├── alb_internal/
+            ├── alb_shared/
+            ├── alb_service/
+            ├── asg/
+            ├── ec2/
+            ├── ec2_db/
+            ├── ecr/
+            ├── iam/
+            │   ├── iam-policies/
+            │   │   ├── users/
+            │   │   └── hotels/
+            │   └── iam-roles/
+            │
+            ├── rds/
+            ├── s3/
+            ├── sns/
+            └── vpc/
+            ├── networking/
+            │   ├── nat-instance/
+            │   ├── routing/
+            │   ├── security_group/
+            │   ├── vpc/
 
 
 📊 Health Checks
 
-- Application Load Balancers perform health checks on both services, maintaining their availability
+Application Load Balancers perform health checks on both services, maintaining their availability
 
 
 ⚠️ Notes
