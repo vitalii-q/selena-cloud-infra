@@ -1,19 +1,19 @@
-Selena Infrastructure (AWS + Terraform)
+# 🚀 Selena Infrastructure (AWS + Terraform)
 
-📌 Selena Infrastructure
 ![AWS](https://img.shields.io/badge/AWS-Cloud-orange)
 ![Terraform](https://img.shields.io/badge/Terraform-IaC-purple)
 <!--![Status](https://img.shields.io/badge/status-active-success)-->
 
+---
 
-📌 Overview
+## 📌 Overview
 
 This repository defines the AWS cloud infrastructure required to run the Selena microservice platform in a scalable and production-ready environment using Terraform
 
 The platform consists of two core services:
 
-- users-service
-- hotels-service
+- `users-service`
+- `hotels-service`
 <!--The system is designed with a focus on:
 
 scalability
@@ -22,9 +22,9 @@ secure secret management
 production-like infrastructure patterns
 
 It handles domain entities such as users, hotels, and locations, and supports horizontal scaling under load.-->
+---
 
-
-🚀 Key Characteristics
+## 🚀 Key Characteristics
 
 - Scalable architecture using Auto Scaling Groups (1 → 3 instances)
 - Secure secret management via AWS Secrets Manager
@@ -42,9 +42,11 @@ The infrastructure is built with an emphasis on:
 - **Isolation** — each service owns its database  
 - **Security** — secrets and certificates managed centrally  
 - **Reliability** — health checks and fault isolation  -->
+---
 
-🏗️ Architecture
+## 🏗️ Architecture
 
+```text
                                     Internet
                                         │
                               ┌─────────▼─────────┐
@@ -77,70 +79,87 @@ The infrastructure is built with an emphasis on:
                             └───────────┬───────────┘
                                         │
                                      Internet
+```
 
+---
 
-☁️ Infrastructure Components
+## ☁️ Infrastructure Components
 
-Networking
+### 🌐 Networking
 
-- Custom VPC <!--(10.0.0.0/16)-->
-- Public and private subnets across 2 AZs:
-    -- eu-central-1a
-    -- eu-central-1b
+- Custom VPC <!--(`10.0.0.0/16`)-->
+- Public and private subnets across 2 Availability Zones:
+    -- `eu-central-1a`
+    -- `eu-central-1b`
 - Internet Gateway for public access
 - Custom NAT Instance (not NAT Gateway)
-- Route tables:
-    -- Public → Internet Gateway
-    -- Private → NAT Instance
 
-Compute
+#### Route tables
+
+- Public subnets → Internet Gateway (`0.0.0.0/0`)
+- Private subnets → NAT Instance (`0.0.0.0/0`)
+
+<!--- Route tables:
+    -- Public → Internet Gateway  (`0.0.0.0/0`)
+    -- Private → NAT Instance  (`0.0.0.0/0`)-->
+
+### 💻 Compute
 
 - EC2 instances managed via Auto Scaling Groups
-- Each service:
+
+#### Scaling configuration
+
+- min: `1`
+- max: `3`
+<!--- Each service:
     -- min: 1 instance
     -- max: 3 instances
-- Instances use a custom AMI built with Packer
+- Instances use a custom AMI built with Packer-->
 
-Load Balancing
+### ⚖️ Load Balancing
 
-Shared Public ALB
+#### Public ALB
 Routes external traffic:
- - users-service.selena-aws.com
- - hotels-service.selena-aws.com
 
-Internal ALB
+ - `users-service.selena-aws.com`
+ - `hotels-service.selena-aws.com`
+
+#### Internal ALB
 Used for service-to-service communication inside VPC:
- - users.internal.selena
- - hotels.internal.selena
 
-DNS & TLS
+ - `users.internal.selena`
+ - `hotels.internal.selena`
 
-Route53
- - Public hosted zone: selena-aws.com
- - Private hosted zone: internal.selena
+### 🌐 DNS & TLS
 
-ACM (AWS Certificate Manager)
- - Wildcard certificate: *.selena-aws.com
+### Route53
+ - Public hosted zone: `selena-aws.com`
+ - Private hosted zone: `internal.selena`
+
+### ACM (AWS Certificate Manager)
+ - Wildcard certificate: `*.selena-aws.com`
  - DNS validation
 
-Containerization
+### 📦 Containerization
 
  - Services are packaged as Docker containers
  - Images stored in Amazon ECR
- - EC2 instances:
-    - Authenticate to ECR
-    - Pull images on startup via UserData scripts
 
-Secrets Management
+#### EC2 bootstrap
 
- - All sensitive data stored in:
-    - AWS Secrets Manager
+- Authenticate to ECR
+- Pull images on startup via UserData scripts
 
- - Examples:
-    - Database credentials
-    - Service configuration
+### 🔐 Secrets Management
 
-Service Bootstrap (UserData)
+- AWS Secrets Manager
+
+ #### Data:
+
+- Database credentials
+- Service configuration
+
+### ⚙️ Service Bootstrap (UserData)
 
 Each EC2 instance:
 1. Installs Docker
@@ -149,58 +168,75 @@ Each EC2 instance:
 4. Pulls latest Docker image
 5. Starts container
 
+---
 
-📦 AMI (Packer)
+## 📦 AMI (Packer)
 
 Custom base AMI is built using Packer:
 
-Path:
-infrastructure/terraform/packer/templates/selena-base-ami.pkr.hcl
+### Path
 
-Includes:
+```bash
+infrastructure/terraform/packer/templates/selena-base-ami.pkr.hcl
+```
+
+### Includes
+
  - Amazon Linux 2023
  - Docker
  - Git
  - CloudWatch Agent
- - System updates
 
-Build command:
+### Build
 
+```bash
 cd infrastructure/terraform
 
 SUBNET_ID=$(terraform -chdir=environments/dev output -json public_subnet_ids | jq -r '.[0]')
 
 packer build -var "subnet_id=$SUBNET_ID" packer/templates/selena-base-ami.pkr.hcl
+```
 
+---
 
-🚀 Deployment
+## 🚀 Deployment
 
-Terraform
+###  Terraform
 
-Working directory:
+Go to the working directory:
 
+```bash
 cd infrastructure/terraform/environments/dev
+```
 
-Initialize
+Initialize:
 
+```bash
 terraform init
+```
 
-Apply
+Apply:
 
+```bash
 terraform apply
+```
 
+---
 
-⚙️ Configuration
+## ⚙️ Configuration
 
-Example variables (terraform.tfvars):
+### Example variables (terraform.tfvars):
 
+```hcl
 Region: eu-central-1
 Environment: prod
 Instance type: t3.nano
 VPC CIDR: 10.0.0.0/16
+```
 
-Feature flags:
+### Feature flags:
 
+```hcl
 enable_users_alb  = true
 enable_users_db   = true
 
@@ -208,45 +244,48 @@ enable_hotels_alb = true
 enable_hotels_db  = true
 
 enable_bastion    = true
+```
 
+---
 
-🔐 IAM & Security
+## 🔐 IAM & Security
 
 Each service has dedicated IAM roles:
 
-users-service
+### users-service
 
  - Access to:
     - ECR
     - Secrets Manager
-    - RDS (read)
+    - RDS
 
-hotels-service
+### hotels-service
 
  - Access to:
-    - Secrets Manager
     - ECR
+    - Secrets Manager
     - SSM (CockroachDB certificates)
-    - Additional roles
-    - Packer role (AMI build)
-    - CockroachDB EC2 role
+    <!--- Packer role (AMI build)
+    - CockroachDB EC2 role-->
 
+---
 
-🌐 DNS
+## 🌐 DNS
 
-Public endpoints:
+### Public endpoints:
 
  - users-service.selena-aws.com
  - hotels-service.selena-aws.com
 
-Internal endpoints:
+### Internal endpoints:
 
  - users.internal.selena
  - hotels.internal.selena
  - hotels_db.internal.selena
 
+---
 
-🧱 Project Structure
+## 🧱 Project Structure
 
     infrastructure/terraform/
         ├── packer/
@@ -297,13 +336,15 @@ Internal endpoints:
             │   ├── security_group/
             │   ├── vpc/
 
+---
 
-📊 Health Checks
+## 📊 Health Checks
 
 Application Load Balancers perform health checks on both services, maintaining their availability
 
+---
 
-⚠️ Notes
+## ⚠️ Notes
 
  - This project is designed with production-like patterns:
     - modular Terraform structure
@@ -312,13 +353,14 @@ Application Load Balancers perform health checks on both services, maintaining t
  - NAT Gateway is intentionally replaced with a custom NAT instance
  - CockroachDB is self-managed on EC2
 
+---
 
-📈 Future Improvements
+## 📈 Future Improvements
 
  - Add CloudWatch metrics & alarms
  - Add centralized logging and tracing
- - Redesign the CI/CD pipeline to use OIDC
  - Migrate to EKS
+ - Redesign the CI/CD pipeline to use OIDC
 <!--👨‍💻 Author
 
 Developed as part of Cloud Engineering learning path.-->
