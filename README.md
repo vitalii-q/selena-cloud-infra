@@ -1,4 +1,4 @@
-# 🚀 Selena Infrastructure (AWS + Terraform)
+# ☁️ Selena Infrastructure (AWS + Terraform)
 
 ![AWS](https://img.shields.io/badge/AWS-Cloud-orange)
 ![Terraform](https://img.shields.io/badge/Terraform-IaC-purple)
@@ -351,7 +351,7 @@ Each service has dedicated IAM roles:
 
 ## 📊 Health Checks
 
-Application Load Balancers perform health checks on both services, maintaining their availability
+Application Load Balancers perform health checks on both services
 
 ---
 
@@ -364,6 +364,7 @@ Application Load Balancers perform health checks on both services, maintaining t
  - NAT Gateway is intentionally replaced with a custom NAT instance
  - CockroachDB is self-managed on EC2
 
+<!--
 ---
 
 ## 📈 Future Improvements
@@ -371,7 +372,7 @@ Application Load Balancers perform health checks on both services, maintaining t
  - Add CloudWatch metrics & alarms
  - Add centralized logging and tracing
  - Migrate to EKS
- - Redesign the CI/CD pipeline to use OIDC
+ - Redesign the CI/CD pipeline to use OIDC-->
 <!--👨‍💻 Author
 
 Developed as part of Cloud Engineering learning path.-->
