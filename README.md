@@ -8,12 +8,16 @@
 
 ## 📌 Overview
 
-This repository defines the **AWS Cloud Infrastructure** required to run the selena microservice platform in a scalable and production-ready environment using Terraform
+Selena is an **AWS Cloud Infrastructure** project built around two isolated microservices and aimed at ensuring a scalable, reliable, and secure environment.
+
+Each service runs in its own Auto Scaling Group and is exposed through an external load balancer (ALB), while internal communication is routed through an internal ALB within a private subnet.
+
+<!--This repository defines the **AWS Cloud Infrastructure** required to run the selena microservice platform in a scalable and production-ready environment using Terraform
 
 The platform consists of two core services:
 
 - `users-service`
-- `hotels-service`
+- `hotels-service`-->
 <!--The system is designed with a focus on:
 
 scalability
@@ -28,8 +32,8 @@ It handles domain entities such as users, hotels, and locations, and supports ho
 
 - Scalable architecture using Auto Scaling Groups (1 → 3 instances)
 - Secure secret management via AWS Secrets Manager
-- Isolated service-to-database communication
-- Public and internal traffic separation via ALBs
+- Public traffic via ALB
+- Internal service-to-service communication over private networking 
 - Docker-based deployment with Amazon ECR
 - Custom NAT instance for outbound internet access
 - Infrastructure is modular and reusable
