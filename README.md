@@ -63,7 +63,7 @@ The infrastructure is built with an emphasis on:
             │                ┌───────────────────────┐               │
     ┌───────▼──────────┐     │     Internal ALB      │     ┌─────────▼─────────┐
     │  users-service   │◄───►│      (private)        │◄───►│  hotels-service   │
-    │     (ASG EC2)    │     └───────────────────────┘     │      (ASG EC2)    │
+    │    (ASG EC2)     │     └───────────────────────┘     │     (ASG EC2)     │
     │                  │                                   │                   │
     │  Private Subnet  │◄────┌───────────────────────┐────►│  Private Subnet   │
     └──┬───────────────┘     │       Bastion         │     └────────────────┬──┘
