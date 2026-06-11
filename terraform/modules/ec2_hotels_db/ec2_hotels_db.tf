@@ -45,7 +45,7 @@ resource "aws_ebs_volume" "cockroachdb_data" {
     Name = "cockroachdb-data"
   }
 
-  lifecycle {
+  lifecycle {    // TODO: ATTENTION!!! Return it when you return to working with the infrastructure: vol-04027023cccb9f931
     prevent_destroy = true           # to avoid losing hotels DB data
   }
 }
