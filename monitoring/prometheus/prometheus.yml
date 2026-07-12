@@ -11,3 +11,9 @@ scrape_configs:
     static_configs:
       - targets:
           - "users-service:9065"
+
+  - job_name: "bookings-service"
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets:
+          - "bookings-service:9066"
