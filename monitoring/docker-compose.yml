@@ -1,11 +1,13 @@
 # This docker-compose file sets up Prometheus and Grafana for monitoring.
 # 
-# From the repository root, start the application services first:
+# From the repository root, create infrastructure/monitoring/.env from
+# infrastructure/monitoring/.env.example and set a local Grafana password.
+# Start the application services first:
 # docker compose -f docker-compose.yml -f docker-compose.override.yml up -d users-service bookings-service hotels-service
 # Then start monitoring:
-# docker compose -f infrastructure/monitoring/docker-compose.yml up -d
+# docker compose --env-file infrastructure/monitoring/.env -f infrastructure/monitoring/docker-compose.yml up -d
 # Stop monitoring:
-# docker compose -f infrastructure/monitoring/docker-compose.yml down
+# docker compose --env-file infrastructure/monitoring/.env -f infrastructure/monitoring/docker-compose.yml down
 
 version: "3.9"
 
@@ -15,8 +17,12 @@ services:
     container_name: prometheus
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=15d"
+      - "--storage.tsdb.retention.size=2GB"
     ports:
       - "9090:9090"
     networks:
@@ -28,10 +34,11 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: "${GRAFANA_ADMIN_PASSWORD:?Set GRAFANA_ADMIN_PASSWORD in infrastructure/monitoring/.env}"
     volumes:
       - ./grafana/provisioning:/etc/grafana/provisioning
+      - grafana_data:/var/lib/grafana
     depends_on:
       - prometheus
     networks:
@@ -41,3 +48,9 @@ networks:
   app_network:
     external: true
     name: selena-dev_app_network
+
+volumes:
+  prometheus_data:
+    name: selena-dev_prometheus_data
+  grafana_data:
+    name: selena-dev_grafana_data
