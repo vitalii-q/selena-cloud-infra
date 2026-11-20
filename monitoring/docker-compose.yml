@@ -1,11 +1,13 @@
 # This docker-compose file sets up Prometheus and Grafana for monitoring.
 # 
-# From the repository root, start only the monitoring services:
-# docker compose -f infrastructure/monitoring/docker-compose.yml up -d
+# From the repository root, create infrastructure/monitoring/.env from
+# infrastructure/monitoring/.env.example and set a local Grafana password.
+# Start the application services first:
+# docker compose -f docker-compose.yml -f docker-compose.override.yml up -d users-service bookings-service hotels-service
+# Then start monitoring:
+# docker compose --env-file infrastructure/monitoring/.env -f infrastructure/monitoring/docker-compose.yml up -d
 # Stop monitoring:
-# docker compose -f infrastructure/monitoring/docker-compose.yml down
-# A separately launched application container can join the created network with
-# --network selena-monitoring --network-alias bookings-service.
+# docker compose --env-file infrastructure/monitoring/.env -f infrastructure/monitoring/docker-compose.yml down
 
 version: "3.9"
 
@@ -43,8 +45,9 @@ services:
       - monitoring
 
 networks:
-  monitoring:
-    name: selena-monitoring
+  app_network:
+    external: true
+    name: selena-dev_app_network
 
 volumes:
   prometheus_data:
